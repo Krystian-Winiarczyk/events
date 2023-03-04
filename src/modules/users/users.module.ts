@@ -11,6 +11,7 @@ import { PetController } from './controller/pet/pet.controller';
 import { PetService } from './service/pet/pet.service';
 
 @Module({
+  exports: [UsersService],
   imports: [TypeOrmModule.forFeature([User, Pet, UserProfile])],
   controllers: [UsersController, UserProfilesController, PetController],
   providers: [UsersService, UserProfilesService, PetService]

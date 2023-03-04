@@ -16,10 +16,7 @@ export class UsersService {
     findUserByEmail(email: string) {
         return this.userRepository.findOne({
             where: { email },
-            relations: {
-                pets: true,
-                profiles: true,
-            }
+            select: ['email', 'password', 'id'],
         })
     }
 
@@ -35,6 +32,7 @@ export class UsersService {
 
     findUsers() {
         return this.userRepository.find({
+            
             relations: {
                 pets: true,
                 profiles: true,
