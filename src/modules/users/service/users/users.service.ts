@@ -13,6 +13,16 @@ export class UsersService {
         @InjectRepository(UserProfile) private userProfileRepository: Repository<UserProfile>,
     ) { }
 
+    findUserByEmail(email: string) {
+        return this.userRepository.findOne({
+            where: { email },
+            relations: {
+                pets: true,
+                profiles: true,
+            }
+        })
+    }
+
     findUser(id: number) {
         return this.userRepository.findOne({
             where: { id },
