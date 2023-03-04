@@ -7,10 +7,12 @@ import { Pet } from 'src/typeorm/entities/Pet';
 import { UserProfile } from 'src/typeorm/entities/UserProfile';
 import { UserProfilesService } from './service/user-profiles/user-profiles.service';
 import { UserProfilesController } from './controller/user-profiles/user-profiles.controller';
+import { PetController } from './controller/pet/pet.controller';
+import { PetService } from './service/pet/pet.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Pet, UserProfile])],
-  controllers: [UsersController, UserProfilesController],
-  providers: [UsersService, UserProfilesService]
+  controllers: [UsersController, UserProfilesController, PetController],
+  providers: [UsersService, UserProfilesService, PetService]
 })
 export class UsersModule { }

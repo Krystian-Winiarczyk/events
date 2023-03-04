@@ -1,3 +1,5 @@
+import { PetService } from './../../service/pet/pet.service';
+import { CreatePetDto } from './../../dtos/CreatePetDto';
 import { UsersService } from '../../service/users/users.service';
 import { CreateUserDto } from '../../dtos/CreateUser.dto';
 import { UpdateUserDto } from '../../dtos/UpdateUser.dto';
@@ -11,6 +13,7 @@ export class UsersController {
     constructor(
         private userService: UsersService,
         private userProfileService: UserProfilesService,
+        private petService: PetService,
     ) { }
 
     @Get()
@@ -23,6 +26,7 @@ export class UsersController {
         return this.userService.findUser(id);
     }
 
+    // User profiles
     @Get(':id/profiles')
     getUserProfiles(@Param('userId', ParseIntPipe) userId: number,) {
         return this.userProfileService.findUserProfiles(userId);
@@ -34,6 +38,20 @@ export class UsersController {
         @Body() createUserProfileDto: CreateUserProfileDto
     ) {
         return this.userProfileService.createUserProfile(id, createUserProfileDto)
+    }
+
+    // Pet profiles
+    @Get(':id/pets')
+    getUserPets(@Param('id', ParseIntPipe) id: number,) {
+        return this.petService.findUserPets(id);
+    }
+
+    @Post(':id/pets')
+    createUserPet(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() createPetDto: CreatePetDto
+    ) {
+        return this.petService.createUserPet(id, createPetDto)
     }
 
     @Post()

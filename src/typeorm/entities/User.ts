@@ -5,22 +5,16 @@ import { UserProfile } from './UserProfile';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
-    @Column()
-    firstName: string;
-
-    @Column()
-    lastName: string;
-
-    @Column({ unique: true })
+    @Column({ unique: true, nullable: false })
     email: string;
 
-    @Column({ unique: true })
+    @Column({ unique: true, nullable: false })
     phone: string;
 
-    @Column()
+    @Column({ nullable: false })
     password: string;
 
-    @Column({ default: 'USER' })
+    @Column({ default: 'USER', nullable: false })
     role: string;
 
     @OneToMany(() => Pet, (pet) => pet.user)

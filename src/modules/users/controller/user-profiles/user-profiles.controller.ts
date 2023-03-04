@@ -1,5 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Post, Body, Patch, Delete } from "@nestjs/common";
-import { CreateUserProfileDto } from "../../dtos/CreateUserProfile.dto";
+import { Controller, Param, ParseIntPipe, Body, Patch, Delete } from "@nestjs/common";
 import { UpdateUserProfileDto } from "../../dtos/UpdateUserProfile.dto";
 import { UserProfilesService } from "../../service/user-profiles/user-profiles.service";
 
