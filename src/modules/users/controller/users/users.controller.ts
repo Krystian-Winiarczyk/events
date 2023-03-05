@@ -28,8 +28,8 @@ export class UsersController {
 
     // User profiles
     @Get(':id/profiles')
-    getUserProfiles(@Param('userId', ParseIntPipe) userId: number,) {
-        return this.userProfileService.findUserProfiles(userId);
+    getUserProfiles(@Param('id', ParseIntPipe) id: number,) {
+        return this.userProfileService.findUserProfiles(id);
     }
 
     @Post(':id/profiles')

@@ -13,7 +13,7 @@ export class UserProfile extends BaseEntity {
     @Column({ nullable: true })
     nickname: string;
 
-    @Column()
+    @Column({ default: false })
     isPrimary: boolean;
 
     @ManyToOne(() => User, (user) => user.pets)

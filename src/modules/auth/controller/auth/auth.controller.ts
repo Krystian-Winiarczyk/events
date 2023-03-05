@@ -1,9 +1,9 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { LoginUserDto } from './../../dtos/LoginUser.dto';
-import { LocalAuthGuard } from './../../guard/local-auth/local-auth.guard';
+import { LocalAuthGuard } from '../../../../guard/local-auth/local-auth.guard';
 import { Controller, Post, Req, UseGuards, Request, Body } from '@nestjs/common';
 import { AuthService } from '../../service/auth/auth.service';
-import { JwtAuthGuard } from '../../guard/jwt-auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../../../../guard/jwt-auth/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
