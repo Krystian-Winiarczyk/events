@@ -20,8 +20,8 @@ export class UsersService {
         })
     }
 
-    findUser(id: number) {
-        return this.userRepository.findOne({
+   async findUser(id: number) {
+        return await this.userRepository.findOne({
             where: { id },
             relations: {
                 pets: true,
@@ -32,7 +32,6 @@ export class UsersService {
 
     findUsers() {
         return this.userRepository.find({
-            
             relations: {
                 pets: true,
                 profiles: true,

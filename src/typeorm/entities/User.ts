@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, JoinTable } from 'typeorm';
+import { Entity, Column, OneToMany, JoinTable, VirtualColumn  } from 'typeorm';
 import { BaseEntity } from '../BaseEntity';
 import { Pet } from './Pet';
 import { UserProfile } from './UserProfile';
