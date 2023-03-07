@@ -13,8 +13,8 @@ export class UsersService {
         @InjectRepository(UserProfile) private userProfileRepository: Repository<UserProfile>,
     ) { }
 
-    findUserByEmail(email: string) {
-        return this.userRepository.findOne({
+    async findUserByEmail(email: string) {
+        return await this.userRepository.findOne({
             where: { email },
             select: ['email', 'password', 'id'],
         })
@@ -30,8 +30,8 @@ export class UsersService {
         })
     }
 
-    findUsers() {
-        return this.userRepository.find({
+    async findUsers() {
+        return await this.userRepository.find({
             relations: {
                 pets: true,
                 profiles: true,
@@ -54,14 +54,14 @@ export class UsersService {
         await this.userProfileRepository.save(newProfile)
 
         newUser.profiles = [newProfile]
-        return this.userRepository.save(newUser)
+        return await this.userRepository.save(newUser)
     }
 
-    updateUser(id: number, updateUserDetails: UpdateUserDto) {
-        return this.userRepository.update({ id }, { ...updateUserDetails })
+    async updateUser(id: number, updateUserDetails: UpdateUserDto) {
+        return await this.userRepository.update({ id }, { ...updateUserDetails })
     }
 
-    deleteUser(id: number) {
-        return this.userRepository.delete({ id })
+    async deleteUser(id: number) {
+        return await this.userRepository.delete({ id })
     }
 }

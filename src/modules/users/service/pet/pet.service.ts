@@ -1,6 +1,6 @@
 import { Pet } from 'src/typeorm/entities/Pet';
 import { UpdatePetDto } from './../../dtos/UpdatePetDto';
-import { CreatePetDto } from './../../dtos/CreatePetDto';
+import { CreatePetDto } from '../../dtos/Pet.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -11,8 +11,16 @@ export class PetService {
         @InjectRepository(Pet) private petRepository: Repository<Pet>,
     ) { }
 
-    findUserPets(userId: number) {
-        return this.petRepository.find({
+    async findPets() {
+        return await this.petRepository.find({
+            relations: {
+                user: true
+            }
+        })
+    }
+
+    async findUserPets(userId: number) {
+        return await this.petRepository.find({
             where: {
                 user: {
                     id: userId
@@ -21,20 +29,20 @@ export class PetService {
         })
     }
 
-    createUserPet(userId: number, petData: CreatePetDto) {
+    async createUserPet(userId: number, petData: CreatePetDto) {
         const newPet = this.petRepository.create({
             ...petData,
             user: <any> userId,
         })
 
-        return this.petRepository.save(newPet)
+        return await this.petRepository.save(newPet)
     }
 
-    updatePet(id: number, petData: UpdatePetDto) {
-        return this.petRepository.update({ id }, { ...petData })
+    async updatePet(id: number, petData: UpdatePetDto) {
+        return await this.petRepository.update({ id }, { ...petData })
     }
 
-    deletePet(id: number) {
-        return this.petRepository.delete({ id })
+    async deletePet(id: number) {
+        return await this.petRepository.delete({ id })
     }
 }

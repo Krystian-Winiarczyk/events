@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, JoinTable, VirtualColumn  } from 'typeorm';
+import { Entity, Column, OneToMany, JoinTable, VirtualColumn } from 'typeorm';
 import { BaseEntity } from '../BaseEntity';
 import { Pet } from './Pet';
 import { UserProfile } from './UserProfile';
@@ -24,4 +24,9 @@ export class User extends BaseEntity {
     @OneToMany(() => UserProfile, (profile) => profile.user)
     @JoinTable()
     profiles: UserProfile[]
+
+    // @VirtualColumn()
+    // get mainProfile() {
+        // return this.profiles.find(profile => profile.isPrimary)
+    // }
 }

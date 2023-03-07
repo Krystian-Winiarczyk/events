@@ -8,3 +8,9 @@ export class CreateUserDto {
     confirmPassword: string
     role?: string
 }
+
+export class UpdateUserDto {
+    email?: string
+    phone?: string
+    role?: string
+}

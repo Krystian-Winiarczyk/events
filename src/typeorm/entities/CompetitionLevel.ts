@@ -7,7 +7,13 @@ export class CompetitionLevel extends BaseEntity {
     @Column()
     name: string;
 
-    @ManyToOne(() => Competition, (competition) => competition.competitionLevels)
+    @Column({ type: 'text', nullable: true })
+    description: string
+
+    @Column({ nullable: true })
+    regulationUrl: string
+
+    @ManyToOne(() => Competition, (competition) => competition.competitionLevels, { onDelete: 'CASCADE' })
     @JoinTable()
     competition: Competition
 }

@@ -1,3 +1,4 @@
+import { CreateEventDto, UpdateEventDto } from './../../dtos/Event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Event } from 'src/typeorm/entities/Event';
@@ -26,13 +27,13 @@ export class EventService {
         })
     }
 
-    async createEvent(eventDetails: any) {
-        const newEvent = this.eventRepository.create({ ...eventDetails })
+    async createEvent(createEventDetails: CreateEventDto) {
+        const newEvent = this.eventRepository.create({ ...createEventDetails })
 
         return await this.eventRepository.save(newEvent)
     }
 
-    async updateEvent(id: number, updateEventDetails: any) {
+    async updateEvent(id: number, updateEventDetails: UpdateEventDto) {
         return await this.eventRepository.update({ id }, { ...updateEventDetails })
     }
 

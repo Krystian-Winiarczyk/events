@@ -1,8 +1,9 @@
+import { CreateCompetitionDto, UpdateCompetitionDto } from './../../dtos/Competition.dto';
 import { CompetitionService } from './../../service/competition/competition.service';
 import { Delete, Patch } from '@nestjs/common';
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 
-@Controller('competition')
+@Controller('competitions')
 export class CompetitionController {
     constructor(
         private competitionService: CompetitionService
@@ -19,14 +20,14 @@ export class CompetitionController {
     }
 
     @Post()
-    createCompetition(@Body() createCompetitionDto: any) {
+    createCompetition(@Body() createCompetitionDto: CreateCompetitionDto) {
         return this.competitionService.createCompetition(createCompetitionDto)
     }
 
     @Patch(':id')
     updateCompetition(
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateCompetitionDto: any
+        @Body() updateCompetitionDto: UpdateCompetitionDto
     ) {
         return this.competitionService.updateCompetition(id, updateCompetitionDto)
     }

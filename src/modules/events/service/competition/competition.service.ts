@@ -1,3 +1,4 @@
+import { CreateCompetitionDto, UpdateCompetitionDto } from './../../dtos/Competition.dto';
 import { CompetitionLevel } from './../../../../typeorm/entities/CompetitionLevel';
 import { Competition } from './../../../../typeorm/entities/Competition';
 import { Injectable } from '@nestjs/common';
@@ -28,8 +29,8 @@ export class CompetitionService {
         })
     }
 
-    async createCompetition(competitionDetails: any) {
-        const newCompetition = this.competitionRepository.create({ name: competitionDetails.name })
+    async createCompetition(createCompetitionDetails: CreateCompetitionDto) {
+        const newCompetition = this.competitionRepository.create({ ...createCompetitionDetails })
 
         const newCompetitionLevel = this.competitionLevelRepository.create({
             name: 'Poziom 1',
@@ -40,7 +41,7 @@ export class CompetitionService {
         return await this.competitionRepository.save(newCompetition)
     }
 
-    async updateCompetition(id: number, updateCompetitionDetails: any) {
+    async updateCompetition(id: number, updateCompetitionDetails: UpdateCompetitionDto) {
         return await this.competitionRepository.update({ id }, { ...updateCompetitionDetails })
     }
 

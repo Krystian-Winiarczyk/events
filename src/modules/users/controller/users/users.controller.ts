@@ -1,12 +1,12 @@
 import { PetService } from './../../service/pet/pet.service';
-import { CreatePetDto } from './../../dtos/CreatePetDto';
+import { CreatePetDto } from '../../dtos/Pet.dto';
 import { UsersService } from '../../service/users/users.service';
-import { CreateUserDto } from '../../dtos/CreateUser.dto';
+import { CreateUserDto } from '../../dtos/User.dto';
 import { UpdateUserDto } from '../../dtos/UpdateUser.dto';
 import { Body, Controller, Get, ParseIntPipe, Post } from '@nestjs/common';
 import { Delete, Param, Patch } from '@nestjs/common/decorators';
 import { UserProfilesService } from '../../service/user-profiles/user-profiles.service';
-import { CreateUserProfileDto } from '../../dtos/CreateUserProfile.dto';
+import { CreateUserProfileDto } from '../../dtos/UserProfile.dto';
 
 @Controller('users')
 export class UsersController {
