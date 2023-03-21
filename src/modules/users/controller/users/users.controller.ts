@@ -1,75 +1,150 @@
 import { PetService } from './../../service/pet/pet.service';
 import { CreatePetDto } from '../../dtos/Pet.dto';
 import { UsersService } from '../../service/users/users.service';
-import { CreateUserDto } from '../../dtos/User.dto';
-import { UpdateUserDto } from '../../dtos/UpdateUser.dto';
+import { CreateUserDto, UpdateUserDto } from '../../dtos/User.dto';
 import { Body, Controller, Get, ParseIntPipe, Post } from '@nestjs/common';
-import { Delete, Param, Patch } from '@nestjs/common/decorators';
+import { Delete, Param, Patch, Req, Res } from '@nestjs/common/decorators';
 import { UserProfilesService } from '../../service/user-profiles/user-profiles.service';
 import { CreateUserProfileDto } from '../../dtos/UserProfile.dto';
+import { Request, Response } from 'express';
+import { BaseController } from 'src/modules/BaseController';
 
 @Controller('users')
-export class UsersController {
+export class UsersController extends BaseController{
     constructor(
         private userService: UsersService,
         private userProfileService: UserProfilesService,
         private petService: PetService,
-    ) { }
+    ) {
+        super()
+     }
 
     @Get()
-    getUsers() {
-        return this.userService.findUsers();
+    async getUsers(@Req() req: Request, @Res() res: Response) {
+        try {
+            const data = await this.userService.findUsers();
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 
     @Get(':id')
-    getUser(@Param('id', ParseIntPipe) id: number,) {
-        return this.userService.findUser(id);
+    async getUser(
+        @Req() req: Request, @Res() res: Response,
+        @Param('id', ParseIntPipe) id: number
+    ) {
+        try {
+            const data = await this.userService.findUser(id);
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 
     // User profiles
     @Get(':id/profiles')
-    getUserProfiles(@Param('id', ParseIntPipe) id: number,) {
-        return this.userProfileService.findUserProfiles(id);
+    async getUserProfiles(
+        @Req() req: Request, @Res() res: Response,
+        @Param('id', ParseIntPipe) id: number
+    ) {
+        try {
+            const data = await this.userProfileService.findUserProfiles(id);
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 
     @Post(':id/profiles')
-    createUserProfile(
+    async createUserProfile(
+        @Req() req: Request, @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
         @Body() createUserProfileDto: CreateUserProfileDto
     ) {
-        return this.userProfileService.createUserProfile(id, createUserProfileDto)
+        try {
+            const data = await this.userProfileService.createUserProfile(id, createUserProfileDto)
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 
     // Pet profiles
     @Get(':id/pets')
-    getUserPets(@Param('id', ParseIntPipe) id: number,) {
-        return this.petService.findUserPets(id);
+    async getUserPets(
+        @Req() req: Request, @Res() res: Response,
+        @Param('id', ParseIntPipe) id: number
+    ) {
+        try {
+            const data = await this.petService.findUserPets(id)
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 
     @Post(':id/pets')
-    createUserPet(
+    async createUserPet(
+        @Req() req: Request, @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
         @Body() createPetDto: CreatePetDto
     ) {
-        return this.petService.createUserPet(id, createPetDto)
+        try {
+            const data = await this.petService.createUserPet(id, createPetDto)
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 
     @Post()
-    createUser(@Body() createUserDto: CreateUserDto) {
+    async createUser(
+        @Req() req: Request, @Res() res: Response,
+        @Body() createUserDto: CreateUserDto
+    ) {
         const { confirmPassword, ...userDetails } = createUserDto
-        return this.userService.createUser(userDetails)
+        try {
+            const data = await this.userService.createUser(userDetails)
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 
     @Patch(':id')
-    updateUser(
+    async updateUser(
+        @Req() req: Request, @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
         @Body() updateUserDto: UpdateUserDto
     ) {
-        this.userService.updateUser(id, updateUserDto)
+        try {
+            const data = await this.userService.updateUser(id, updateUserDto)
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 
     @Delete(':id')
-    deleteUser(@Param('id', ParseIntPipe) id: number,) {
-        this.userService.deleteUser(id)
+    async deleteUser(
+        @Req() req: Request, @Res() res: Response,
+        @Param('id', ParseIntPipe) id: number
+    ) {
+        try {
+            const data = await this.userService.deleteUser(id)
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 }

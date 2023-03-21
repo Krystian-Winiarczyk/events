@@ -16,7 +16,7 @@ export class UpdateEventDto {
     locationPostalCode?: string
     locationStreet?: string
     locationNumber?: string
-    description?: string;
+    description?: string
     locationCountry?: string
     locationDescription?: string
 }

@@ -1,24 +1,23 @@
 import { BaseController } from './../../../BaseController';
-import { PetService } from './../../service/pet/pet.service';
+import { CompetitionLevelService } from './../../service/competition-level/competition-level.service';
+import { UpdateCompetitionLevelDto } from './../../dtos/CompetitionLevel.dto';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Req, Res, UseGuards } from '@nestjs/common';
-import { UpdatePetDto } from '../../dtos/Pet.dto';
 import { JwtAuthGuard } from 'src/guard/jwt-auth/jwt-auth.guard';
 import { Request, Response } from 'express';
 
-@Controller('pets')
+@Controller('competition/levels')
 @UseGuards(JwtAuthGuard)
-export class PetController extends BaseController {
-
-    constructor(private petService: PetService) { 
-        super()
+export class CompetitionLevelController extends BaseController {
+    constructor(private competitionLevelService: CompetitionLevelService) {
+        super();
     }
 
     @Get()
     async getPets(
-        @Req() req: Request, @Res() res: Response,
+        @Req() req: Request, @Res() res: Response
     ) {
         try {
-            const data = await this.petService.findPets()
+            const data = await this.competitionLevelService.findLevels();
 
             this.apiSuccessResponse(res, req, data)
         } catch (error) {
@@ -30,28 +29,29 @@ export class PetController extends BaseController {
     async updateUserProfile(
         @Req() req: Request, @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
-        @Body() updatePetDto: UpdatePetDto
+        @Body() updateCompetitionLevelDto: UpdateCompetitionLevelDto
     ) {
         try {
-            const data = await this.petService.updatePet(id, updatePetDto)
+            await this.competitionLevelService.updateCompetitionLevel(id, updateCompetitionLevelDto)
 
-            this.apiSuccessResponse(res, req, data)
+            this.apiSuccessResponse(res, req, { id })
         } catch (error) {
             this.apiErrorResponse(res, req, error)
         }
     }
 
     @Delete(':id')
-    async deleteUserProfile(
+    deleteUserProfile(
         @Req() req: Request, @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
     ) {
         try {
-            const data = await this.petService.deletePet(id)
+            this.competitionLevelService.deleteCompetitionLevel(id)
 
-            this.apiSuccessResponse(res, req, data)
+            this.apiSuccessResponse(res, req, { id })
         } catch (error) {
             this.apiErrorResponse(res, req, error)
+
         }
     }
     

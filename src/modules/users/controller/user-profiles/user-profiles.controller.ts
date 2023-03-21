@@ -1,23 +1,54 @@
-import { Controller, Param, ParseIntPipe, Body, Patch, Delete } from "@nestjs/common";
-import { UpdateUserProfileDto } from "../../dtos/UpdateUserProfile.dto";
+import { BaseController } from './../../../BaseController';
+import { Controller, Param, ParseIntPipe, Body, Patch, Delete, Get, Req, Res } from "@nestjs/common";
+import { UpdateUserProfileDto } from "../../dtos/UserProfile.dto";
 import { UserProfilesService } from "../../service/user-profiles/user-profiles.service";
+import { Request, Response } from 'express';
 
-@Controller('users/profiles')
-export class UserProfilesController {
-    constructor(private userProfileService: UserProfilesService) { }
+@Controller('user/profiles')
+export class UserProfilesController extends BaseController {
+    constructor(private userProfileService: UserProfilesService) {
+        super();
+    }
+
+    @Get()
+    async getProfiles(
+        @Req() req: Request, @Res() res: Response,
+    ) {
+        try {
+            const data = await this.userProfileService.findProfiles()
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
+    }
 
     @Patch(':id')
-    updateUserProfile(
+    async updateUserProfile(
+        @Req() req: Request, @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
         @Body() updateUserProfileDto: UpdateUserProfileDto
     ) {
-        this.userProfileService.updateUserProfile(id, updateUserProfileDto)
+        try {
+            const data = await this.userProfileService.updateUserProfile(id, updateUserProfileDto)
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 
     @Delete(':id')
-    deleteUserProfile(
+    async deleteUserProfile(
+        @Req() req: Request, @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
     ) {
-        this.userProfileService.deleteUserProfile(id)
+        try {
+            const data = await this.userProfileService.deleteUserProfile(id)
+
+            this.apiSuccessResponse(res, req, data)
+        } catch (error) {
+            this.apiErrorResponse(res, req, error)
+        }
     }
 }

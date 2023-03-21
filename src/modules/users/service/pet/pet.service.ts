@@ -1,6 +1,5 @@
 import { Pet } from 'src/typeorm/entities/Pet';
-import { UpdatePetDto } from './../../dtos/UpdatePetDto';
-import { CreatePetDto } from '../../dtos/Pet.dto';
+import { CreatePetDto, UpdatePetDto } from '../../dtos/Pet.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

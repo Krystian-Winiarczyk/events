@@ -1,5 +1,5 @@
 import { UserProfile } from './../../../../typeorm/entities/UserProfile';
-import { UpdateUserDto } from '../../dtos/UpdateUser.dto';
+import { UpdateUserDto } from '../../dtos/User.dto';
 import { CreateUserParams } from '../../../../utils/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
