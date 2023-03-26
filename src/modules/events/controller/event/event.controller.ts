@@ -1,11 +1,13 @@
 import { BaseController } from './../../../BaseController';
 import { CreateEventDto, UpdateEventDto } from './../../dtos/Event.dto';
 import { EventService } from './../../service/event/event.service';
-import { Delete, Patch, Req, Res } from '@nestjs/common';
+import { Delete, Patch, Req, Res, UseGuards } from '@nestjs/common';
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { JwtAuthGuard } from 'src/guard/jwt-auth/jwt-auth.guard';
 
 @Controller('events')
+@UseGuards(JwtAuthGuard)
 export class EventController extends BaseController {
 
     constructor(private eventService: EventService) {

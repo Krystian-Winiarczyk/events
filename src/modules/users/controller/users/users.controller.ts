@@ -3,13 +3,15 @@ import { CreatePetDto } from '../../dtos/Pet.dto';
 import { UsersService } from '../../service/users/users.service';
 import { CreateUserDto, UpdateUserDto } from '../../dtos/User.dto';
 import { Body, Controller, Get, ParseIntPipe, Post } from '@nestjs/common';
-import { Delete, Param, Patch, Req, Res } from '@nestjs/common/decorators';
+import { Delete, Param, Patch, Req, Res, UseGuards } from '@nestjs/common/decorators';
 import { UserProfilesService } from '../../service/user-profiles/user-profiles.service';
 import { CreateUserProfileDto } from '../../dtos/UserProfile.dto';
 import { Request, Response } from 'express';
 import { BaseController } from 'src/modules/BaseController';
+import { JwtAuthGuard } from 'src/guard/jwt-auth/jwt-auth.guard';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController extends BaseController{
     constructor(
         private userService: UsersService,

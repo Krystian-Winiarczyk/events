@@ -6,14 +6,16 @@ export class BaseController {
         const payload: any = {
             method: req.method,
             url: req.baseUrl,
-            ip: req.ip
+            ip: req.ip,
+            status,
         }
 
-        if (Array.isArray(data)) payload.items = data
-        else payload.item = data
+        if (Array.isArray(data)) 
+            payload.items = data
+        else 
+            payload.items = [data]
 
-        res
-            .status(status)
+        res.status(status)
             .json(payload);
     }
 
@@ -21,13 +23,13 @@ export class BaseController {
         const payload: any = {
             method: req.method,
             url: req.baseUrl,
-            ip: req.ip
+            ip: req.ip,
+            status,
         }
 
         payload.error = error
 
-        res
-            .status(status)
+        res.status(status)
             .json(payload);
     }
 }

@@ -1,7 +1,8 @@
 import { Size } from './../../constants/Size';
-import { Entity, Column, ManyToOne, JoinTable } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinTable, OneToMany } from 'typeorm';
 import { BaseEntity } from '../BaseEntity';
 import { User } from './User';
+import { EventRegistration } from './EventRegistration';
 
 @Entity({ name: 'pets' })
 export class Pet extends BaseEntity {
@@ -26,4 +27,8 @@ export class Pet extends BaseEntity {
     @ManyToOne(() => User, (user) => user.pets)
     @JoinTable()
     user: User
+
+    @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.pet)
+    @JoinTable()
+    eventRegistrations: EventRegistration[]
 }

@@ -1,4 +1,5 @@
-import { Entity, Column, ManyToOne, JoinTable } from 'typeorm';
+import { EventRegistration } from './EventRegistration';
+import { Entity, Column, ManyToOne, JoinTable, OneToMany } from 'typeorm';
 import { BaseEntity } from '../BaseEntity';
 import { User } from './User';
 
@@ -19,4 +20,8 @@ export class UserProfile extends BaseEntity {
     @ManyToOne(() => User, (user) => user.pets)
     @JoinTable()
     user: User
+
+    @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.userProfile)
+    @JoinTable()
+    eventRegistrations: EventRegistration[]
 }
