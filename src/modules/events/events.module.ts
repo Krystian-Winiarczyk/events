@@ -10,10 +10,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Competition } from 'src/typeorm/entities/Competition';
 import { CompetitionLevelController } from './controller/competition-level/competition-level.controller';
 import { CompetitionLevelService } from './service/competition-level/competition-level.service';
+import { EventRegistrationController } from './controller/event-registration/event-registration.controller';
+import { EventRegistrationService } from './service/event-registration/event-registration.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Event, EventCompetition, CompetitionLevel, Competition])],
-  providers: [CompetitionService, EventService, CompetitionLevelService],
-  controllers: [EventController, CompetitionController, CompetitionLevelController]
+  providers: [CompetitionService, EventService, CompetitionLevelService, EventRegistrationService],
+  controllers: [EventController, CompetitionController, CompetitionLevelController, EventRegistrationController]
 })
 export class EventsModule {}
