@@ -5,4 +5,5 @@ export type CreateUserParams = {
     phone: string
     role?: string
     nickname?: string
+    password?: string
 }

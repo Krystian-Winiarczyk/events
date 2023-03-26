@@ -1,3 +1,4 @@
+import { CreateUserParams } from './../../../../utils/types';
 import { UsersService } from './../../../users/service/users/users.service';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -7,7 +8,7 @@ export class AuthService {
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService
-    ) {}
+    ) { }
 
     async validateUser(email: string, password: string): Promise<any> {
         const user = await this.usersService.findUserByEmail(email);
@@ -28,6 +29,14 @@ export class AuthService {
         return {
             accessToken: this.jwtService.sign(payload),
             ...fullUser,
+        }
+    }
+
+    async signup(userDetails: CreateUserParams) {
+        const data = await this.usersService.createUser(userDetails)
+        return {
+            accessToken: this.jwtService.sign(data),
+            ...data,
         }
     }
 }

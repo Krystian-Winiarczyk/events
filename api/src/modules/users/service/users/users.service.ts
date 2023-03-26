@@ -20,7 +20,7 @@ export class UsersService {
         })
     }
 
-   async findUser(id: number) {
+    async findUser(id: number) {
         return await this.userRepository.findOne({
             where: { id },
             relations: {

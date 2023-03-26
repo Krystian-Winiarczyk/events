@@ -9,4 +9,6 @@ export class EventRegistrationController extends BaseController {
     constructor(private eventRegistrationService: EventRegistrationService) {
         super()
     }
+
+
 }

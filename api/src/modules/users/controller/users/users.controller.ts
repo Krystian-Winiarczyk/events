@@ -11,15 +11,14 @@ import { BaseController } from 'src/modules/BaseController';
 import { JwtAuthGuard } from 'src/guard/jwt-auth/jwt-auth.guard';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
-export class UsersController extends BaseController{
+export class UsersController extends BaseController {
     constructor(
         private userService: UsersService,
         private userProfileService: UserProfilesService,
         private petService: PetService,
     ) {
         super()
-     }
+    }
 
     @Get()
     async getUsers(@Req() req: Request, @Res() res: Response) {
