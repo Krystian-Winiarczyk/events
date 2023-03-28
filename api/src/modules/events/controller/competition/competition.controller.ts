@@ -7,7 +7,7 @@ import { Request, Response } from 'express';
 import { JwtAuthGuard } from 'src/guard/jwt-auth/jwt-auth.guard';
 
 @Controller('competitions')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 export class CompetitionController extends BaseController {
     constructor(private competitionService: CompetitionService) {
         super();

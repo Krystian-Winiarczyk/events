@@ -29,17 +29,11 @@ const isLoginForm = ref(true)
         class="auth-card pa-4"
         max-width="500"
       >
-        <VCardItem class="justify-center">
-          <template #prepend>
+        <div class="d-flex justify-center">
             <div class="d-flex">
-              <VNodeRenderer :nodes="themeConfig.app.logo" />
+              <VNodeRenderer :nodes="themeConfig.app.logo" style="height: 150px"/>
             </div>
-          </template>
-
-          <VCardTitle class="font-weight-bold text-h5 py-1">
-            {{ themeConfig.app.title }}
-          </VCardTitle>
-        </VCardItem>
+        </div>
 
         <VCardText class="pt-1">
           <h5 class="text-h5 font-weight-semibold mb-1">

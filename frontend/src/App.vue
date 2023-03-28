@@ -22,11 +22,11 @@ syncConfigThemeWithVuetifyTheme()
     </VApp>
 
     <VSnackbar color="danger" v-model="error.visible" v-for="(error, index) in errors" :key="`errors_${index}`">
-      {{ $te(error.message) ? $t(error.message) : error.message }}
+      {{ error.message ? $t(error.message) : error.message }}
     </VSnackbar>
 
     <VSnackbar color="success" v-model="success.visible" v-for="(success, index) in successes" :key="`successes_${index}`">
-      {{ $te(success.message) ? $t(success.message) : success.message }}
+      {{ success.message ? $t(success.message) : success.message }}
     </VSnackbar>
   </VLocaleProvider>
 </template>

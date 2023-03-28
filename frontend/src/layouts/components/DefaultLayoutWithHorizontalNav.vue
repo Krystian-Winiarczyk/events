@@ -23,11 +23,7 @@ const { appRouteTransition } = useThemeConfig()
         to="/"
         class="app-logo d-flex align-center gap-x-3"
       >
-        <VNodeRenderer :nodes="themeConfig.app.logo" />
-
-        <h1 class="app-title font-weight-bold leading-normal text-xl">
-          {{ themeConfig.app.title }}
-        </h1>
+        <VNodeRenderer :nodes="themeConfig.app.logo" style="height: 85px;" />
       </RouterLink>
       <VSpacer />
 

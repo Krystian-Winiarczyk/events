@@ -7,8 +7,13 @@ export default [
     icon: { icon: 'tabler-smart-home' },
   },
   {
-    title: 'Second page',
-    to: { name: 'second-page' },
+    title: 'Events',
+    to: { name: 'events' },
+    icon: { icon: 'tabler-file' },
+  },
+  {
+    title: 'Competitions',
+    to: { name: 'competitions' },
     icon: { icon: 'tabler-file' },
   },
 ] as HorizontalNavItems
