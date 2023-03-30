@@ -21,7 +21,7 @@ interface RegisterUserDto {
 export const currentUser = ref(null)
 
 export const useAuth = () => {
-    const { deleteSnackbar, createSnackbar, errors, successes } = useSnackbar()
+    const { createSnackbar, errors, successes } = useSnackbar()
 
     const loading = ref(false)
 

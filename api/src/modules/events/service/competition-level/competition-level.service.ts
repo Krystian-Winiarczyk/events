@@ -28,17 +28,22 @@ export class CompetitionLevelService {
         })
     }
 
-    async createCompetitionLevel(competitionId: number, competitionLevelDetails: CreateCompetitionLevelDto) {
+    async createCompetitionLevel(competitionLevelDetails: CreateCompetitionLevelDto) {
+        const { competition, ...competitionLevelDetail } = competitionLevelDetails
         const newLevel = this.competitionLevelRepository.create({
-            ...competitionLevelDetails,
-            competition: <any> competitionId,
+            ...competitionLevelDetail,
+            competition: <any> competition,
         })
 
         return await this.competitionLevelRepository.save(newLevel)
     }
 
     async updateCompetitionLevel(id: number, competitionLevelDetails: UpdateCompetitionLevelDto) {
-        return await this.competitionLevelRepository.update({ id }, { ...competitionLevelDetails })
+        const { competition, ...competitionLevelDetail } = competitionLevelDetails
+        const updatePayload: UpdateCompetitionLevelDto = { ...competitionLevelDetail }
+
+        if (competition) updatePayload.competition = <any> competition
+        return await this.competitionLevelRepository.update({ id }, { ...updatePayload })
     }
 
     async deleteCompetitionLevel(id: number) {

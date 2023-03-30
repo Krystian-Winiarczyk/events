@@ -13,6 +13,11 @@
   "Nickname": "Nickname",
   "Password": "Password",
   "ConfirmPassword": "Confirm password",
+  "Back": "Back",
+  "Save": "Save",
+  "Name": "Name",
+  "Regulations": "Regulations",
+  "Description": "Description",
   
   "$vuetify": {
     "badge": "Badge",
