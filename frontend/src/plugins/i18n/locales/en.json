@@ -16,8 +16,13 @@
   "Back": "Back",
   "Save": "Save",
   "Name": "Name",
+  "Add": "Add",
   "Regulations": "Regulations",
   "Description": "Description",
+  "EmptyDescription": "Empty description",
+  "CompetitionLevels": "Competition levels",
+  "CompetitionLevel": "Competition level",
+  "Level": "Level",
   
   "$vuetify": {
     "badge": "Badge",

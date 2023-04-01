@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSnackbar } from '@composable/useSnackbar';
+import { useSnackbar } from '@composable/useSnackbar'
 import { useTheme } from 'vuetify'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { hexToRgb } from '@layouts/utils'
@@ -21,12 +21,30 @@ syncConfigThemeWithVuetifyTheme()
       <RouterView />
     </VApp>
 
-    <VSnackbar color="danger" v-model="error.visible" v-for="(error, index) in errors" :key="`errors_${index}`">
+    <VSnackbar
+      v-for="(error, index) in errors"
+      :key="`errors_${index}`"
+      v-model="error.visible"
+      color="danger"
+    >
       {{ error.message ? $t(error.message) : error.message }}
     </VSnackbar>
 
-    <VSnackbar color="success" v-model="success.visible" v-for="(success, index) in successes" :key="`successes_${index}`">
+    <VSnackbar
+      v-for="(success, index) in successes"
+      :key="`successes_${index}`"
+      v-model="success.visible"
+      color="success"
+    >
       {{ success.message ? $t(success.message) : success.message }}
     </VSnackbar>
   </VLocaleProvider>
 </template>
+
+<style lang="scss">
+  .disable-card-overflow {
+    .v-card {
+      overflow: unset !important;
+    }
+  }
+</style>

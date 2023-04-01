@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import EmptyContent from '@/views/utils/empty-content.vue'
+
 const props = defineProps({
   item: {
     type: Object,
@@ -6,6 +8,12 @@ const props = defineProps({
     required: true,
   },
 })
+
+const emits = defineEmits(['removeLevelItem'])
+
+const removeCompetitionLevel = (level: any, index: number): void => {
+  emits('removeLevelItem', level, index)
+}
 </script>
 
 <template>
@@ -19,10 +27,10 @@ const props = defineProps({
             sm="6"
           >
             <VTextField
-                    disabled
               id="outlined-basic"
-              :label="$t('Name')"
               v-model="item.name"
+              disabled
+              :label="$t('Name')"
             />
           </VCol>
           <!-- Regulations url -->
@@ -31,10 +39,10 @@ const props = defineProps({
             sm="6"
           >
             <VTextField
-                disabled
               id="outlined-basic"
-              :label="$t('Regulations')"
               v-model="item.regulationUrl"
+              disabled
+              :label="$t('Regulations')"
             />
           </VCol>
           <!-- Description -->
@@ -42,15 +50,59 @@ const props = defineProps({
             cols="12"
           >
             <VTextarea
-                disabled
               id="outlined-basic"
-              :label="$t('Description')"
               v-model="item.description"
+              disabled
+              :label="$t('Description')"
             />
           </VCol>
         </VRow>
       </VCardItem>
     </VCard>
+
+    <VRow class="mt-1">
+      <VCol
+        v-for="(competitionLevel, index) in item.competitionLevels"
+        :key="`competitionLevel_${index}`"
+        cols="4"
+      >
+        <VCard>
+          <VCardTitle>
+            <div class="d-flex justify-space-between">
+              {{ competitionLevel.name }}
+
+              <VTooltip
+                v-if="competitionLevel.regulationUrl"
+                location="top"
+                :text="competitionLevel.regulationUrl"
+              >
+                <template #activator="{ props }">
+                  <VIcon
+                    v-bind="props"
+                    size="20"
+                    icon="tabler-link"
+                  />
+                </template>
+              </VTooltip>
+              <VIcon
+                size="20"
+                icon="tabler-trash"
+                class="ml-1"
+                @click="removeCompetitionLevel(competitionLevel, index)"
+              />
+            </div>
+          </VCardTitle>
+
+          <VCardText v-if="competitionLevel.description">
+            {{ competitionLevel.description }}
+          </VCardText>
+          <EmptyContent
+            v-else
+            :message="$t('EmptyDescription')"
+          />
+        </VCard>
+      </VCol>
+    </VRow>
 
     <!-- Competitions -->
     <VCard />

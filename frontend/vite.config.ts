@@ -42,6 +42,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@types': fileURLToPath(new URL('./src/@types', import.meta.url)),
       '@themeConfig': fileURLToPath(new URL('./themeConfig.ts', import.meta.url)),
       '@composable': fileURLToPath(new URL('./src/composable/', import.meta.url)),
       '@core': fileURLToPath(new URL('./src/@core', import.meta.url)),

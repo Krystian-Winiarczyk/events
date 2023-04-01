@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import Edit from '@/views/pages/competitions/edit.vue'
 import Details from '@/views/pages/competitions/details.vue'
+import AlertDialog from '@/views/utils/alert-dialog.vue'
 import axiosIns from '@/plugins/axios'
 import { useCompetitions } from '@/composable/useCompetitions'
 import { onMounted } from 'vue'
@@ -8,6 +9,7 @@ import { onMounted } from 'vue'
 const route = useRoute()
 const { loading, loadSingle, editOrCreate } = useCompetitions()
 
+const isAlertOpen = ref(false)
 const editedItem = ref({
   name: '',
   description: '',
@@ -41,14 +43,18 @@ const save = async () => {
   }
 }
 
+const remove = async (level: any, index: number) => {
+    if (level?.id) {
+        editedItem.value.competitionLevels.splice(index, 1)
+    } 
+}
+
 onMounted(async () => {
   if (isViewMode) {
     const initResponse = await loadSingle(<string> route.params.id)
-        console.log(initResponse);
-        
     if (initResponse)
         editedItem.value = initResponse
-  }
+    }
 })
 </script>
 
@@ -97,14 +103,18 @@ onMounted(async () => {
       </VBtn>
     </div>
 
+    <AlertDialog :visible="alertVisible" @click="removeLevel" />
+
     <!-- Content -->
     <Details
       v-if="isViewMode && !isEditMode"
       :item="editedItem"
+      @remove-level-item="remove"
     />
     <Edit
       v-else
       :item.async="editedItem"
+      @remove-level-item="remove"
     />
   </div>
 </template>

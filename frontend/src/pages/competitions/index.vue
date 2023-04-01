@@ -33,7 +33,7 @@ onMounted(() => {
         size="22"
         icon="tabler-plus"
       />
-      ADD
+      {{ $t('Add') }}
     </VBtn>
     <VCard>
       <VCardItem>

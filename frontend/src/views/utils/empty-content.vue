@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps({
-  classes: { default: () => ['py-10'], type: Array },
+  classes: { default: () => ['py-2'], type: Array },
   message: { default: 'Empty content', type: String },
 })
 </script>
@@ -10,7 +10,7 @@ const props = defineProps({
     class="text-primary text-center"
     :class="props.classes"
   >
-    <v-icon icon="mdi-circle-off-outline"></v-icon>
+    <VIcon icon="mdi-circle-off-outline"></VIcon>
     {{ props.message }}
   </div>
 </template>
