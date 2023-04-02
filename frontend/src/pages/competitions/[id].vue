@@ -5,11 +5,12 @@ import AlertDialog from '@/views/utils/alert-dialog.vue'
 import axiosIns from '@/plugins/axios'
 import { useCompetitions } from '@/composable/useCompetitions'
 import { onMounted } from 'vue'
+import { AlertDialogType } from '@types/AlertDialogType';
 
 const route = useRoute()
-const { loading, loadSingle, editOrCreate } = useCompetitions()
+const { loading: competitionLoading, loadSingle, editOrCreate } = useCompetitions()
 
-const isAlertOpen = ref(false)
+const dialogData = ref(null)
 const editedItem = ref({
   name: '',
   description: '',
@@ -44,9 +45,15 @@ const save = async () => {
 }
 
 const remove = async (level: any, index: number) => {
-    if (level?.id) {
-        editedItem.value.competitionLevels.splice(index, 1)
-    } 
+  dialogData.value = { level, index }
+    
+}
+
+const removeProcess = async (callbackData: any) => {
+  const { level, index } = callbackData
+  if (level?.id) {
+      editedItem.value.competitionLevels.splice(index, 1)
+  } 
 }
 
 onMounted(async () => {
@@ -103,7 +110,13 @@ onMounted(async () => {
       </VBtn>
     </div>
 
-    <AlertDialog :visible="alertVisible" @click="removeLevel" />
+    <AlertDialog 
+      :visible="!!dialogData"
+      :callbackData="dialogData"
+      :type="AlertDialogType.DANGER"
+      @ok="removeProcess"
+      @change-visible="dialogData = null" 
+    />
 
     <!-- Content -->
     <Details
