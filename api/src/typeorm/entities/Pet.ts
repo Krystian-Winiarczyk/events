@@ -1,6 +1,6 @@
 import { Size } from './../../constants/Size';
 import { Entity, Column, ManyToOne, JoinTable, OneToMany } from 'typeorm';
-import { BaseEntity } from '../BaseEntity';
+import { BaseEntity } from '../../base/BaseEntity';
 import { User } from './User';
 import { EventRegistration } from './EventRegistration';
 

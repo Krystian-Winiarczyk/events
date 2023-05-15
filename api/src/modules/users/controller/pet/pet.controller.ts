@@ -1,4 +1,4 @@
-import { BaseController } from './../../../BaseController';
+import { BaseController } from '../../../../base/BaseController';
 import { PetService } from './../../service/pet/pet.service';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Req, Res, UseGuards } from '@nestjs/common';
 import { UpdatePetDto } from '../../dtos/Pet.dto';
@@ -9,7 +9,7 @@ import { Request, Response } from 'express';
 @UseGuards(JwtAuthGuard)
 export class PetController extends BaseController {
 
-    constructor(private petService: PetService) { 
+    constructor(private petService: PetService) {
         super()
     }
 
@@ -54,5 +54,5 @@ export class PetController extends BaseController {
             this.apiErrorResponse(res, req, error)
         }
     }
-    
+
 }

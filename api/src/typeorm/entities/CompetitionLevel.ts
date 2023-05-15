@@ -1,6 +1,7 @@
 import { Competition } from './Competition';
-import { Entity, Column, ManyToOne, JoinTable } from 'typeorm';
-import { BaseEntity } from '../BaseEntity';
+import {Entity, Column, ManyToOne, JoinTable, OneToMany} from 'typeorm';
+import { BaseEntity } from '../../base/BaseEntity';
+import {EventCompetitionLevel} from "./EventCompetitionLevel";
 
 @Entity({ name: 'competition_levels' })
 export class CompetitionLevel extends BaseEntity {
@@ -16,4 +17,8 @@ export class CompetitionLevel extends BaseEntity {
     @ManyToOne(() => Competition, (competition) => competition.competitionLevels, { onDelete: 'CASCADE' })
     @JoinTable()
     competition: Competition
+
+    @OneToMany(() => EventCompetitionLevel, (eventCompetition) => eventCompetition.competitionLevel)
+    @JoinTable()
+    eventCompetitions: EventCompetitionLevel[]
 }

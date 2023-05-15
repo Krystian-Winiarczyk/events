@@ -1,67 +1,43 @@
-import { UserProfile } from './../../../../typeorm/entities/UserProfile';
-import { UpdateUserDto } from '../../dtos/User.dto';
-import { CreateUserParams } from '../../../../utils/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/typeorm/entities/User';
-import { Repository } from 'typeorm';
+import {
+    DeleteResult,
+    FindOptionsSelect,
+    FindOptionsSelectByString,
+    FindOptionsWhere,
+    Repository,
+    UpdateResult,
+} from 'typeorm';
+import { ServiceInterface } from '../../../../interfaces/Service.interface';
+import { BaseDto } from 'src/base/BaseDto';
+import {
+    FindOptionsRelationByString,
+    FindOptionsRelations,
+} from 'typeorm/find-options/FindOptionsRelations';
+import * as argon2 from 'argon2';
+import { CreateUserDto } from '../../dtos/User.dto';
+import {BaseService} from "../../../../base/BaseService";
+import {UserProfilesService} from "../user-profiles/user-profiles.service";
 
 @Injectable()
-export class UsersService {
+export class UsersService extends BaseService<User>{
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
-        @InjectRepository(UserProfile) private userProfileRepository: Repository<UserProfile>,
-    ) { }
-
-    async findUserByEmail(email: string) {
-        return await this.userRepository.findOne({
-            where: { email },
-            select: ['email', 'password', 'id'],
-        })
+        private userProfileService: UserProfilesService,
+    ) {
+        super(userRepository)
     }
 
-    async findUser(id: number) {
-        return await this.userRepository.findOne({
-            where: { id },
-            relations: {
-                pets: true,
-                profiles: true,
-            }
-        })
-    }
-
-    async findUsers() {
-        return await this.userRepository.find({
-            relations: {
-                pets: true,
-                profiles: true,
-            }
-        })
-    }
-
-    async createUser(userDetails: CreateUserParams) {
-        const { lastName, firstName, nickname = '', ...userData } = userDetails
+    async create(createDto: CreateUserDto): Promise<User> {
+        const { firstName, lastName, ...userDetails } = createDto
         const newUser = this.userRepository.create({
-            ...userData,
-        })
+            ...userDetails,
+        });
 
-        const newProfile = this.userProfileRepository.create({
-            firstName,
-            lastName,
-            nickname,
-            isPrimary: true,
-        })
-        await this.userProfileRepository.save(newProfile)
+        newUser.password = await argon2.hash(userDetails.password);
+        newUser.profiles = [await this.userProfileService.create({ firstName, lastName, isPrimary: true })]
 
-        newUser.profiles = [newProfile]
-        return await this.userRepository.save(newUser)
-    }
-
-    async updateUser(id: number, updateUserDetails: UpdateUserDto) {
-        return await this.userRepository.update({ id }, { ...updateUserDetails })
-    }
-
-    async deleteUser(id: number) {
-        return await this.userRepository.delete({ id })
+        return await this.userRepository.save(newUser);
     }
 }

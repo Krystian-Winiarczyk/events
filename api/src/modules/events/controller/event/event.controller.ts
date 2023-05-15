@@ -1,4 +1,4 @@
-import { BaseController } from './../../../BaseController';
+import { BaseController } from '../../../../base/BaseController';
 import { CreateEventDto, UpdateEventDto } from './../../dtos/Event.dto';
 import { EventService } from './../../service/event/event.service';
 import { Delete, Patch, Req, Res, UseGuards } from '@nestjs/common';

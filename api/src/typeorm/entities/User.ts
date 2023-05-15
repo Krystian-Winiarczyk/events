@@ -1,7 +1,8 @@
 import { Entity, Column, OneToMany, JoinTable, VirtualColumn } from 'typeorm';
-import { BaseEntity } from '../BaseEntity';
+import { BaseEntity } from '../../base/BaseEntity';
 import { Pet } from './Pet';
 import { UserProfile } from './UserProfile';
+import {Exclude} from "class-transformer";
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -25,6 +26,9 @@ export class User extends BaseEntity {
     @JoinTable()
     profiles: UserProfile[]
 
+    @Column({ nullable: true })
+    @Exclude()
+    public refreshToken?: string;
     // @VirtualColumn()
     // get mainProfile() {
         // return this.profiles.find(profile => profile.isPrimary)

@@ -1,4 +1,4 @@
-import { BaseController } from './../../../BaseController';
+import { BaseController } from '../../../../base/BaseController';
 import { CompetitionLevelService } from './../../service/competition-level/competition-level.service';
 import { UpdateCompetitionLevelDto, CreateCompetitionLevelDto } from './../../dtos/CompetitionLevel.dto';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
@@ -68,5 +68,5 @@ export class CompetitionLevelController extends BaseController {
 
         }
     }
-    
+
 }

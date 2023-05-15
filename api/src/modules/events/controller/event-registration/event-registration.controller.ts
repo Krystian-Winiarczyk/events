@@ -1,5 +1,5 @@
 import { EventRegistrationService } from './../../service/event-registration/event-registration.service';
-import { BaseController } from './../../../BaseController';
+import { BaseController } from '../../../../base/BaseController';
 import { JwtAuthGuard } from './../../../../guard/jwt-auth/jwt-auth.guard';
 import { Controller, UseGuards } from '@nestjs/common';
 

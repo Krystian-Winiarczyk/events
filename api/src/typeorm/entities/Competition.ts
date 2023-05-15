@@ -1,8 +1,6 @@
-import { EventCompetition } from './EventCompetition';
 import { CompetitionLevel } from './CompetitionLevel';
-import { Event } from './Event';
-import { Entity, Column, JoinTable, OneToMany, ManyToMany } from 'typeorm';
-import { BaseEntity } from '../BaseEntity';
+import { Entity, Column, JoinTable, OneToMany } from 'typeorm';
+import { BaseEntity } from '../../base/BaseEntity';
 
 @Entity({ name: 'competitions' })
 export class Competition extends BaseEntity {
@@ -14,10 +12,6 @@ export class Competition extends BaseEntity {
 
     @Column({ nullable: true })
     regulationUrl: string
-
-    @OneToMany(() => EventCompetition, (eventCompetition) => eventCompetition.competition)
-    @JoinTable()
-    eventCompetitions: EventCompetition[]
 
     @OneToMany(() => CompetitionLevel, (competitionLevel) => competitionLevel.competition)
     @JoinTable()

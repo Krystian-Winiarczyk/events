@@ -1,8 +1,8 @@
-import { EventCompetition } from './EventCompetition';
+import { EventCompetitionLevel } from './EventCompetitionLevel';
 import { Pet } from 'src/typeorm/entities/Pet';
 import { UserProfile } from 'src/typeorm/entities/UserProfile';
 import { Entity, Column, ManyToOne, JoinTable } from 'typeorm';
-import { BaseEntity } from '../BaseEntity';
+import { BaseEntity } from '../../base/BaseEntity';
 import { EventRegistrationStatuses } from 'src/constants/EventRegistration';
 
 @Entity({ name: 'event_registrations' })
@@ -19,7 +19,7 @@ export class EventRegistration extends BaseEntity {
     @JoinTable()
     pet: Pet
 
-    @ManyToOne(() => EventCompetition)
+    @ManyToOne(() => EventCompetitionLevel)
     @JoinTable()
-    eventCompetition: EventCompetition
+    eventCompetition: EventCompetitionLevel
 }

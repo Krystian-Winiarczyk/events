@@ -1,4 +1,4 @@
-import { BaseController } from './../../../BaseController';
+import { BaseController } from '../../../../base/BaseController';
 import { CreateCompetitionDto, UpdateCompetitionDto } from './../../dtos/Competition.dto';
 import { CompetitionService } from './../../service/competition/competition.service';
 import { Delete, Patch, Req, Res, UseGuards } from '@nestjs/common';

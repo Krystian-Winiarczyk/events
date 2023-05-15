@@ -1,12 +1,13 @@
-import { BaseController } from './../../../BaseController';
-import { Res, UnauthorizedException } from '@nestjs/common';
+import { BaseController } from '../../../../base/BaseController';
+import {Get, Res, UnauthorizedException} from '@nestjs/common';
 import { LoginUserDto } from './../../dtos/LoginUser.dto';
 import { LocalAuthGuard } from '../../../../guard/local-auth/local-auth.guard';
 import { Controller, Post, Req, UseGuards, Body } from '@nestjs/common';
 import { AuthService } from '../../service/auth/auth.service';
 import { JwtAuthGuard } from '../../../../guard/jwt-auth/jwt-auth.guard';
 import { Request, Response } from 'express';
-import { CreateUserDto } from 'src/modules/users/dtos/User.dto';
+import {JwtRefreshAuthGuard} from "../../../../guard/jwt-refresh-auth/jwt-refresh-auth.guard";
+import {User} from "../../../../typeorm/entities/User";
 
 @Controller('auth')
 export class AuthController extends BaseController {
@@ -15,37 +16,55 @@ export class AuthController extends BaseController {
         super();
     }
 
-    @UseGuards(LocalAuthGuard)
-    @Post('login')
-    async login(
-        @Req() req: Request, @Res() res: Response,
-        @Body() loginUser: LoginUserDto
-    ) {
-        const user = await this.authService.validateUser(loginUser.email, loginUser.password)
-
-        if (!user) throw new UnauthorizedException()
-
+    @UseGuards(JwtAuthGuard)
+    @Get('logout')
+    async logout(@Req() req: Request, @Res() res: Response) {
         try {
-            const data = await this.authService.login(user)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            await this.authService.logout(req?.user?.id);
 
-            this.apiSuccessResponse(res, req, data)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            this.apiSuccessResponse(res, req, req?.user);
         } catch (error) {
-            this.apiErrorResponse(res, req, error)
+            this.apiErrorResponse(res, req, error);
         }
     }
 
-    @Post('signup')
-    async createUser(
-        @Req() req: Request, @Res() res: Response,
-        @Body() createUserDto: CreateUserDto
+    @UseGuards(LocalAuthGuard)
+    @Post('login')
+    async login(
+        @Req() req: Request,
+        @Res() res: Response,
+        @Body() loginUser: LoginUserDto,
     ) {
-        const { confirmPassword, ...userDetails } = createUserDto
         try {
-            const data = await this.authService.signup(userDetails)
+            const user: User = await this.authService.signIn(loginUser);
 
-            this.apiSuccessResponse(res, req, data)
+            this.apiSuccessResponse(res, req, user);
         } catch (error) {
-            this.apiErrorResponse(res, req, error)
+            this.apiErrorResponse(res, req, error);
+        }
+    }
+
+    @UseGuards(JwtRefreshAuthGuard)
+    @Get('refresh')
+    async refreshTokens(@Req() req: Request, @Res() res: Response) {
+        try {
+            const tokens: { accessToken: string; refreshToken: string } =
+                await this.authService.refreshTokens(
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    req.user.id,
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    req.user.refreshToken,
+                );
+
+            this.apiSuccessResponse(res, req, tokens);
+        } catch (error) {
+            this.apiErrorResponse(res, req, error);
         }
     }
 }

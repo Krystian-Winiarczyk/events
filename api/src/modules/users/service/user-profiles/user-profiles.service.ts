@@ -1,46 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserProfile } from 'src/typeorm/entities/UserProfile';
-import { Repository } from 'typeorm';
-import { CreateUserProfileDto, UpdateUserProfileDto } from '../../dtos/UserProfile.dto';
+import {
+    Repository,
+} from 'typeorm';
+import { CreateUserProfileDto } from '../../dtos/UserProfile.dto';
+import {BaseService} from "../../../../base/BaseService";
 @Injectable()
-export class UserProfilesService {
-    constructor(
-        @InjectRepository(UserProfile) private userProfileRepository: Repository<UserProfile>,
-    ) { }
-
-    async findProfiles() {
-        return await this.userProfileRepository.find({
-            relations: {
-                user: true
-            }
-        })
+export class UserProfilesService extends BaseService<UserProfile>{
+    constructor(@InjectRepository(UserProfile) private userProfileRepository: Repository<UserProfile>) {
+        super(userProfileRepository)
     }
 
-    async findUserProfiles(userId: number) {
-        return await this.userProfileRepository.find({
-            where: {
-                user: {
-                    id: userId
-                }
-            },
-        })
-    }
-
-    async createUserProfile(userId: number, profileData: CreateUserProfileDto) {
+    async create(profileData: CreateUserProfileDto): Promise<UserProfile> {
         const newUserProfile = this.userProfileRepository.create({
             ...profileData,
-            user: <any>userId,
+            user: <any> profileData.user ?? null,
         })
 
-        return await this.userProfileRepository.save(newUserProfile)
-    }
-
-    async updateUserProfile(id: number, profileData: UpdateUserProfileDto) {
-        return await this.userProfileRepository.update({ id }, { ...profileData })
-    }
-
-    async deleteUserProfile(id: number) {
-        return await this.userProfileRepository.delete({ id })
+        return await this.userProfileRepository.save(newUserProfile);
     }
 }

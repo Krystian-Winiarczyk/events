@@ -1,6 +1,6 @@
 import { EventRegistration } from './EventRegistration';
 import { Entity, Column, ManyToOne, JoinTable, OneToMany } from 'typeorm';
-import { BaseEntity } from '../BaseEntity';
+import { BaseEntity } from '../../base/BaseEntity';
 import { User } from './User';
 
 @Entity({ name: 'user_profiles' })
