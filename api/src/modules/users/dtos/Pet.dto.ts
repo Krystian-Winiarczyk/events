@@ -7,6 +7,7 @@ export class CreatePetDto {
     size?: Size
     color?: string
     personality?: string
+    user?: number
 }
 
 export class UpdatePetDto {
@@ -16,4 +17,5 @@ export class UpdatePetDto {
     size?: Size
     color?: string
     personality?: string
+    user?: number
 }

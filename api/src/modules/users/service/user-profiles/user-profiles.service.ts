@@ -11,7 +11,6 @@ export class UserProfilesService extends BaseService<UserProfile>{
     constructor(@InjectRepository(UserProfile) private userProfileRepository: Repository<UserProfile>) {
         super(userProfileRepository)
     }
-
     async create(profileData: CreateUserProfileDto): Promise<UserProfile> {
         const newUserProfile = this.userProfileRepository.create({
             ...profileData,
