@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useGenerateImageVariant } from '@/@core/composable/useGenerateImageVariant'
+import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import authV1LoginMaskDark from '@images/pages/auth-v1-login-mask-dark.png'
 import authV1LoginMaskLight from '@images/pages/auth-v1-login-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
@@ -28,14 +29,14 @@ const isPasswordVisible = ref(false)
           </div>
         </template>
 
-        <VCardTitle class="text-2xl font-weight-bold">
+        <VCardTitle class="text-2xl font-weight-bold text-capitalize">
           {{ themeConfig.app.title }}
         </VCardTitle>
       </VCardItem>
 
       <VCardText class="pt-2">
-        <h5 class="text-h5 font-weight-semibold mb-1">
-          Welcome to {{ themeConfig.app.title }}! 👋🏻
+        <h5 class="text-h5 mb-1">
+          Welcome to <span class="text-capitalize">{{ themeConfig.app.title }}! 👋🏻</span>
         </h5>
 
         <p class="mb-0">
@@ -50,8 +51,10 @@ const isPasswordVisible = ref(false)
             <VCol cols="12">
               <VTextField
                 v-model="form.email"
+                autofocus
                 label="Email"
                 type="email"
+                placeholder="johndoe@email.com"
               />
             </VCol>
 
@@ -60,6 +63,7 @@ const isPasswordVisible = ref(false)
               <VTextField
                 v-model="form.password"
                 label="Password"
+                placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible"
@@ -73,8 +77,8 @@ const isPasswordVisible = ref(false)
                 />
 
                 <RouterLink
-                  :to="{ name: 'index' }"
                   class="text-primary ms-2 mb-1"
+                  :to="{ name: 'index' }"
                 >
                   Forgot Password?
                 </RouterLink>
@@ -96,16 +100,37 @@ const isPasswordVisible = ref(false)
             >
               <span>New on our platform?</span>
               <RouterLink
-                :to="{ name: 'signup' }"
                 class="text-primary ms-2"
+                :to="{ name: 'signup' }"
               >
                 Create an account
               </RouterLink>
+            </VCol>
+
+            <VCol
+              cols="12"
+              class="d-flex align-center"
+            >
+              <VDivider />
+              <span class="mx-4">or</span>
+              <VDivider />
+            </VCol>
+
+            <!-- auth providers -->
+            <VCol
+              cols="12"
+              class="text-center"
+            >
+              <AuthProvider />
             </VCol>
           </VRow>
         </VForm>
       </VCardText>
     </VCard>
+    <VImg
+      :src="authV1ThemeLoginMask"
+      class="d-none d-md-block auth-footer-mask"
+    />
   </div>
 </template>
 

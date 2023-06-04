@@ -1,25 +1,29 @@
-<template>
-  <div>
-    <VCard
-      class="mb-6"
-      title="Kick start your project 🚀"
-    >
-      <VCardText>All the best for your new project.</VCardText>
-      <VCardText>
-        Please make sure to read our <a
-          href="https://pixinvent.com/demo/materialize-vuejs-admin-dashboard-template/documentation/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-decoration-none"
-        >
-          Template Documentation
-        </a> to understand where to go from here and how to use our template.
-      </VCardText>
-    </VCard>
+<script setup lang="ts">
+import { useGenerateImageVariant } from '@/@core/composable/useGenerateImageVariant'
+import authV1LoginMaskDark from '@images/pages/auth-v1-login-mask-dark.png'
+import authV1LoginMaskLight from '@images/pages/auth-v1-login-mask-light.png'
+import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
+import { themeConfig } from '@themeConfig'
 
-    <VCard title="Want to integrate JWT? 🔒">
-      <VCardText>We carefully crafted JWT flow so you can implement JWT with ease and with minimum efforts.</VCardText>
-      <VCardText>Please read our  JWT Documentation to get more out of JWT authentication.</VCardText>
-    </VCard>
-  </div>
+const form = ref({
+  email: '',
+  password: '',
+  remember: false,
+})
+
+const authV1ThemeLoginMask = useGenerateImageVariant(authV1LoginMaskLight, authV1LoginMaskDark)
+const isPasswordVisible = ref(false)
+</script>
+
+<template>
+  <div></div>
 </template>
+
+<style lang="scss">
+@use "@core/scss/template/pages/page-auth.scss";
+</style>
+
+<route lang="yaml">
+meta:
+layout: blank
+</route>
