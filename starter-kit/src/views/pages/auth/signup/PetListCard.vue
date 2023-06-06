@@ -53,33 +53,29 @@ const areFieldsFilled = computed(() => {
       class="mt-0 pt-2"
     >
       <VRow class="pt-2">
-        <VCol cols="12">
+        <VCol
+          cols="12"
+          class="d-flex align-center justify-center mb-0 pb-0"
+        >
           <VFileInput
-            density="compact"
+            ref="petAvatarUpload"
+            class="d-none"
             show-size
             accept="image/png, image/jpeg, image/bmp, image/jpg, image/webp"
-            prepend-icon="mdi-camera-outline"
-            label="Avatar"
             :model-value="pet.image"
             @update:modelValue="emits('changeField', { value: $event, key: 'image' })"
+          />
+          <VAvatar
+            :image="imagePreviewSrc"
+            variant="tonal"
+            class="cursor-pointer"
+            color="primary"
+            size="70"
+            @click="profileAvatarUpload.click()"
           >
-            <template #selection="{ fileNames }">
-              <template
-                v-for="fileName in fileNames"
-                :key="fileName"
-              >
-                <VChip
-                  label
-                  size="small"
-                  variant="outlined"
-                  color="primary"
-                  class="me-2"
-                >
-                  {{ $filters.truncate(fileName, 14) }}
-                </VChip>
-              </template>
-            </template>
-          </VFileInput>
+            <span v-if="profileFirstLetters">{{ profileFirstLetters }}</span>
+            <VIcon icon="mdi-cloud-upload" v-else />
+          </VAvatar>
         </VCol>
         <VCol cols="12">
           <VTextField

@@ -7,38 +7,49 @@ interface Props {
 const props = defineProps<Props>()
 const emits = defineEmits(['removeProfile', 'changeField', 'changePrimaryProfile'])
 
-const isEdited = ref(true)
+const profileAvatarUpload = ref(null)
+
+const setProfileName = value => {
+  const [firstName = '', lastName = ''] = value.split(' ')
+
+  emits('changeField', { value: firstName, key: 'firstName' })
+  emits('changeField', { value: lastName, key: 'lastName' })
+}
 
 const imagePreviewSrc = computed(() => {
   const avatar = props.profile.avatar[0]
-  if (!avatar)
-    return `${props.profile.firstName.at(0)}${props.profile.lastName.at(0)}`.toUpperCase()
+  if (!avatar) return null
 
   return URL.createObjectURL(props.profile.avatar[0])
 })
 
-const areFieldsFilled = computed(() => {
-  return props.profile.firstName && props.profile.lastName
+const profileFirstLetters = computed(() => {
+  return `${props.profile.firstName[0] || ''}${props.profile.lastName[0] || ''}`.trim().toUpperCase()
 })
+
+const profileFullName = computed(() => {
+  return `${props.profile.firstName || ''} ${props.profile.lastName || ''}`.trim()
+})
+
 </script>
 
 <template>
-  <VCard variant="outlined">
+  <VCard>
     <VCardTitle class="mb-0 pb-0 d-flex justify-space-between">
       <div class="d-flex align-center">
-        <VCheckbox :model-value="profile.isPrimary" :disabled="profile.isPrimary" @update:modelValue="emits('changePrimaryProfile')" />
-        Profil {{ profile.isPrimary ? 'główny' : 'dodatkowy' }}
+        <div>
+          <VCheckbox
+            :model-value="profile.isPrimary"
+            :disabled="profile.isPrimary"
+            @update:modelValue="emits('changePrimaryProfile')"
+          />
+          <VTooltip color="primary" activator="parent">
+            {{ profile.isPrimary ? 'Profil główny' : 'Profil dodatkowy' }}
+          </VTooltip>
+        </div>
+        {{ profileFullName || 'Profil' }}
       </div>
       <div>
-        <VBtn
-          class="mr-2"
-          density="compact"
-          variant="text"
-          :disabled="!areFieldsFilled"
-          :icon="isEdited ? 'mdi-eye' : 'mdi-edit'"
-          color="secondary"
-          @click="isEdited = !isEdited"
-        />
         <VBtn
           density="compact"
           variant="text"
@@ -49,91 +60,61 @@ const areFieldsFilled = computed(() => {
       </div>
     </VCardTitle>
     <!-- Edit :: START -->
-    <VCardItem
-      v-if="isEdited"
-      class="mt-0 pt-2"
-    >
+    <VCardItem class="mt-0 pt-2">
       <VRow class="pt-2">
-        <VCol cols="12">
+        <VCol
+          cols="12"
+          class="d-flex align-center justify-center mb-0 pb-0"
+        >
           <VFileInput
-            density="compact"
+            ref="profileAvatarUpload"
+            class="d-none"
             show-size
             accept="image/png, image/jpeg, image/bmp, image/jpg, image/webp"
-            prepend-icon="mdi-camera-outline"
-            label="Avatar"
             :model-value="profile.avatar"
             @update:modelValue="emits('changeField', { value: $event, key: 'avatar' })"
-          >
-            <template #selection="{ fileNames }">
-              <template
-                v-for="fileName in fileNames"
-                :key="fileName"
-              >
-                <VChip
-                  label
-                  size="small"
-                  variant="outlined"
-                  color="primary"
-                  class="me-2"
-                >
-                  {{ $filters.truncate(fileName, 14) }}
-                </VChip>
-              </template>
-            </template>
-          </VFileInput>
-        </VCol>
-        <VCol cols="12">
-          <VTextField
-            :model-value="profile.firstName"
-            density="compact"
-            label="Imię"
-            placeholder="John"
-            @update:modelValue="emits('changeField', { value: $event, key: 'firstName' })"
           />
+          <VAvatar
+            :image="imagePreviewSrc"
+            variant="tonal"
+            class="cursor-pointer"
+            color="primary"
+            size="70"
+            @click="profileAvatarUpload.click()"
+          >
+            <span v-if="profileFirstLetters">{{ profileFirstLetters }}</span>
+            <VIcon icon="mdi-cloud-upload" v-else />
+          </VAvatar>
         </VCol>
-        <VCol cols="12">
+        <VCol
+          cols="12"
+          class="text-center"
+        >
           <VTextField
-            :model-value="profile.lastName"
+            variant="plain"
+            :model-value="profileFullName"
             density="compact"
-            label="Nazwisko"
-            placeholder="Doe"
-            @update:modelValue="emits('changeField', { value: $event, key: 'lastName' })"
+            class="centred-input"
+            placeholder="Wpisz Imię i nazwisko"
+            @update:modelValue="setProfileName"
           />
         </VCol>
         <VCol cols="12">
           <VTextarea
             :model-value="profile.description"
             density="compact"
-            label="Kilka słów opisu"
+            rows="2"
+            label="Opis profilu"
             @update:modelValue="emits('changeField', { value: $event, key: 'description' })"
           />
         </VCol>
       </VRow>
     </VCardItem>
-    <!-- Edit :: END -->
-    <!-- Preview :: START -->
-    <VCardItem
-      v-else
-      class="mt-0 pt-2"
-    >
-      <VRow class="pt-2">
-        <VCol cols="12" class="d-flex justify-center">
-          <VAvatar :image="imagePreviewSrc" variant="tonal" color="primary" size="80">
-            {{ imagePreviewSrc }}
-          </VAvatar>
-        </VCol>
-        <VCol cols="12" class="d-flex justify-center">
-          {{ profile.firstName }} {{ profile.lastName }}
-        </VCol>
-        <VCol cols="12">
-          {{ profile.description }}
-        </VCol>
-      </VRow>
-    </VCardItem>
-    <!-- Preview :: END -->
   </VCard>
 </template>
 
-<style scoped lang="scss">
-
+<style lang="scss">
+  .centred-input input {
+    text-align: center;
+  }
 </style>
