@@ -6,6 +6,7 @@ import { useThemeConfig } from '@core/composable/useThemeConfig'
 import Footer from '@/layouts/components/Footer.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
+import NavBarI18n from '@/layouts/components/NavBarI18n.vue'
 
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
@@ -41,6 +42,9 @@ watch([isVerticalNavCollapsed, isAppRtl], val => {
         <NavbarThemeSwitcher />
 
         <VSpacer />
+
+
+        <NavBarI18n />
 
         <UserProfile />
       </div>

@@ -7,6 +7,7 @@ import { defineConfig } from 'vite'
 import Pages from 'vite-plugin-pages'
 import Layouts from 'vite-plugin-vue-layouts'
 import vuetify from 'vite-plugin-vuetify'
+import VueI18n from '@intlify/vite-plugin-vue-i18n'
 
 // @ts-expect-error Known error: https://github.com/sxzz/unplugin-vue-macros/issues/257#issuecomment-1410752890
 import DefineOptions from 'unplugin-vue-define-options/vite'
@@ -34,8 +35,15 @@ export default defineConfig({
       dts: true,
     }),
     AutoImport({
-      imports: ['vue', 'vue-router', '@vueuse/core', '@vueuse/math', 'pinia'],
+      imports: ['vue', 'vue-router', '@vueuse/core', '@vueuse/math', 'pinia', 'vue-i18n'],
       vueTemplate: true,
+    }),
+    VueI18n({
+      runtimeOnly: true,
+      compositionOnly: true,
+      include: [
+        fileURLToPath(new URL('./src/plugins/i18n/locales/**', import.meta.url)),
+      ],
     }),
 
     DefineOptions(),
