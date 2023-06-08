@@ -72,4 +72,7 @@ export default defineConfig({
       './src/**/*.vue',
     ],
   },
+  server: {
+    host: true,
+  },
 })

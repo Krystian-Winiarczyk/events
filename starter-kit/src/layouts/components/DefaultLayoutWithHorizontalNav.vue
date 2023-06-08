@@ -33,7 +33,7 @@ const { appRouteTransition } = useThemeConfig()
 
       <NavBarI18n />
 
-      <NavbarThemeSwitcher class="me-2" />
+<!--      <NavbarThemeSwitcher class="me-2" />-->
 
       <UserProfile />
     </template>

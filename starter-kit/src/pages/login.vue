@@ -55,6 +55,7 @@ const isPasswordVisible = ref(false)
                 label="Email"
                 type="email"
                 placeholder="johndoe@email.com"
+                :rules="[requiredValidator]"
               />
             </VCol>
 
