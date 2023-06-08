@@ -127,7 +127,7 @@ const theme: VuetifyOptions['theme'] = {
         'activated-opacity': 0.1,
         'pressed-opacity': 0.14,
         'dragged-opacity': 0.1,
-        'table-header-background': '#3A3E5B',
+        'table-header-background': '#1E1A1E',
 
         // Shadows
         'shadow-key-umbra-opacity': 0.2,
