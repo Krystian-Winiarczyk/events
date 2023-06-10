@@ -29,6 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
   align: 'center',
 })
 
+
 const emit = defineEmits<Emit>()
 
 const currentStep = ref(props.currentStep || 0)
@@ -102,12 +103,12 @@ watchEffect(() => {
 
               <div>
                 <p class="stepper-title font-weight-medium text-base mb-0">
-                  {{ item.title }}
+                  {{ $t(item.title) }}
                 </p>
                 <span
                   v-if="item.subtitle"
                   class="stepper-subtitle text-sm"
-                >{{ item.subtitle }}</span>
+                >{{ $t(item.subtitle) }}</span>
               </div>
             </div>
 
@@ -164,14 +165,14 @@ watchEffect(() => {
             <!-- 👉 title and subtitle -->
             <div style="line-height: 0;">
               <h6 class="text-sm font-weight-medium step-title">
-                {{ item.title }}
+                {{ $t(item.title) }}
               </h6>
 
               <span
                 v-if="item.subtitle"
                 class="text-xs step-subtitle"
               >
-                {{ item.subtitle }}
+                {{ $t(item.subtitle) }}
               </span>
             </div>
 

@@ -1,4 +1,48 @@
 {
+  "Next": "Dalej",
+  "Previous": "Poprzedni",
+  "Back": "Cofnij",
+  "Confirm": "Potwierdź",
+
+  "Email": "Email",
+  "UserName": "Nazwa użytkownika",
+  "Password": "Hasło",
+  "ConfirmPassword": "Potwierdź hasło",
+
+  "Summary": "Podsumowanie",
+
+  "Profile": "Profil | Profile",
+  "Account": "Konto",
+  "AccountDetails": "Szczegóły konta",
+  "ProfileDescription": "Opis profilu",
+  "MainProfile": "Profil główny",
+  "AdditionalProfile": "Profil dodatkowy",
+
+  "Pet": "Pupila | Pupile",
+  "Favorite": "Pupil",
+  "Breed": "Rasa",
+  "Color": "Kolor",
+  "Age": "Wiek",
+  "Personality": "Osobowość",
+  "PetDescription": "Opis pupila",
+
+  "signup": {
+    "TypePassword": "Wprowadz hasło",
+    "TypePasswordAgain": "Wprowadz hasło ponownie",
+    "EnterYourAccountInformation": "Wprowadz informacje dotyczące Twojego konta",
+
+    "CreateAPlayerProfiles": "Utwórz profile zawodników",
+    "TypeNameAndLastName": "Wpisz Imię i nazwisko",
+
+    "TypePetName": "Wpisz Imię pupila",
+    "AddOwnPet": "Dodaj swojego pupila",
+    "CreateOwnPets": "Utwórz swoich pupili",
+    "AddOwnPetsToAccount": "Dodaj swoich pupili do konta",
+
+    "VerifyYourData": "Zweryfikuj poprawność swoich danych"
+
+  },
+
   "$vuetify": {
     "badge": "Badge",
     "pagination": {

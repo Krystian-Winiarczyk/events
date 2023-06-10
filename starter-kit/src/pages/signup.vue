@@ -2,6 +2,7 @@
 import registerMultiStepsIllustration from '@images/pages/auth-register-multi-steps-illustration.png'
 import ProfileList from '@/views/pages/auth/signup/ProfileList.vue'
 import PetList from '@/views/pages/auth/signup/PetList.vue'
+import Summary from '@/views/pages/auth/signup/Summary.vue'
 
 const currentStep = ref(0)
 const isPasswordVisible = ref(false)
@@ -9,20 +10,20 @@ const isConfirmPasswordVisible = ref(false)
 
 const items = [
   {
-    title: 'Konto',
-    subtitle: 'Szczegóły konta',
+    title: 'Account',
+    icon: 'mdi-account-cog',
   },
   {
     title: 'Profile',
-    subtitle: 'Utwórz profil zawodnika',
+    icon: 'mdi-account-box-multiple',
   },
   {
-    title: 'Zwierzaki',
-    subtitle: 'Dodaj swojego zwierzaka',
+    title: 'Favorite',
+    icon: 'mdi-paw',
   },
   {
-    title: 'Zwierzaki',
-    subtitle: 'Dodaj swojego zwierzaka',
+    title: 'Summary',
+    icon: 'mdi-format-list-checks',
   },
 ]
 
@@ -66,7 +67,7 @@ const addProfile = (): void => {
   if (!form.profiles.find(searchProfile => searchProfile.isPrimary))
     profile.isPrimary = true
 
-  form.profiles.unshift(profile)
+  form.profiles.push(profile)
 }
 
 const changePrimaryProfile = index => {
@@ -88,7 +89,7 @@ const addPet = (): void => {
     age: 5,
   }
 
-  form.pets.unshift(pet)
+  form.pets.push(pet)
 }
 </script>
 
@@ -112,7 +113,7 @@ const addPet = (): void => {
     <VCol
       cols="12"
       md="8"
-      class="auth-card-v2 d-flex align-center justify-center pa-5"
+      class="auth-card-v2 d-flex justify-center pa-5"
       style="background-color: rgb(var(--v-theme-surface));"
     >
       <VCard
@@ -120,12 +121,14 @@ const addPet = (): void => {
         class="mt-12 px-1"
         style="max-width: 925px"
       >
-        <AppStepper
-          v-model:current-step="currentStep"
-          :items="items"
-          :direction="$vuetify.display.smAndUp ? 'horizontal' : 'vertical'"
-          class="mb-8"
-        />
+        <div>
+          <AppStepper
+            v-model:current-step="currentStep"
+            :items="items"
+            :direction="$vuetify.display.smAndUp ? 'horizontal' : 'vertical'"
+            class="mb-8"
+          />
+        </div>
 
         <VWindow
           v-model="currentStep"
@@ -134,10 +137,10 @@ const addPet = (): void => {
           <VForm>
             <VWindowItem>
               <h5 class="text-h5 mb-1">
-                Konto
+                {{ $t('Account') }}
               </h5>
               <p class="text-sm">
-                Wprowadz informacje dotyczące Twojego konta
+                {{ $t('signup.EnterYourAccountInformation') }}
               </p>
 
               <VRow>
@@ -147,7 +150,7 @@ const addPet = (): void => {
                 >
                   <VTextField
                     v-model="form.username"
-                    label="Nazwa użytkownika"
+                    :label="$t('UserName')"
                     placeholder="John Doe"
                   />
                 </VCol>
@@ -158,7 +161,7 @@ const addPet = (): void => {
                 >
                   <VTextField
                     v-model="form.email"
-                    label="Email"
+                    :label="$t('Email')"
                     placeholder="johndoe@email.com"
                   />
                 </VCol>
@@ -169,8 +172,8 @@ const addPet = (): void => {
                 >
                   <VTextField
                     v-model="form.password"
-                    label="Hasło"
-                    placeholder="Wprowadź hasło"
+                    :label="$t('Password')"
+                    :placeholder="$t('signup.TypePassword')"
                     :type="isPasswordVisible ? 'text' : 'password'"
                     :append-inner-icon="isPasswordVisible ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
                     @click:append-inner="isPasswordVisible = !isPasswordVisible"
@@ -183,8 +186,8 @@ const addPet = (): void => {
                 >
                   <VTextField
                     v-model="form.confirmPassword"
-                    label="Potwierdź hasło"
-                    placeholder="Wprowadź hasło ponownie"
+                    :label="$t('ConfirmPassword')"
+                    :placeholder="$t('signup.TypePasswordAgain')"
                     :type="isConfirmPasswordVisible ? 'text' : 'password'"
                     :append-inner-icon="isConfirmPasswordVisible ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
                     @click:append-inner="isConfirmPasswordVisible = !isConfirmPasswordVisible"
@@ -200,10 +203,10 @@ const addPet = (): void => {
               >
                 <div>
                   <h5 class="text-h5 mb-1">
-                    Profile
+                    {{ $t('Profile', 2) }}
                   </h5>
                   <p class="text-sm">
-                    Utwórz profile zawodników
+                    {{ $t('signup.CreateAPlayerProfiles') }}
                   </p>
                 </div>
                 <VBtn
@@ -231,10 +234,10 @@ const addPet = (): void => {
               >
                 <div>
                   <h5 class="text-h5 mb-1">
-                    Zwierzaki
+                    {{ $t('Pet', 2) }}
                   </h5>
                   <p class="text-sm">
-                    Utwórz profile swoich futrzaków
+                    {{ $t('signup.AddOwnPetsToAccount') }}
                   </p>
                 </div>
                 <VBtn
@@ -256,11 +259,13 @@ const addPet = (): void => {
 
             <VWindowItem>
               <h5 class="text-h5">
-                Select Plan
+                {{ $t('Summary') }}
               </h5>
               <p class="text-sm">
-                Select plan as per your requirement
+                {{ $t('signup.VerifyYourData') }}
               </p>
+
+              <Summary :data="form" />
             </VWindowItem>
           </VForm>
         </VWindow>
@@ -277,7 +282,7 @@ const addPet = (): void => {
               start
               class="flip-in-rtl"
             />
-            Previous
+            {{ $t('Previous') }}
           </VBtn>
 
           <VBtn
@@ -286,14 +291,14 @@ const addPet = (): void => {
             append-icon="mdi-check"
             @click="onSubmit"
           >
-            submit
+            {{ $t('Submit') }}
           </VBtn>
 
           <VBtn
             v-else
             @click="currentStep++"
           >
-            Next
+            {{ $t('Next') }}
 
             <VIcon
               icon="mdi-arrow-right"

@@ -40,6 +40,7 @@ const removeProfile = index => {
         >
           <ProfileListCard
             class="ma-5"
+            :class="{ 'fade-1-transition': profileIndex === 0 }"
             style="width: 325px"
             :profile="profile"
             :index="profileIndex"
@@ -54,5 +55,19 @@ const removeProfile = index => {
 </template>
 
 <style scoped lang="scss">
+  .fade-1-transition {
+    animation: 0.5s linear forwards !important;
+    animation-name: faded !important;
+  }
 
+  @keyframes faded {
+    from {
+      opacity: 0;
+      margin-top: -50px;
+    }
+    to {
+      opacity: 1;
+      margin-top: 0;
+    }
+  }
 </style>

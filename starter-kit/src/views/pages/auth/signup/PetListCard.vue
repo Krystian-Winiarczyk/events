@@ -7,37 +7,30 @@ interface Props {
 const props = defineProps<Props>()
 const emits = defineEmits(['removePet', 'changeField'])
 
+const petAvatarUpload = ref(null)
+
 const isEdited = ref(true)
 
 const imagePreviewSrc = computed(() => {
   const image = props.pet.image[0]
   if (!image)
-    return `${props.pet.name.at(0)}${props.pet.name.at(1)}`.toUpperCase()
+    return null
 
-  return URL.createObjectURL(props.pet.avatar[0])
+  return URL.createObjectURL(props.pet.image[0])
 })
 
-const areFieldsFilled = computed(() => {
-  return props.pet.name
+const petFirstLetters = computed(() => {
+  return `${props.pet.name[0] || ''}`.trim().toUpperCase()
 })
 </script>
 
 <template>
-  <VCard variant="outlined">
+  <VCard>
     <VCardTitle class="mb-0 pb-0 d-flex justify-space-between">
       <div class="d-flex align-center">
-        Zwierzak
+        {{ $t('Favorite') }}
       </div>
       <div>
-        <VBtn
-          class="mr-2"
-          density="compact"
-          variant="text"
-          :disabled="!areFieldsFilled"
-          :icon="isEdited ? 'mdi-eye' : 'mdi-edit'"
-          color="secondary"
-          @click="isEdited = !isEdited"
-        />
         <VBtn
           density="compact"
           variant="text"
@@ -48,10 +41,7 @@ const areFieldsFilled = computed(() => {
       </div>
     </VCardTitle>
     <!-- Edit :: START -->
-    <VCardItem
-      v-if="isEdited"
-      class="mt-0 pt-2"
-    >
+    <VCardItem class="mt-0 pt-2">
       <VRow class="pt-2">
         <VCol
           cols="12"
@@ -71,18 +61,25 @@ const areFieldsFilled = computed(() => {
             class="cursor-pointer"
             color="primary"
             size="70"
-            @click="profileAvatarUpload.click()"
+            @click="petAvatarUpload.click()"
           >
-            <span v-if="profileFirstLetters">{{ profileFirstLetters }}</span>
-            <VIcon icon="mdi-cloud-upload" v-else />
+            <span v-if="petFirstLetters">{{ petFirstLetters }}</span>
+            <VIcon
+              v-else
+              icon="mdi-cloud-upload"
+            />
           </VAvatar>
         </VCol>
-        <VCol cols="12">
+        <VCol
+          cols="12"
+          class="text-center"
+        >
           <VTextField
+            variant="plain"
             :model-value="pet.name"
             density="compact"
-            label="Imię futrzaka"
-            placeholder="John"
+            class="centred-input"
+            placeholder="Wpisz Imię pupila"
             @update:modelValue="emits('changeField', { value: $event, key: 'name' })"
           />
         </VCol>
@@ -126,44 +123,14 @@ const areFieldsFilled = computed(() => {
           <VTextarea
             :model-value="pet.description"
             density="compact"
-            label="Kilka słów opisu"
+            rows="2"
+            label="Opis pupila"
             @update:modelValue="emits('changeField', { value: $event, key: 'description' })"
           />
         </VCol>
       </VRow>
     </VCardItem>
     <!-- Edit :: END -->
-    <!-- Preview :: START -->
-    <VCardItem
-      v-else
-      class="mt-0 pt-2"
-    >
-      <VRow class="pt-2">
-        <VCol
-          cols="12"
-          class="d-flex justify-center"
-        >
-          <VAvatar
-            :image="imagePreviewSrc"
-            variant="tonal"
-            color="primary"
-            size="80"
-          >
-            {{ imagePreviewSrc }}
-          </VAvatar>
-        </VCol>
-        <VCol
-          cols="12"
-          class="d-flex justify-center"
-        >
-          {{ pet.name }}
-        </VCol>
-        <VCol cols="12">
-          {{ pet.description }}
-        </VCol>
-      </VRow>
-    </VCardItem>
-    <!-- Preview :: END -->
   </VCard>
 </template>
 

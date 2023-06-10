@@ -18,7 +18,8 @@ const setProfileName = value => {
 
 const imagePreviewSrc = computed(() => {
   const avatar = props.profile.avatar[0]
-  if (!avatar) return null
+  if (!avatar)
+    return null
 
   return URL.createObjectURL(props.profile.avatar[0])
 })
@@ -30,7 +31,6 @@ const profileFirstLetters = computed(() => {
 const profileFullName = computed(() => {
   return `${props.profile.firstName || ''} ${props.profile.lastName || ''}`.trim()
 })
-
 </script>
 
 <template>
@@ -43,11 +43,14 @@ const profileFullName = computed(() => {
             :disabled="profile.isPrimary"
             @update:modelValue="emits('changePrimaryProfile')"
           />
-          <VTooltip color="primary" activator="parent">
-            {{ profile.isPrimary ? 'Profil główny' : 'Profil dodatkowy' }}
+          <VTooltip
+            color="primary"
+            activator="parent"
+          >
+            {{ profile.isPrimary ? $t('MainProfile') : $t('AdditionalProfile') }}
           </VTooltip>
         </div>
-        {{ profileFullName || 'Profil' }}
+        {{ profileFullName || $t('Profile') }}
       </div>
       <div>
         <VBtn
@@ -83,7 +86,10 @@ const profileFullName = computed(() => {
             @click="profileAvatarUpload.click()"
           >
             <span v-if="profileFirstLetters">{{ profileFirstLetters }}</span>
-            <VIcon icon="mdi-cloud-upload" v-else />
+            <VIcon
+              v-else
+              icon="mdi-cloud-upload"
+            />
           </VAvatar>
         </VCol>
         <VCol
@@ -95,7 +101,7 @@ const profileFullName = computed(() => {
             :model-value="profileFullName"
             density="compact"
             class="centred-input"
-            placeholder="Wpisz Imię i nazwisko"
+            :placeholder="$t('signup.TypeNameAndLastName')"
             @update:modelValue="setProfileName"
           />
         </VCol>
@@ -104,7 +110,7 @@ const profileFullName = computed(() => {
             :model-value="profile.description"
             density="compact"
             rows="2"
-            label="Opis profilu"
+            :label="$t('ProfileDescription')"
             @update:modelValue="emits('changeField', { value: $event, key: 'description' })"
           />
         </VCol>
