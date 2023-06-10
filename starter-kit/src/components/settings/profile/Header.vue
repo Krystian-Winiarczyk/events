@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import avatar from '@images/avatars/avatar-1.png'
 
+const { $scroll } = getCurrentInstance()?.proxy
+
 const user = {
   avatar,
   name: 'Emily Totsu',
@@ -20,19 +22,33 @@ const user = {
     },
   ],
 }
+
+const headerAvatar = ref(null)
+const headerName = ref(null)
+
+window.addEventListener('scroll', () => {
+  // const lAvatar = getScrollLevel(headerAvatar)
+  const lName = $scroll.getLevel(headerName.value)
+
+  console.log(lName)
+})
 </script>
 
 <template>
   <div class="d-flex flex-column align-center gap-4">
     <!--    START::Avatar    -->
     <VAvatar
+      ref="headerAvatar"
       :image="user.avatar"
       size="50%"
     />
     <!--    END::Avatar    -->
 
     <!--    START::Name & Role    -->
-    <span class="d-flex flex-column align-center">
+    <span
+      ref="headerName"
+      class="d-flex flex-column align-center"
+    >
       <p class="text-h5 mb-0">
         {{ user.name }}
       </p>
