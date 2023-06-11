@@ -2,7 +2,8 @@
 import type { Ref } from 'vue'
 import type { Pet, User } from '@/globals/types/types'
 import avatar from '@images/avatars/avatar-1.png'
-import avatarPet from '@images/pages/pose_m1.png'
+
+const avatarPet = 'https://cdn.pixabay.com/photo/2018/05/11/08/11/dog-3389729_1280.jpg'
 
 const filters = ref([])
 
@@ -14,6 +15,26 @@ const user: User = {
 }
 
 const pets: Ref<Pet[]> = ref([
+  {
+    avatar: avatarPet,
+    name: 'Testo',
+    owner: user,
+  },
+  {
+    avatar: avatarPet,
+    name: 'Testo',
+    owner: user,
+  },
+  {
+    avatar: avatarPet,
+    name: 'Testo',
+    owner: user,
+  },
+  {
+    avatar: avatarPet,
+    name: 'Testo',
+    owner: user,
+  },
   {
     avatar: avatarPet,
     name: 'Testo',
@@ -54,52 +75,41 @@ const pets: Ref<Pet[]> = ref([
     <div class="d-flex flex-column gap-3">
       <label>I want to see</label>
 
-      <VRow>
-        <VCol class="d-flex flex-column justify-center align-center gap-2">
-          <FilterItem
-            v-model="filters"
-            label="My"
-            input-value="my"
-            icon="mdi-user"
-          />
-        </VCol>
+      <div class="d-flex flex-row gap-3">
+        <FilterItem
+          v-model="filters"
+          label="My"
+          input-value="my"
+          icon="mdi-user"
+        />
 
-        <VCol class="d-flex flex-column justify-center align-center gap-2">
-          <FilterItem
-            v-model="filters"
-            label="New"
-            input-value="new"
-            icon="mdi-star"
-          />
-        </VCol>
+        <FilterItem
+          v-model="filters"
+          label="New"
+          input-value="new"
+          icon="mdi-star"
+        />
 
-        <VCol class="d-flex flex-column justify-center align-center gap-2">
-          <FilterItem
-            v-model="filters"
-            label="Lovers"
-            input-value="lovers"
-            icon="mdi-heart"
-          />
-        </VCol>
-
-        <VCol class="d-flex flex-column justify-center align-center gap-2">
-          <FilterItem
-            v-model="filters"
-            label="All"
-            input-value="all"
-            icon="mdi-dots-horizontal"
-          />
-        </VCol>
-      </VRow>
+        <FilterItem
+          v-model="filters"
+          label="Lovers"
+          input-value="lovers"
+          icon="mdi-heart"
+        />
+      </div>
     </div>
 
-    <div>
-      <ListItem
+    <VRow>
+      <VCol
         v-for="(pet, i) in pets"
         :key="i"
-        :pet="pet"
-      />
-    </div>
+        cols="6"
+        md="3"
+        lg="2"
+      >
+        <ListItem :pet="pet" />
+      </VCol>
+    </VRow>
   </div>
 </template>
 

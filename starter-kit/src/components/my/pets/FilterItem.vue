@@ -54,15 +54,15 @@ const value = computed({
 
   <label
     :for="`checkbox-${label}`"
-    class="w-100 d-flex flex-column justify-center align-center gap-2"
+    class="d-flex flex-row justify-start align-center gap-2 bg-var-theme-background pa-2 rounded"
   >
     <span
-      class="w-100 d-flex flex-column justify-center align-center rounded-lg"
-      :style="`background: rgba(${color}, .34); padding: 1.1rem 0;`"
+      class="d-flex flex-column justify-center align-center rounded"
+      :style="`background: rgba(${color}, .5); padding: .34rem;`"
     >
       <VIcon
         :icon="icon"
-        size="28"
+        size="20"
       />
     </span>
 
