@@ -57,6 +57,36 @@ defineProps({
             <VIcon icon="mdi-chevron-right" />
           </template>
         </VListItem>
+
+        <VDivider />
+
+        <VListItem
+          :value="user.name"
+          title="Your's Firends"
+        >
+          <template #prepend>
+            <VIcon icon="mdi-users" />
+          </template>
+
+          <template #append>
+            <VIcon icon="mdi-chevron-right" />
+          </template>
+        </VListItem>
+
+        <VDivider />
+
+        <VListItem
+          :value="user.name"
+          title="Your's Events"
+        >
+          <template #prepend>
+            <VIcon icon="mdi-event" />
+          </template>
+
+          <template #append>
+            <VIcon icon="mdi-chevron-right" />
+          </template>
+        </VListItem>
       </VList>
     </div>
     <!--    END::About    -->
@@ -173,6 +203,14 @@ defineProps({
         <VListItem title="Help Me">
           <template #prepend>
             <VIcon icon="mdi-help" />
+          </template>
+        </VListItem>
+
+        <VDivider />
+
+        <VListItem title="Get Information About You">
+          <template #prepend>
+            <VIcon icon="mdi-document" />
           </template>
         </VListItem>
 

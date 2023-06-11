@@ -27,7 +27,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
       >
         <VList>
           <!-- 👉 User Avatar & Name -->
-          <VListItem @click="$router.push({ path: './set/me' })">
+          <VListItem @click="$router.push({ path: '/my/settings' })">
             <template #prepend>
               <VListItemAction start>
                 <VBadge
@@ -55,17 +55,20 @@ import avatar1 from '@images/avatars/avatar-1.png'
 
           <VDivider class="my-2" />
 
-          <!-- 👉 FAQ -->
-          <VListItem link>
+          <!-- 👉 My Pets -->
+          <VListItem
+            link
+            @click="$router.push({ path: '/my/pets' })"
+          >
             <template #prepend>
               <VIcon
                 class="me-2"
-                icon="tabler-help"
+                icon="mdi-paw"
                 size="22"
               />
             </template>
 
-            <VListItemTitle>FAQ</VListItemTitle>
+            <VListItemTitle>My Pets</VListItemTitle>
           </VListItem>
 
           <!-- Divider -->
