@@ -27,7 +27,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
       >
         <VList>
           <!-- 👉 User Avatar & Name -->
-          <VListItem @click="$router.push({ path: 'set/me' })">
+          <VListItem @click="$router.push({ path: './set/me' })">
             <template #prepend>
               <VListItemAction start>
                 <VBadge

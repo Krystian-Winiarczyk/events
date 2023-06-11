@@ -14,14 +14,15 @@ import i18n from '@/plugins/i18n'
 /*    START::Utils    */
 import extensions from './utils/extensions'
 import properties from './utils/properties'
+import useMobileMixin from '@/mixins/isMobile'
 
 /*    END::Utils    */
 
-/*    START::Types    */
+/*    START::Mixins    */
 
-/*    END::Types    */
+/*    END::Mixins    */
 
-loadFonts()
+await loadFonts()
 
 // Create vue app
 const app = createApp(App)
@@ -34,6 +35,8 @@ app.use(createPinia())
 app.use(router)
 app.use(layoutsPlugin)
 app.use(i18n)
+
+app.mixin(useMobileMixin)
 
 // Mount vue app
 app.mount('#app')

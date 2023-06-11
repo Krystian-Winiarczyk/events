@@ -10,72 +10,26 @@ defineProps({
 </script>
 
 <template>
-  <!--    START::About    -->
-  <div class="d-flex flex-column gap-2">
-    <label class="font-p">About</label>
+  <div class="d-flex flex-column gap-3">
+    <!--    START::About    -->
+    <div class="d-flex flex-column">
+      <label class="font-p sticky-label">
+        About
+      </label>
 
-    <VList
-      lines="two"
-      rounded
-      variant="plain"
-      density="comfortable"
-    >
-      <VListItem
-        :value="user.name"
-        title="Your Name"
-        :subtitle="user.name"
-      >
-        <template #prepend>
-          <VIcon icon="mdi-user" />
-        </template>
-
-        <template #append>
-          <VIcon
-            icon="mdi-edit"
-            size="18"
-          />
-        </template>
-      </VListItem>
-
-      <VDivider />
-
-      <VListItem
-        :value="user.name"
-        title="Your's Pets"
-      >
-        <template #prepend>
-          <VIcon icon="mdi-paw" />
-        </template>
-
-        <template #append>
-          <VIcon icon="mdi-chevron-right" />
-        </template>
-      </VListItem>
-    </VList>
-  </div>
-  <!--    END::About    -->
-
-  <!--    START::Socials    -->
-  <div class="d-flex flex-column gap-2">
-    <label class="font-p">Socials</label>
-
-    <VList
-      lines="two"
-      rounded
-      variant="plain"
-      density="comfortable"
-    >
-      <template
-        v-for="(social, key) in user.socials"
-        :key="key"
+      <VList
+        lines="two"
+        rounded
+        variant="plain"
+        density="comfortable"
       >
         <VListItem
-          :value="social.type"
-          :title="social.type.toLowerCase()"
-          :subtitle="social.href"
+          :value="user.name"
+          title="Your Name"
+          :subtitle="user.name"
         >
           <template #prepend>
-            <VIcon :icon="`mdi-${social.type.toLowerCase()}`" />
+            <VIcon icon="mdi-user" />
           </template>
 
           <template #append>
@@ -86,83 +40,153 @@ defineProps({
           </template>
         </VListItem>
 
-        <VDivider v-if="key !== user.socials.length - 1" />
-      </template>
-    </VList>
-  </div>
-  <!--    END::Socials    -->
+        <VDivider />
 
-  <!--    START::Security    -->
-  <div class="d-flex flex-column gap-2">
-    <label class="font-p">Security</label>
+        <VListItem
+          :value="user.name"
+          title="Your's Pets"
+        >
+          <template #prepend>
+            <VIcon icon="mdi-paw" />
+          </template>
 
-    <VList
-      lines="two"
-      rounded
-      variant="plain"
-      density="comfortable"
-    >
-      <VListItem
-        title="Your Password"
-        subtitle="******"
+          <template #append>
+            <VIcon icon="mdi-chevron-right" />
+          </template>
+        </VListItem>
+      </VList>
+    </div>
+    <!--    END::About    -->
+
+    <!--    START::Socials    -->
+    <div class="d-flex flex-column">
+      <label class="font-p sticky-label">
+        Socials
+      </label>
+
+      <VList
+        lines="two"
+        rounded
+        variant="plain"
+        density="comfortable"
       >
-        <template #prepend>
-          <VIcon icon="mdi-password" />
+        <template
+          v-for="(social, key) in user.socials"
+          :key="key"
+        >
+          <VListItem
+            :value="social.type"
+            :title="social.type.toLowerCase()"
+            :subtitle="social.href"
+          >
+            <template #prepend>
+              <VIcon :icon="`mdi-${social.type.toLowerCase()}`" />
+            </template>
+
+            <template #append>
+              <VIcon
+                icon="mdi-edit"
+                size="18"
+              />
+            </template>
+          </VListItem>
+
+          <VDivider v-if="key !== user.socials.length - 1" />
         </template>
+      </VList>
+    </div>
+    <!--    END::Socials    -->
 
-        <template #append>
-          <VIcon
-            icon="mdi-edit"
-            size="18"
-          />
-        </template>
-      </VListItem>
+    <!--    START::Security    -->
+    <div class="d-flex flex-column">
+      <label class="font-p sticky-label">
+        Security
+      </label>
 
-      <VDivider />
-
-      <VListItem
-        title="Your Email"
-        :subtitle="user.email"
+      <VList
+        lines="two"
+        rounded
+        variant="plain"
+        density="comfortable"
       >
-        <template #prepend>
-          <VIcon icon="mdi-email" />
-        </template>
+        <VListItem
+          title="Your Password"
+          subtitle="******"
+        >
+          <template #prepend>
+            <VIcon icon="mdi-password" />
+          </template>
 
-        <template #append>
-          <VIcon
-            icon="mdi-edit"
-            size="18"
-          />
-        </template>
-      </VListItem>
-    </VList>
+          <template #append>
+            <VIcon
+              icon="mdi-edit"
+              size="18"
+            />
+          </template>
+        </VListItem>
+
+        <VDivider />
+
+        <VListItem
+          title="Your Email"
+          :subtitle="user.email"
+        >
+          <template #prepend>
+            <VIcon icon="mdi-email" />
+          </template>
+
+          <template #append>
+            <VIcon
+              icon="mdi-edit"
+              size="18"
+            />
+          </template>
+        </VListItem>
+      </VList>
+    </div>
+    <!--    END::Security    -->
+
+    <!--    START::Support    -->
+    <div class="d-flex flex-column">
+      <label class="font-p sticky-label">
+        Support
+      </label>
+
+      <VList
+        lines="two"
+        rounded
+        variant="plain"
+        density="comfortable"
+      >
+        <VListItem title="Help Me">
+          <template #prepend>
+            <VIcon icon="mdi-help" />
+          </template>
+        </VListItem>
+
+        <VDivider />
+
+        <VListItem title="Delete Your Account">
+          <template #prepend>
+            <VIcon icon="mdi-trash" />
+          </template>
+        </VListItem>
+      </VList>
+    </div>
+    <!--    END::Support    -->
   </div>
-  <!--    END::Security    -->
-
-  <!--    START::Support    -->
-  <div class="d-flex flex-column gap-2">
-    <label class="font-p">Support</label>
-
-    <VList
-      lines="two"
-      rounded
-      variant="plain"
-      density="comfortable"
-    >
-      <VListItem title="Help Me">
-        <template #prepend>
-          <VIcon icon="mdi-help" />
-        </template>
-      </VListItem>
-
-      <VDivider />
-
-      <VListItem title="Delete Your Account">
-        <template #prepend>
-          <VIcon icon="mdi-trash" />
-        </template>
-      </VListItem>
-    </VList>
-  </div>
-  <!--    END::Support    -->
 </template>
+
+<style lang="scss" scoped>
+.sticky-label {
+  position: sticky;
+
+  top: 4rem;
+
+  padding: .5rem 1rem;
+
+  background: #1E1A1E;
+
+  z-index: 10;
+}
+</style>
