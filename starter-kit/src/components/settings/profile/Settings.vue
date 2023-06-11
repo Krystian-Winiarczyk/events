@@ -13,7 +13,10 @@ defineProps({
   <div class="d-flex flex-column gap-3">
     <!--    START::About    -->
     <div class="d-flex flex-column">
-      <label class="font-p sticky-label">
+      <label
+        class="font-p sticky-label"
+        :style="isSM ? 'top: 4rem' : 'top: 4rem'"
+      >
         About
       </label>
 
@@ -60,7 +63,10 @@ defineProps({
 
     <!--    START::Socials    -->
     <div class="d-flex flex-column">
-      <label class="font-p sticky-label">
+      <label
+        class="font-p sticky-label"
+        :style="isSM ? 'top: 4rem' : 'top: 4rem'"
+      >
         Socials
       </label>
 
@@ -99,7 +105,10 @@ defineProps({
 
     <!--    START::Security    -->
     <div class="d-flex flex-column">
-      <label class="font-p sticky-label">
+      <label
+        class="font-p sticky-label"
+        :style="isSM ? 'top: 4rem' : 'top: 4rem'"
+      >
         Security
       </label>
 
@@ -148,7 +157,10 @@ defineProps({
 
     <!--    START::Support    -->
     <div class="d-flex flex-column">
-      <label class="font-p sticky-label">
+      <label
+        class="font-p sticky-label"
+        :style="isSM ? 'top: 4rem' : 'top: 4rem'"
+      >
         Support
       </label>
 
@@ -180,8 +192,6 @@ defineProps({
 <style lang="scss" scoped>
 .sticky-label {
   position: sticky;
-
-  top: 4rem;
 
   padding: .5rem 1rem;
 

@@ -10,27 +10,58 @@ defineProps({
 </script>
 
 <template>
-  {{ isSM }}
+  <div
+    class="
+      d-flex flex-column align-center gap-4
 
-  <div class="d-flex flex-column align-center gap-4">
-    <!--    START::Avatar    -->
-    <VAvatar
-      :image="user.avatar"
-      :size="isSM ? '50%' : '4rem'"
-    />
-    <!--    END::Avatar    -->
+      flex-md-row
+    "
+  >
+    <div
+      class="
+        w-100 d-flex flex-column align-center
 
-    <!--    START::Name & Role    -->
-    <span class="d-flex flex-column align-center">
-      <p class="text-h5 mb-0">
-        {{ user.name }}
-      </p>
+        flex-md-row
+      "
+      style="row-gap: 1rem; column-gap: .64rem;"
+    >
+      <!--    START::Avatar    -->
+      <VAvatar
+        :image="user.avatar"
+        :size="isSM ? '50%' : '2.5rem'"
+      />
+      <!--    END::Avatar    -->
 
-      <p class="text-subtitle mb-0">
-        {{ user.role }}
-      </p>
-    </span>
+      <!--    START::Name & Role    -->
+      <span
+        class="
+          d-flex flex-column align-center
+
+          align-md-start
+        "
+      >
+        <p
+          class="
+            text-h5 font-weight-bold mb-0
+
+            text-md-body-1
+          "
+        >
+          {{ user.name }}
+        </p>
+
+        <p
+          class="
+            text-subtitle mb-0
+
+            text-md-subtitle-2
+          "
+        >
+          {{ user.role }}
+        </p>
+      </span>
     <!--    END::Name & Role    -->
+    </div>
 
     <!--    START::Socials Links    -->
     <div class="d-flex flex-row gap-4">
@@ -41,7 +72,6 @@ defineProps({
         color="secondary"
         rounded="sm"
         variant="tonal"
-        size="small"
       />
     </div>
     <!--    END::Socials Links    -->
