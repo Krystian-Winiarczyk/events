@@ -10,13 +10,13 @@ defineProps({
 </script>
 
 <template>
-  {{ isMobile }}
+  {{ isSM }}
 
   <div class="d-flex flex-column align-center gap-4">
     <!--    START::Avatar    -->
     <VAvatar
       :image="user.avatar"
-      :size="isMobile ? '50%' : '4rem'"
+      :size="isSM ? '50%' : '4rem'"
     />
     <!--    END::Avatar    -->
 

@@ -14,11 +14,11 @@ import i18n from '@/plugins/i18n'
 /*    START::Utils    */
 import extensions from './utils/extensions'
 import properties from './utils/properties'
-import useMobileMixin from '@/mixins/isMobile'
 
 /*    END::Utils    */
 
 /*    START::Mixins    */
+import breakpointsMixin from '@/mixins/breakpoints'
 
 /*    END::Mixins    */
 
@@ -36,7 +36,7 @@ app.use(router)
 app.use(layoutsPlugin)
 app.use(i18n)
 
-app.mixin(useMobileMixin)
+app.mixin(breakpointsMixin)
 
 // Mount vue app
 app.mount('#app')
