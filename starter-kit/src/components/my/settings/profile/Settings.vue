@@ -28,7 +28,7 @@ defineProps({
       >
         <VListItem
           :value="user.name"
-          title="Your Name"
+          title="My Name"
           :subtitle="user.name"
         >
           <template #prepend>
@@ -47,7 +47,8 @@ defineProps({
 
         <VListItem
           :value="user.name"
-          title="Your's Pets"
+          title="My Pets"
+          @click="$router.push({ path: '/my/pets' })"
         >
           <template #prepend>
             <VIcon icon="mdi-paw" />
@@ -62,7 +63,7 @@ defineProps({
 
         <VListItem
           :value="user.name"
-          title="Your's Firends"
+          title="My Firends"
         >
           <template #prepend>
             <VIcon icon="mdi-users" />
@@ -77,7 +78,7 @@ defineProps({
 
         <VListItem
           :value="user.name"
-          title="Your's Events"
+          title="My Events"
         >
           <template #prepend>
             <VIcon icon="mdi-event" />
@@ -149,7 +150,7 @@ defineProps({
         density="comfortable"
       >
         <VListItem
-          title="Your Password"
+          title="My Password"
           subtitle="******"
         >
           <template #prepend>
@@ -167,7 +168,7 @@ defineProps({
         <VDivider />
 
         <VListItem
-          title="Your Email"
+          title="My Email"
           :subtitle="user.email"
         >
           <template #prepend>
@@ -208,7 +209,7 @@ defineProps({
 
         <VDivider />
 
-        <VListItem title="Get Information About You">
+        <VListItem title="Give My Data">
           <template #prepend>
             <VIcon icon="mdi-document" />
           </template>
@@ -216,7 +217,7 @@ defineProps({
 
         <VDivider />
 
-        <VListItem title="Delete Your Account">
+        <VListItem title="Delete My Account">
           <template #prepend>
             <VIcon icon="mdi-trash" />
           </template>

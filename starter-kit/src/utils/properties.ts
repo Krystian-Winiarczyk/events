@@ -5,13 +5,36 @@ export default {
   install(app: App<Element>): void {
     /*    START::Filters    */
     app.config.globalProperties.$filters = {
-      truncate(value: string, length = 50, clamp = '...'): string {
+      truncate(value: string, max = 50, clamp = '…'): string {
         if (!value)
           return ''
 
-        const _value = value.toString()
+        const STR = value.toString()
+        const LENGTH = STR.length
 
-        return _value.length > length ? _value.slice(0, length) + clamp : _value
+        if (LENGTH < max) return STR
+
+        const VALUE = STR.slice(0, max).trim()
+
+        return `${VALUE}${clamp}`
+      },
+
+      island(value: string, max = 50, clamp = '…'): string {
+        console.log(true)
+
+        if (!value)
+          return ''
+
+        const STR = value.toString()
+        const LENGTH = STR.length
+        const MID = Math.floor(LENGTH / 2)
+
+        if (LENGTH < max) return STR
+
+        const START = STR.slice(0, MID - max / 2).trim()
+        const END = STR.slice(MID + max / 2).trim()
+
+        return `${START}${clamp}${END}`
       },
     }
 
@@ -20,30 +43,30 @@ export default {
     /*    START::Scroll    */
     app.config.globalProperties.$scroll = {
       binary: (reverse = true): number => {
-        const scroll = Math.max(window.scrollY, 0)
+        const SCROLL = Math.max(window.scrollY, 0)
 
-        const level = !reverse ? scroll : 1 - scroll
+        const LEVEL = !reverse ? scroll : 1 - SCROLL
 
-        return level.range(0, 1)
+        return LEVEL.range(0, 1)
       },
 
       breakPoint: (point: number, reverse = true): number => {
-        const scroll = Math.max(window.scrollY, 0)
+        const SCROLL = Math.max(window.scrollY, 0)
 
-        const level = !reverse ? (scroll / point) : (1 - scroll / point)
+        const LEVEL = !reverse ? (SCROLL / point) : (1 - SCROLL / point)
 
-        return level.range(0, 1)
+        return LEVEL.range(0, 1)
       },
 
       getLevelOf: (element: UnwrapRef<null>): number => {
         if (!element)
           return 0
 
-        const windowHeight = window.innerHeight
-        const elementTop = element.offsetTop
-        const scrollPosition = window.scrollY
+        const WINDOW_HEIGHT = window.innerHeight
+        const ELEMENT_TOP = element.offsetTop
+        const SCROLL_POSITION = window.scrollY
 
-        let scrollLevel = (scrollPosition + windowHeight - elementTop) / windowHeight
+        let scrollLevel = (SCROLL_POSITION + WINDOW_HEIGHT - ELEMENT_TOP) / WINDOW_HEIGHT
 
         scrollLevel = Math.max(0, Math.min(1, scrollLevel)).round(1)
 
