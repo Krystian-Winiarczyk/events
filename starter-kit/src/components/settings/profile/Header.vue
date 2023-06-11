@@ -1,36 +1,11 @@
 <script setup lang="ts">
-import avatar from '@images/avatars/avatar-1.png'
+import type { User } from '@/types/types'
 
-const { $scroll } = getCurrentInstance()?.proxy
-
-const user = {
-  avatar,
-  name: 'Emily Totsu',
-  role: 'Pet Owner',
-  socials: [
-    {
-      type: 'FACEBOOK',
-      href: 'https://www.facebook.com/',
-    },
-    {
-      type: 'LINKEDIN',
-      href: 'https://www.linkedin.com/',
-    },
-    {
-      type: 'INSTAGRAM',
-      href: 'https://www.instagram.com/',
-    },
-  ],
-}
-
-const headerAvatar = ref(null)
-const headerName = ref(null)
-
-window.addEventListener('scroll', () => {
-  // const lAvatar = getScrollLevel(headerAvatar)
-  const lName = $scroll.getLevel(headerName.value)
-
-  console.log(lName)
+defineProps({
+  user: {
+    type: Object as () => User,
+    required: true,
+  },
 })
 </script>
 
@@ -38,17 +13,13 @@ window.addEventListener('scroll', () => {
   <div class="d-flex flex-column align-center gap-4">
     <!--    START::Avatar    -->
     <VAvatar
-      ref="headerAvatar"
       :image="user.avatar"
       size="50%"
     />
     <!--    END::Avatar    -->
 
     <!--    START::Name & Role    -->
-    <span
-      ref="headerName"
-      class="d-flex flex-column align-center"
-    >
+    <span class="d-flex flex-column align-center">
       <p class="text-h5 mb-0">
         {{ user.name }}
       </p>

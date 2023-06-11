@@ -17,21 +17,23 @@ import properties from './utils/properties'
 
 /*    END::Utils    */
 
+/*    START::Types    */
+
+/*    END::Types    */
+
 loadFonts()
 
 // Create vue app
 const app = createApp(App)
 
-// Filters
-
 // Use plugins
 app.use(vuetify)
+app.use(extensions)
+app.use(properties)
 app.use(createPinia())
 app.use(router)
 app.use(layoutsPlugin)
 app.use(i18n)
-app.use(extensions)
-app.use(properties)
 
 // Mount vue app
 app.mount('#app')

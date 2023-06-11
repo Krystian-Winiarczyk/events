@@ -19,7 +19,23 @@ export default {
 
     /*    START::Scroll    */
     app.config.globalProperties.$scroll = {
-      getLevel: (element: UnwrapRef<null>): number => {
+      binary: (reverse = true): number => {
+        const scroll = Math.max(window.scrollY, 0)
+
+        const level = !reverse ? scroll : 1 - scroll
+
+        return level.range(0, 1)
+      },
+
+      breakPoint: (point: number, reverse = true): number => {
+        const scroll = Math.max(window.scrollY, 0)
+
+        const level = !reverse ? (scroll / point) : (1 - scroll / point)
+
+        return level.range(0, 1)
+      },
+
+      getLevelOf: (element: UnwrapRef<null>): number => {
         if (!element)
           return 0
 
