@@ -75,5 +75,11 @@ export default {
     }
 
     /*    END::Scroll    */
+
+    /*    START::Generators    */
+    app.config.globalProperties.$gen = {
+
+    }
+    /*    END::Generators    */
   },
 }

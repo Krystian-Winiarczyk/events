@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Header from '@/components/my/settings/profile/Header.vue'
 import Settings from '@/components/my/settings/profile/Settings.vue'
-import type { User } from '@/types/types'
+import type { User } from '@/globals/types/types'
 import avatar from '@images/avatars/avatar-1.png'
 
 const user: User = {
