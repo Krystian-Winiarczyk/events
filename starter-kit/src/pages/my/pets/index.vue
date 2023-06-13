@@ -45,33 +45,36 @@ const pets: Ref<Pet[]> = ref([
 
 <template>
   <div class="d-flex flex-column gap-5">
+    <!--    START::Tob Banner    -->
     <VCard
       style="background: linear-gradient(0deg, #B53D47 0%, #F25260 100%)"
       rounded="lg"
     >
-      <template #title>
-        Save The Animals!
-      </template>
+      <VCardItem>
+        <VCardTitle>
+          Save The Animals!
+        </VCardTitle>
+      </VCardItem>
 
-      <template #text>
-        <div class="d-flex flex-column align-start">
-          Many animals require our help! See how you can assist them alongside us.
+      <VCardText class="d-flex flex-column align-start">
+        Many animals require our help! See how you can assist them alongside us.
 
-          <VBtn
-            rounded="pill"
-            class="mt-5"
-          >
-            Help!
+        <VBtn
+          rounded="pill"
+          class="mt-5"
+        >
+          Help!
 
-            <VIcon
-              end
-              icon="mdi-heart"
-            />
-          </VBtn>
-        </div>
-      </template>
+          <VIcon
+            end
+            icon="mdi-heart"
+          />
+        </VBtn>
+      </vcardtext>
     </VCard>
+    <!--    END::Tob Banner    -->
 
+    <!--    START::Filters    -->
     <div class="d-flex flex-column gap-3">
       <label>I want to see</label>
 
@@ -98,18 +101,21 @@ const pets: Ref<Pet[]> = ref([
         />
       </div>
     </div>
+    <!--    END::Filters    -->
 
+    <!--    START::Pet List    -->
     <VRow>
       <VCol
         v-for="(pet, i) in pets"
         :key="i"
-        cols="6"
-        md="3"
-        lg="2"
+        cols="12"
+        md="4"
+        lg="3"
       >
         <ListItem :pet="pet" />
       </VCol>
     </VRow>
+    <!--    END::Pet List    -->
   </div>
 </template>
 
