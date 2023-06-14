@@ -20,6 +20,8 @@ defineProps({
     <VBtn
       icon="mdi-heart"
       class="position-absolute mx-3 my-4"
+      size="small"
+      color="light"
       style="top: 0; right: 0;"
     />
 

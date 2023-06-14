@@ -58,7 +58,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
           <!-- 👉 My Pets -->
           <VListItem
             link
-            @click="$router.push({ path: '/my/pets' })"
+            @click="$router.push({ path: '/pets' })"
           >
             <template #prepend>
               <VIcon

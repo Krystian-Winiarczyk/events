@@ -17,6 +17,7 @@ const pet: Ref<Pet> = ref(
     avatar: avatarPet,
     name: 'Testo',
     owner: user,
+    dsc: 'One popular sainthood i give you: view each other. Music doesn’t spiritually discover any wind — but the guru is what sits. Not hell or paradise, avoid the acceptance.',
   },
 )
 </script>
@@ -25,20 +26,10 @@ const pet: Ref<Pet> = ref(
   <div class="d-flex flex-column gap-4">
     <!--    START::Picture    -->
     <div
-      class="w-100 rounded-lg overflow-hidden position-relative"
-      style="height: 60vh"
+      class="d-flex flex-column align-center"
+      style="row-gap: 1rem; column-gap: .64rem;"
     >
-      <img
-        :src="pet.avatar"
-        :alt="`The avatar of the ${pet.name}`"
-        class="w-100 h-100 v-img__img--cover"
-      >
-
-      <VBtn
-        icon="mdi-heart"
-        class="position-absolute mx-3 my-4"
-        style="top: 0; right: 0;"
-      />
+      <Avatar :image="pet.avatar" />
     </div>
     <!--    END::Picture    -->
 
@@ -51,28 +42,57 @@ const pet: Ref<Pet> = ref(
         </p>
 
         <div class="text-subtitle-2 d-flex flex-row align-content-center gap-2">
-          <VAvatar
-            :image="pet.owner.avatar"
-            size="16"
-            style="top: .14rem"
-          />
+          He's my owner
 
-          {{ pet.owner.name }}
+          <VBtn
+            variant="text"
+            size="sm"
+            @click="$router.push({ path: `/user/${pet.owner.name}` })"
+          >
+            <template #prepend>
+              <VAvatar
+                :image="pet.owner.avatar"
+                size="16"
+              />
+            </template>
+
+            <p class="mx-1 mb-0">
+              {{ pet.owner.name }}
+            </p>
+          </VBtn>
         </div>
       </div>
       <!--    END::Owner Name & Pet Name    -->
 
-      <VBtn icon="mdi-gender-male" />
+      <VBtn
+        variant="text"
+        icon="mdi-gender-male"
+      />
     </div>
     <!--    END::Header    -->
 
-    <!--    START::Owner    -->
-    <VCardItem
-      class="pa-0"
-      :prepend-avatar="pet.owner.avatar || ''"
-      :title="pet.owner.name"
-      :subtitle="pet.owner.email"
-    />
-    <!--    END::Owner    -->
+    <VRow>
+      <VCol
+        cols="6"
+        sm="6"
+      >
+        <VCard
+          title="Breed"
+          subtitle="Golden"
+        />
+      </VCol>
+
+      <VCol
+        cols="6"
+        sm="6"
+      >
+        <VCard
+          title="Weight"
+          subtitle="2.4kg"
+        />
+      </VCol>
+    </VRow>
+
+    {{ pet.dsc }}
   </div>
 </template>

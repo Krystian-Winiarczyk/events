@@ -48,7 +48,7 @@ defineProps({
         <VListItem
           :value="user.name"
           title="My Pets"
-          @click="$router.push({ path: '/my/pets' })"
+          @click="$router.push({ path: '/pets' })"
         >
           <template #prepend>
             <VIcon icon="mdi-paw" />
