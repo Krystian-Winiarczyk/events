@@ -27,7 +27,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
       >
         <VList>
           <!-- 👉 User Avatar & Name -->
-          <VListItem>
+          <VListItem @click="$router.push({ path: '/my/settings' })">
             <template #prepend>
               <VListItemAction start>
                 <VBadge
@@ -55,56 +55,20 @@ import avatar1 from '@images/avatars/avatar-1.png'
 
           <VDivider class="my-2" />
 
-          <!-- 👉 Profile -->
-          <VListItem link>
+          <!-- 👉 My Pets -->
+          <VListItem
+            link
+            @click="$router.push({ path: '/pets' })"
+          >
             <template #prepend>
               <VIcon
                 class="me-2"
-                icon="tabler-user"
+                icon="mdi-paw"
                 size="22"
               />
             </template>
 
-            <VListItemTitle>Profile</VListItemTitle>
-          </VListItem>
-
-          <!-- 👉 Settings -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-settings"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Settings</VListItemTitle>
-          </VListItem>
-
-          <!-- 👉 Pricing -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-currency-dollar"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Pricing</VListItemTitle>
-          </VListItem>
-
-          <!-- 👉 FAQ -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-help"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>FAQ</VListItemTitle>
+            <VListItemTitle>My Pets</VListItemTitle>
           </VListItem>
 
           <!-- Divider -->

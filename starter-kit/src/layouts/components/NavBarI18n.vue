@@ -11,12 +11,8 @@ const i18nCompLanguages: I18nLanguage[] = [
     i18nLang: 'en',
   },
   {
-    label: 'French',
-    i18nLang: 'fr',
-  },
-  {
-    label: 'Arabic',
-    i18nLang: 'ar',
+    label: 'Polski',
+    i18nLang: 'pl',
   },
 ]
 

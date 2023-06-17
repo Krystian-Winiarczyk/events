@@ -23,3 +23,11 @@ handleSkinChanges()
     </VApp>
   </VLocaleProvider>
 </template>
+
+<style>
+.margin-center {
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+</style>

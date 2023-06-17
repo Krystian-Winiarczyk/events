@@ -1,0 +1,3 @@
+src/types/*.ts
+src/utils/*.ts
+src/mixins/*.ts

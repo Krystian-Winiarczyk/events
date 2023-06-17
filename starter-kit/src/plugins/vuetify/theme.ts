@@ -1,6 +1,5 @@
 import type { VuetifyOptions } from 'vuetify'
 import { resolveVuetifyTheme } from '@core/utils/vuetify'
-import { themeConfig } from '@themeConfig'
 
 export const staticPrimaryColor = '#666CFF'
 
@@ -128,7 +127,7 @@ const theme: VuetifyOptions['theme'] = {
         'activated-opacity': 0.1,
         'pressed-opacity': 0.14,
         'dragged-opacity': 0.1,
-        'table-header-background': '#3A3E5B',
+        'table-header-background': '#1E1A1E',
 
         // Shadows
         'shadow-key-umbra-opacity': 0.2,
@@ -137,6 +136,12 @@ const theme: VuetifyOptions['theme'] = {
         'shadow-key-umbra-color': '#000',
         'shadow-key-penumbra-color': '#212121',
         'shadow-key-ambient-color': '#30334E',
+
+        'shadow-lg-c': '#000',
+        'shadow-lg-x': '-14px',
+        'shadow-lg-y': '14px',
+        'shadow-lg-b': '60px',
+        'shadow-lg-o': 0.5,
       },
     },
   },

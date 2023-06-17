@@ -11,29 +11,32 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import i18n from '@/plugins/i18n'
 
-loadFonts()
+/*    START::Utils    */
+import extensions from './utils/extensions'
+import properties from './utils/properties'
+
+/*    END::Utils    */
+
+/*    START::Mixins    */
+import breakpointsMixin from '@/mixins/breakpoints'
+
+/*    END::Mixins    */
+
+await loadFonts()
 
 // Create vue app
 const app = createApp(App)
 
-// Filters
-app.config.globalProperties.$filters = {
-  truncate(value: string, length = 50, clamp = '...'): string {
-    if (!value)
-      return ''
-
-    const _value = value.toString()
-
-    return _value.length > length ? _value.slice(0, length) + clamp : _value
-  },
-}
-
 // Use plugins
 app.use(vuetify)
+app.use(extensions)
+app.use(properties)
 app.use(createPinia())
 app.use(router)
 app.use(layoutsPlugin)
 app.use(i18n)
+
+app.mixin(breakpointsMixin)
 
 // Mount vue app
 app.mount('#app')
