@@ -12,6 +12,7 @@ import {Competition} from "../typeorm/entities/Competition";
 import {CompetitionLevel} from "../typeorm/entities/CompetitionLevel";
 import {EventRegistration} from "../typeorm/entities/EventRegistration";
 import {EventCompetitionLevel} from "../typeorm/entities/EventCompetitionLevel";
+import {File} from "../typeorm/entities/File";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -26,8 +27,8 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
-      entities: [User, Pet, UserProfile, Event, Competition, CompetitionLevel, EventRegistration, EventCompetitionLevel],
-      synchronize: configService.get('APP_MODE') === AppModes.DEVELOPMENT,
+      entities: [User, Pet, UserProfile, Event, Competition, CompetitionLevel, EventRegistration, EventCompetitionLevel, File],
+      synchronize: true || configService.get('APP_MODE') === AppModes.DEVELOPMENT,
     };
   },
 };

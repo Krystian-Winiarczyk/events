@@ -7,10 +7,10 @@ import {Exclude} from "class-transformer";
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
     @Column({ unique: true, nullable: false })
-    email: string;
+    username: string;
 
     @Column({ unique: true, nullable: false })
-    phone: string;
+    email: string;
 
     @Column({ nullable: false, select: false })
     password: string;

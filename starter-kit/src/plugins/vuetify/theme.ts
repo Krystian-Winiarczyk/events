@@ -10,7 +10,7 @@ const theme: VuetifyOptions['theme'] = {
       dark: false,
       colors: {
         // 'primary': localStorage.getItem(`${themeConfig.app.title}-lightThemePrimaryColor`) || staticPrimaryColor,
-        'primary': '#666cff',
+        'primary': '#7c5295',
         'on-primary': '#fff',
         'secondary': '#6d788d',
         'on-secondary': '#fff',

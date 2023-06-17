@@ -16,6 +16,11 @@
   "AccountDetails": "Szczegóły konta",
   "ProfileDescription": "Opis profilu",
   "MainProfile": "Profil główny",
+  "Nickname": "Pseudonim",
+  "Sex": "Płeć",
+  "Male": "Mężczyzna",
+  "Female": "Kobieta",
+  "Other": "Inna | Inne",
   "AdditionalProfile": "Profil dodatkowy",
 
   "Pet": "Pupila | Pupile",
@@ -31,16 +36,30 @@
     "TypePasswordAgain": "Wprowadz hasło ponownie",
     "EnterYourAccountInformation": "Wprowadz informacje dotyczące Twojego konta",
 
-    "CreateAPlayerProfiles": "Utwórz profile zawodników",
+    "CreateAPlayerProfiles": "Utwórz profil zawodnika",
     "TypeNameAndLastName": "Wpisz Imię i nazwisko",
 
     "TypePetName": "Wpisz Imię pupila",
     "AddOwnPet": "Dodaj swojego pupila",
-    "CreateOwnPets": "Utwórz swoich pupili",
-    "AddOwnPetsToAccount": "Dodaj swoich pupili do konta",
+    "CreateOwnPets": "Dodaj swojego pupila",
+    "AddOwnPetsToAccount": "Dodaj swojego pupila do konta",
 
     "VerifyYourData": "Zweryfikuj poprawność swoich danych"
 
+  },
+
+  "validator": {
+    "FieldIsRequired": "To pole jest wymagane",
+    "FieldIsNotValidEmail": "Pole Email musi być prawidłowym adresem email",
+    "PasswordNotMatchPatter": "Pole musi zawierać co najmniej jedną wielką literę, jedną małą literę, jeden znak specjalny i jedną cyfrę, o długości co najmniej 8 znaków",
+    "ConfirmPasswordNotMatchPassword": "Pole Potwierdź hasło nie jest zgodne z polem Hasło",
+    "NumberOutOfRange": "Wprowadź liczbę między {min} a {max}",
+    "FieldMustBeInteger": "To pole musi być liczbą całkowitą",
+    "InvalidRegexpFormat": "Format pola Regex jest nieprawidłowy",
+    "ValueContainNotAlphabeticCharacters": "Pole Alfa może zawierać tylko litery",
+    "InvalidUrl": "Adres URL jest nieprawidłowy",
+    "FieldTooLong": "Pole Minimalna liczba znaków musi wynosić co najmniej {length}",
+    "NotValidCharacters": "Wszystkie znaki są nieprawidłowe"
   },
 
   "$vuetify": {

@@ -7,9 +7,13 @@ const messages = Object.fromEntries(
     .map(([key, value]) => [key.slice(10, -5), value.default]),
 )
 
-export default createI18n({
+const instance = createI18n({
   legacy: false,
   locale: 'en',
   fallbackLocale: 'en',
   messages,
 })
+
+export { instance }
+export default instance
+

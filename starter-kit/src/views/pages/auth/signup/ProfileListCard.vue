@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { requiredValidator } from '@core/utils/validators'
+
 interface Props {
   profile: any
-  index: number | string
 }
 
 const props = defineProps<Props>()
-const emits = defineEmits(['removeProfile', 'changeField', 'changePrimaryProfile'])
+const emits = defineEmits(['changeField'])
 
 const profileAvatarUpload = ref(null)
 
@@ -34,89 +35,88 @@ const profileFullName = computed(() => {
 </script>
 
 <template>
-  <VCard>
-    <VCardTitle class="mb-0 pb-0 d-flex justify-space-between">
-      <div class="d-flex align-center">
-        <div>
-          <VCheckbox
-            :model-value="profile.isPrimary"
-            :disabled="profile.isPrimary"
-            @update:modelValue="emits('changePrimaryProfile')"
-          />
-          <VTooltip
-            color="primary"
-            activator="parent"
-          >
-            {{ profile.isPrimary ? $t('MainProfile') : $t('AdditionalProfile') }}
-          </VTooltip>
-        </div>
-        {{ profileFullName || $t('Profile') }}
-      </div>
+  <VRow>
+    <VCol
+      cols="12"
+      class="d-flex align-center justify-center align-center"
+    >
       <div>
-        <VBtn
-          density="compact"
-          variant="text"
-          icon="mdi-trash"
-          color="secondary"
-          @click="emits('removeProfile')"
+        <VFileInput
+          ref="profileAvatarUpload"
+          class="d-none"
+          show-size
+          accept="image/png, image/jpeg, image/bmp, image/jpg, image/webp"
+          :model-value="profile.avatar"
+          @update:modelValue="emits('changeField', { value: $event, key: 'avatar' })"
         />
+        <VAvatar
+          :image="imagePreviewSrc"
+          variant="tonal"
+          class="cursor-pointer"
+          color="primary"
+          size="60"
+          @click="profileAvatarUpload.click()"
+        >
+          <span v-if="profileFirstLetters">{{ profileFirstLetters }}</span>
+          <VIcon
+            v-else
+            icon="mdi-cloud-upload"
+          />
+        </VAvatar>
       </div>
-    </VCardTitle>
-    <!-- Edit :: START -->
-    <VCardItem class="mt-0 pt-2">
-      <VRow class="pt-2">
-        <VCol
-          cols="12"
-          class="d-flex align-center justify-center mb-0 pb-0"
-        >
-          <VFileInput
-            ref="profileAvatarUpload"
-            class="d-none"
-            show-size
-            accept="image/png, image/jpeg, image/bmp, image/jpg, image/webp"
-            :model-value="profile.avatar"
-            @update:modelValue="emits('changeField', { value: $event, key: 'avatar' })"
-          />
-          <VAvatar
-            :image="imagePreviewSrc"
-            variant="tonal"
-            class="cursor-pointer"
-            color="primary"
-            size="70"
-            @click="profileAvatarUpload.click()"
-          >
-            <span v-if="profileFirstLetters">{{ profileFirstLetters }}</span>
-            <VIcon
-              v-else
-              icon="mdi-cloud-upload"
+      <VTextField
+        class="pt-0 pl-2"
+        variant="plain"
+        :model-value="profileFullName"
+        :rules="[requiredValidator]"
+        :placeholder="$t('signup.TypeNameAndLastName')"
+        @update:modelValue="setProfileName"
+      />
+    </VCol>
+    <VCol cols="6">
+      <VTextField
+        :model-value="profile.nickname"
+        :label="$t('Nickname')"
+        @update:modelValue="emits('changeField', { value: $event, key: 'nickname' })"
+      />
+    </VCol>
+    <VCol cols="6">
+      <VSelect
+        v-model="value"
+        :items="items"
+        item-title="name"
+        item-value="name"
+        label="Select Item"
+        placeholder="Select Item"
+        multiple
+        clearable
+        clear-icon="mdi-close"
+      >
+        <template #selection="{ item }">
+          <VChip>
+            <VAvatar
+              start
+              :image="item.raw.avatar"
             />
-          </VAvatar>
-        </VCol>
-        <VCol
-          cols="12"
-          class="text-center"
-        >
-          <VTextField
-            variant="plain"
-            :model-value="profileFullName"
-            density="compact"
-            class="centred-input"
-            :placeholder="$t('signup.TypeNameAndLastName')"
-            @update:modelValue="setProfileName"
-          />
-        </VCol>
-        <VCol cols="12">
-          <VTextarea
-            :model-value="profile.description"
-            density="compact"
-            rows="2"
-            :label="$t('ProfileDescription')"
-            @update:modelValue="emits('changeField', { value: $event, key: 'description' })"
-          />
-        </VCol>
-      </VRow>
-    </VCardItem>
-  </VCard>
+            <span>{{ item.title }}</span>
+          </VChip>
+        </template>
+      </VSelect>
+      <VTextField
+        :model-value="profile.nickname"
+        :label="$t('Sex')"
+        @update:modelValue="emits('changeField', { value: $event, key: 'nickname' })"
+      />
+    </VCol>
+    <VCol cols="12">
+      <VTextarea
+        :model-value="profile.description"
+        rows="2"
+        :label="$t('ProfileDescription')"
+        @update:modelValue="emits('changeField', { value: $event, key: 'description' })"
+      />
+    </VCol>
+  </VRow>
 </template>
 
 <style lang="scss">

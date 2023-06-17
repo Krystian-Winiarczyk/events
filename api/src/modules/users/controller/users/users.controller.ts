@@ -29,6 +29,8 @@ import {PetService} from "../../service/pet/pet.service";
 import {UsersService} from "../../service/users/users.service";
 import {CreateUserProfileDto} from "../../dtos/UserProfile.dto";
 import {CreatePetDto} from "../../dtos/Pet.dto";
+import {Pet} from "../../../../typeorm/entities/Pet";
+import {UserProfile} from "../../../../typeorm/entities/UserProfile";
 
 // @UseGuards(JwtAuthGuard, RoleGuard)
 @Controller('api/users')
@@ -149,7 +151,7 @@ export class UsersController
         @Param('id', ParseIntPipe) id: number
     ) {
         try {
-            const data = await this.userProfileService.findAll({ where: {
+            const data: UserProfile[] = await this.userProfileService.findAll({ where: {
                 user: { id }
             }});
 
@@ -166,7 +168,7 @@ export class UsersController
         @Body() createUserProfileDto: CreateUserProfileDto
     ) {
         try {
-            const data = await this.userProfileService.create({ ...createUserProfileDto, user: id })
+            const data: UserProfile = await this.userProfileService.create({ ...createUserProfileDto, user: id })
 
             this.apiSuccessResponse(res, req, data)
         } catch (error) {
@@ -181,7 +183,9 @@ export class UsersController
         @Param('id', ParseIntPipe) id: number
     ) {
         try {
-            const data = await this.petService.findUserPets(id)
+            const data: Pet[] = await this.petService.findAll({ where: {
+                user: { id }
+            }});
 
             this.apiSuccessResponse(res, req, data)
         } catch (error) {
@@ -196,7 +200,7 @@ export class UsersController
         @Body() createPetDto: CreatePetDto
     ) {
         try {
-            const data = await this.petService.createUserPet(id, createPetDto)
+            const data: Pet = await this.petService.create({ ...createPetDto, user: id })
 
             this.apiSuccessResponse(res, req, data)
         } catch (error) {

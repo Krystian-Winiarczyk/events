@@ -3,6 +3,7 @@ import { Entity, Column, ManyToOne, JoinTable, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import { User } from './User';
 import { EventRegistration } from './EventRegistration';
+import {File} from "./File";
 
 @Entity({ name: 'pets' })
 export class Pet extends BaseEntity {
@@ -24,9 +25,16 @@ export class Pet extends BaseEntity {
     @Column({ nullable: true })
     personality: string
 
+    @Column({ nullable: true })
+    test: string
+
     @ManyToOne(() => User, (user) => user.pets)
     @JoinTable()
     user: User
+
+    @OneToMany(() => File, file => file.pet)
+    @JoinTable()
+    images: File[]
 
     @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.pet)
     @JoinTable()

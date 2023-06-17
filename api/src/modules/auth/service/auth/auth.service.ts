@@ -6,11 +6,21 @@ import {User} from "../../../../typeorm/entities/User";
 import {LoginUserDto} from "../../dtos/LoginUser.dto";
 import * as argon2 from 'argon2';
 import { ConfigService } from '@nestjs/config';
+import {SignupDto} from "../../dtos/Signup.dto";
+import {create} from "domain";
+import {PetService} from "../../../users/service/pet/pet.service";
+import {UserProfilesService} from "../../../users/service/user-profiles/user-profiles.service";
+import {Roles} from "../../../../decorators/roles.decorator";
+import {Ranks} from "../../../../constants/Ranks";
+import {CreateUserProfileDto} from "../../../users/dtos/UserProfile.dto";
+import {CreatePetDto} from "../../../users/dtos/Pet.dto";
 
 @Injectable()
 export class AuthService {
     constructor(
         private usersService: UsersService,
+        private userProfilesService: UserProfilesService,
+        private petService: PetService,
         private jwtService: JwtService,
         private configService: ConfigService,
     ) {}
@@ -88,29 +98,43 @@ export class AuthService {
         return { ...user, ...tokens };
     }
 
-    async signUp(createUserDto): Promise<any> {
+    async signUp(signupDto: SignupDto): Promise<any> {
+        const passwordsMatch = signupDto.password === signupDto.confirmPassword
+
+        if (!passwordsMatch) {
+            throw new BadRequestException('Passwords are not the same');
+        }
+
         // Check if user exists
-        const userExists = await this.usersService.findOneBy({
-            where: {
-                email: createUserDto.email,
-            }
+        const where: { email: string, username?: string } = {
+            email: signupDto.email,
+        }
+        if (signupDto.username) where.username = signupDto.username
+
+        const userWithEmailExists: User = await this.usersService.findOneBy({
+            where,
         });
 
-        if (userExists) {
+        if (userWithEmailExists) {
             throw new BadRequestException('User already exists');
         }
 
-        // Hash password
-        const hash = await this.hashData(createUserDto.password);
-        const newUser = await this.usersService.create({
-            ...createUserDto,
-            password: hash,
+        const newUser: User = await this.usersService.create({
+            firstName: signupDto.profile.firstName,
+            lastName: signupDto.profile.lastName,
+            avatar: signupDto.profile.avatar,
+            email: signupDto.email,
+            username: signupDto.username,
+            password: signupDto.password,
+            role: Ranks.USER,
         });
 
-        delete newUser.password;
-        const tokens = await this.getTokens({ ...newUser });
-        await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-        return { ...newUser, ...tokens };
+        await this.petService.create({ ...signupDto.pet, user: newUser.id })
+
+        // delete newUser.password;
+        // const tokens = await this.getTokens({ ...newUser });
+        // await this.updateRefreshToken(newUser.id, tokens.refreshToken);
+        // return { ...newUser, ...tokens };
     }
 
     async logout(userId: number) {

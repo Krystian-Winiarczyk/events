@@ -7,6 +7,7 @@ export class CreatePetDto {
     size?: Size
     color?: string
     personality?: string
+    images?: Array<any>
     user?: number
 }
 
@@ -17,5 +18,6 @@ export class UpdatePetDto {
     size?: Size
     color?: string
     personality?: string
+    images?: Array<any>
     user?: number
 }

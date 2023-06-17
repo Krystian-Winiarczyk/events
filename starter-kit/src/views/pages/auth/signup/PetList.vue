@@ -36,7 +36,7 @@ const removePet = index => {
             style="width: 425px"
             :pet="pet"
             :index="petIndex"
-            @remove-profile="removePet(petIndex)"
+            @remove-pet="removePet(petIndex)"
             @change-field="changePetField(petIndex, $event)"
           />
         </VSlideGroupItem>

@@ -8,6 +8,7 @@ import { JwtAuthGuard } from '../../../../guard/jwt-auth/jwt-auth.guard';
 import { Request, Response } from 'express';
 import {JwtRefreshAuthGuard} from "../../../../guard/jwt-refresh-auth/jwt-refresh-auth.guard";
 import {User} from "../../../../typeorm/entities/User";
+import {SignupDto} from "../../dtos/Signup.dto";
 
 @Controller('auth')
 export class AuthController extends BaseController {
@@ -41,6 +42,21 @@ export class AuthController extends BaseController {
     ) {
         try {
             const user: User = await this.authService.signIn(loginUser);
+
+            this.apiSuccessResponse(res, req, user);
+        } catch (error) {
+            this.apiErrorResponse(res, req, error);
+        }
+    }
+
+    @Post('signup')
+    async signup(
+        @Req() req: Request,
+        @Res() res: Response,
+        @Body() signupData: SignupDto,
+    ) {
+        try {
+            const user: User = await this.authService.signUp(signupData);
 
             this.apiSuccessResponse(res, req, user);
         } catch (error) {

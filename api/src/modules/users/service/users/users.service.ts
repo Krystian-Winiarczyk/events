@@ -30,13 +30,15 @@ export class UsersService extends BaseService<User>{
     }
 
     async create(createDto: CreateUserDto): Promise<User> {
-        const { firstName, lastName, ...userDetails } = createDto
+        const { firstName, lastName, avatar, ...userDetails } = createDto
         const newUser = this.userRepository.create({
             ...userDetails,
         });
 
+        console.log(newUser, userDetails, avatar)
+
         newUser.password = await argon2.hash(userDetails.password);
-        newUser.profiles = [await this.userProfileService.create({ firstName, lastName, isPrimary: true })]
+        newUser.profiles = [await this.userProfileService.create({ firstName, lastName, isPrimary: true, avatar })]
 
         return await this.userRepository.save(newUser);
     }

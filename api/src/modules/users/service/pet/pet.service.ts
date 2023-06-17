@@ -11,12 +11,23 @@ export class PetService extends BaseService<Pet> {
         super(petRepository)
     }
 
-    async create(createPetDto: CreatePetDto): Promise<Pet> {
-        const newPet = this.petRepository.create({
-            ...createPetDto,
-            user: <any> createPetDto.user ?? null,
-        })
+    async create(createPetDto: CreatePetDto | CreatePetDto[]): Promise<Pet> {
+        let data = null;
 
-        return await this.petRepository.save(newPet);
+        if (Array.isArray(createPetDto)) {
+            data = createPetDto.map(profile => {
+                return this.petRepository.create({
+                    ...profile,
+                    user: <any> profile.user ?? null,
+                })
+            })
+        } else {
+            data = this.petRepository.create({
+                ...createPetDto,
+                user: <any> createPetDto.user ?? null,
+            })
+        }
+
+        return await this.petRepository.save(data);
     }
 }
