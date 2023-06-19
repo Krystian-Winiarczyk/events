@@ -11,17 +11,17 @@ export declare type User = {
   createdAt?: string
 }
 
-export declare type Pet = {
-  avatar?: string
-  name: string
-  owner: User
-  gender?: GENDER
-  birth?: string
-  createdAt?: string
-}
+// export declare type Pet = {
+//   avatar?: string
+//   name: string
+//   owner: User
+//   gender?: GENDER
+//   birth?: string
+//   createdAt?: string
+// }
 
 // export declare type File = {
-//   id: stirng
+//   id?: stirng
 //   orgninalName: string
 //   path: string
 //   mimetype: string
@@ -29,7 +29,7 @@ export declare type Pet = {
 // }
 //
 // export declare type User = {
-//   id: string
+//   id?: string
 //   email: string
 //   phone: string
 //   role: string
@@ -39,32 +39,37 @@ export declare type Pet = {
 //   createdAt?: string
 // }
 //
-// export declare type SocialMedia = {
-//   id: string
-//   url: string
-//   type: SOCIAL_MEDIA
-//   createdAt?: string
-// }
-//
-// export declare type UserProfile = {
-//   id: string
-//   firstName: string
-//   lastName: string
-//   nickname?: string
-//   gender?: GENDER
-//   age?: number
-//   birthDate?: string
-//   socialMedias?: Array<SocialMedia>
-//   createdAt?: string
-// }
-//
+export declare type SocialMedia = {
+  id?: string
+  url: string
+  type: SOCIAL_MEDIA
+  createdAt?: string
+}
+
+export declare type UserProfile = {
+  id?: string
+  firstName: string
+  lastName: string
+  nickname?: string
+  description?: string
+  avatar?: File | any
+  gender?: GENDER
+  birthDate?: string
+  socialMedias?: Array<SocialMedia>
+  createdAt?: string
+}
+
 // // Pet
-// export declare type Pet = {
-//   id: string
-//   name: string
-//   user: User
-//   birth?: string
-//   avatar?: string
-//   gender?: GENDER
-//   createdAt?: string
-// }
+export declare type Pet = {
+  id?: string
+  name: string
+  breed?: string
+  color?: string
+  personality?: string
+  description?: string
+  user?: User
+  gender?: GENDER
+  birthDate?: string
+  images?: Array<File> | Array<any>
+  createdAt?: string
+}

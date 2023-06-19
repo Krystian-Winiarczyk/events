@@ -115,20 +115,18 @@ export class AuthService {
             where,
         });
 
-        if (userWithEmailExists) {
-            throw new BadRequestException('User already exists');
-        }
+        // if (userWithEmailExists) {
+        //     throw new BadRequestException('User already exists');
+        // }
 
         const newUser: User = await this.usersService.create({
-            firstName: signupDto.profile.firstName,
-            lastName: signupDto.profile.lastName,
-            avatar: signupDto.profile.avatar,
             email: signupDto.email,
             username: signupDto.username,
             password: signupDto.password,
             role: Ranks.USER,
         });
 
+        await this.userProfilesService.create({ ...signupDto.profile, isPrimary: true, user: newUser.id })
         await this.petService.create({ ...signupDto.pet, user: newUser.id })
 
         // delete newUser.password;

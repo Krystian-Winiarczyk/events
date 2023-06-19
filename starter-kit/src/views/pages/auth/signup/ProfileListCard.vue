@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { requiredValidator } from '@core/utils/validators'
+import type { UserProfile } from '@/globals/types/types'
+import { GENDER } from '@/globals/enums/enums'
 
 interface Props {
-  profile: any
+  profile: UserProfile
 }
 
 const props = defineProps<Props>()
@@ -10,14 +12,18 @@ const emits = defineEmits(['changeField'])
 
 const profileAvatarUpload = ref(null)
 
-const setProfileName = value => {
+const setProfileName = (value: string): void => {
   const [firstName = '', lastName = ''] = value.split(' ')
 
   emits('changeField', { value: firstName, key: 'firstName' })
   emits('changeField', { value: lastName, key: 'lastName' })
 }
 
-const imagePreviewSrc = computed(() => {
+// START :: Data
+const genders: Array<any> = Object.keys(GENDER).map(key => ({ value: key, label: key }))
+
+// START :: Computed
+const imagePreviewSrc = computed((): (string | null) => {
   const avatar = props.profile.avatar[0]
   if (!avatar)
     return null
@@ -25,20 +31,25 @@ const imagePreviewSrc = computed(() => {
   return URL.createObjectURL(props.profile.avatar[0])
 })
 
-const profileFirstLetters = computed(() => {
+const profileFirstLetters = computed((): string => {
   return `${props.profile.firstName[0] || ''}${props.profile.lastName[0] || ''}`.trim().toUpperCase()
 })
 
-const profileFullName = computed(() => {
+const profileFullName = computed((): string => {
   return `${props.profile.firstName || ''} ${props.profile.lastName || ''}`.trim()
 })
+
+const changeValue = ($event) => {
+  console.log($event)
+  emits('changeField', { value: $event, key: 'gender' })
+}
 </script>
 
 <template>
   <VRow>
     <VCol
       cols="12"
-      class="d-flex align-center justify-center align-center"
+      class="d-flex align-center justify-center"
     >
       <div>
         <VFileInput
@@ -73,40 +84,36 @@ const profileFullName = computed(() => {
         @update:modelValue="setProfileName"
       />
     </VCol>
-    <VCol cols="6">
+    <VCol cols="12" md="6">
       <VTextField
         :model-value="profile.nickname"
         :label="$t('Nickname')"
         @update:modelValue="emits('changeField', { value: $event, key: 'nickname' })"
       />
     </VCol>
-    <VCol cols="6">
+    <VCol cols="12" md="6">
+      <AppDateTimePicker
+        :model-value="profile.birthDate"
+        :label="$t('Birthday')"
+        :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'Y-m-d' }"
+        @update:modelValue="emits('changeField', { value: $event, key: 'birthDate' })"
+      />
+    </VCol>
+    <VCol cols="12">
       <VSelect
-        v-model="value"
-        :items="items"
-        item-title="name"
-        item-value="name"
-        label="Select Item"
-        placeholder="Select Item"
-        multiple
+        :model-value="profile.gender"
+        :items="genders"
+        :label="$t('Gender')"
         clearable
+        :item-title="t => $t(`Genders.${t.label}`)"
         clear-icon="mdi-close"
+        @update:modelValue="changeValue"
       >
-        <template #selection="{ item }">
-          <VChip>
-            <VAvatar
-              start
-              :image="item.raw.avatar"
-            />
-            <span>{{ item.title }}</span>
-          </VChip>
+        <template #selection="data">
+          <!-- HTML that describe how select should render items when the select is open -->
+          {{ $t(`Genders.${data.item.value}`) }}
         </template>
       </VSelect>
-      <VTextField
-        :model-value="profile.nickname"
-        :label="$t('Sex')"
-        @update:modelValue="emits('changeField', { value: $event, key: 'nickname' })"
-      />
     </VCol>
     <VCol cols="12">
       <VTextarea

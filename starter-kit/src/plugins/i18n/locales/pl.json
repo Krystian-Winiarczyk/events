@@ -1,0 +1,99 @@
+{
+  "Next": "Dalej",
+  "Previous": "Poprzedni",
+  "Back": "Cofnij",
+  "Confirm": "Potwierdź",
+
+  "Email": "Email",
+  "UserName": "Nazwa użytkownika",
+  "Password": "Hasło",
+  "ConfirmPassword": "Potwierdź hasło",
+
+  "Summary": "Podsumowanie",
+
+  "Profile": "Profil | Profile",
+  "Account": "Konto",
+  "AccountDetails": "Szczegóły konta",
+  "ProfileDescription": "Opis profilu",
+  "MainProfile": "Profil główny",
+  "Nickname": "Pseudonim",
+  "Birthday": "Urodziny",
+  "Gender": "Płeć",
+  "Genders": {
+    "FEMALE": "Kobieta",
+    "MALE": "Mężczyzna",
+    "OTHER": "Inna"
+  },
+  "PetGenders": {
+    "FEMALE": "Samica",
+    "MALE": "Samiec"
+  },
+
+  "AdditionalProfile": "Profil dodatkowy",
+
+  "Pet": "Pupila | Pupile",
+  "Favorite": "Pupil",
+  "Breed": "Rasa",
+  "Color": "Umaszczenie",
+  "Age": "Wiek",
+  "Personality": "Osobowość",
+  "PetDescription": "Opis pupila",
+  "Description": "Opis",
+
+  "signup": {
+    "TypePassword": "Wprowadz hasło",
+    "TypePasswordAgain": "Wprowadz hasło ponownie",
+    "EnterYourAccountInformation": "Wprowadz informacje dotyczące Twojego konta",
+
+    "CreateAPlayerProfiles": "Utwórz profil zawodnika",
+    "TypeNameAndLastName": "Wpisz Imię i nazwisko",
+
+    "TypePetName": "Wpisz Imię pupila",
+    "AddOwnPet": "Dodaj swojego pupila",
+    "CreateOwnPets": "Dodaj swojego pupila",
+    "AddOwnPetsToAccount": "Dodaj swojego pupila do konta",
+
+    "VerifyYourData": "Zweryfikuj poprawność swoich danych"
+  },
+
+  "validator": {
+    "FieldIsRequired": "To pole jest wymagane",
+    "FieldIsNotValidEmail": "Pole Email musi być prawidłowym adresem email",
+    "PasswordNotMatchPatter": "Pole musi zawierać co najmniej jedną wielką literę, jedną małą literę, jeden znak specjalny i jedną cyfrę, o długości co najmniej 8 znaków",
+    "ConfirmPasswordNotMatchPassword": "Pole Potwierdź hasło nie jest zgodne z polem Hasło",
+    "NumberOutOfRange": "Wprowadź liczbę między {min} a {max}",
+    "FieldMustBeInteger": "To pole musi być liczbą całkowitą",
+    "InvalidRegexpFormat": "Format pola Regex jest nieprawidłowy",
+    "ValueContainNotAlphabeticCharacters": "Pole Alfa może zawierać tylko litery",
+    "InvalidUrl": "Adres URL jest nieprawidłowy",
+    "FieldTooLong": "Pole Minimalna liczba znaków musi wynosić co najmniej {length}",
+    "NotValidCharacters": "Wszystkie znaki są nieprawidłowe"
+  },
+
+  "$vuetify": {
+    "badge": "Badge",
+    "pagination": {
+      "ariaLabel": {
+        "root": "root",
+        "previous": "previous",
+        "next": "next",
+        "currentPage": "currentPage",
+        "page": "page"
+      }
+    },
+    "input": {
+      "clear": "clear",
+      "appendAction": "appendAction",
+      "prependAction": "prependAction",
+      "counterSize": "counterSize"
+    },
+    "fileInput": {
+      "counterSize": "counterSize"
+    },
+    "rating": {
+      "ariaLabel": {
+        "item": "item"
+      }
+    }
+  }
+}

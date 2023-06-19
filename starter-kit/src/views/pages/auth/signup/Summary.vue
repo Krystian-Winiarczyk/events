@@ -7,6 +7,7 @@ const props = defineProps<Props>()
 
 const imagePreviewSrc = (object: any, key = 'avatar') => {
   const image = object[key][0]
+
   if (!image)
     return null
 
@@ -14,117 +15,157 @@ const imagePreviewSrc = (object: any, key = 'avatar') => {
 }
 
 // Pet
-const petList = computed(() => {
-  return props.data?.pets || []
+const petFirstLetter = computed(() => {
+  return `${props.data.pet?.name[0] || ''}`.trim().toUpperCase()
 })
-
-const petFirstLetter = (pet: any) => {
-  return `${pet?.name[0] || ''}`.trim().toUpperCase()
-}
 
 // Profile
-const profileList = computed(() => {
-  return props.data?.profiles || []
+const profileFirstLetters = computed(() => {
+  return `${props.data.profile.firstName[0] || ''}${props.data.profile.lastName[0] || ''}`.trim().toUpperCase()
 })
 
-const profileFirstLetters = (profile: any) => {
-  return `${profile.firstName[0] || ''}${profile.lastName[0] || ''}`.trim().toUpperCase()
-}
-
-const profileFullName = (profile) => {
-  return `${profile.firstName || ''} ${profile.lastName || ''}`.trim()
-}
-
+const profileFullName = computed(() => {
+  return `${props.data.profile.firstName || ''} ${props.data.profile.lastName || ''}`.trim()
+})
 </script>
 
 <template>
   <div>
-  <!-- Basic data -->
-    <h6 class="text-h6">
-      <VIcon icon="mdi-account-cog" color="primary" />
-      {{ $t('Account') }}
-    </h6>
-    <VList>
-      <!-- Username -->
-      <VListItem>
-        <span class="font-weight-bold">
-          Username:
-        </span>
-        <span class="text-body-2">{{ data.username || '-' }}</span>
-      </VListItem>
-      <!-- Email -->
-      <VListItem>
-        <span class="font-weight-bold">
-          Email:
-        </span>
-        <span class="text-body-2">{{ data.email || '-' }}</span>
-      </VListItem>
-    </VList>
-
-    <!-- Profiles -->
-    <h6 class="text-h6">
-      <VIcon icon="mdi-account-box-multiple" color="primary" />
-      {{ $t('Profile', 2) }}
-    </h6>
-
-    <VList>
-      <VListItem
-        v-for="(profile, profileIndex) in profileList"
-        :key="`summary_profile_${profileIndex}`"
-        :title="profileFullName(profile)"
-      >
-        <template #prepend>
-          <VAvatar
-            :image="imagePreviewSrc(profile, 'avatar')"
-            variant="tonal"
-            class="cursor-pointer"
+    <!-- Basic data -->
+    <VRow>
+      <VCol cols="12">
+        <h6 class="text-h6">
+          <VIcon
+            icon="mdi-account-cog"
             color="primary"
-            size="40"
-          >
-            <span>{{ profileFirstLetters(profile) }}</span>
-          </VAvatar>
-        </template>
+          />
+          {{ $t('Account') }}
+        </h6>
+        <VRow class="mt-1">
+          <VCol cols="12" md="6">
+            <span class="font-weight-bold">
+              {{ $t('Username') }}:
+            </span>
+            <span class="text-body-2">{{ data.username || '-' }}</span>
+          </VCol>
+          <VCol cols="12" md="6">
+            <span class="font-weight-bold">
+              {{ $t('Email') }}:
+            </span>
+            <span class="text-body-2">{{ data.email || '-' }}</span>
+          </VCol>
+        </VRow>
+        <VDivider color="primary" class="mt-2" />
+      </VCol>
+      <VCol
+        cols="12"
+        md="6"
+      >
+        <h6 class="text-h6">
+          <VIcon
+            icon="mdi-account-box-multiple"
+            color="primary"
+          />
+          {{ $t('Profile') }}
+        </h6>
 
-        <template #append>
-          <div>
-            <VIcon icon="mdi-crown" style="color:#DEB82D;" />
-
-            <VTooltip
+        <VList>
+          <VListItem class="mb-3">
+            <VAvatar
+              :image="imagePreviewSrc(data.profile, 'avatar')"
+              variant="tonal"
+              class="cursor-pointer"
               color="primary"
-              activator="parent"
+              size="40"
             >
-              {{ profile.isPrimary ? $t('MainProfile') : $t('AdditionalProfile') }}
-            </VTooltip>
-          </div>
-        </template>
-      </VListItem>
-    </VList>
+              <span>{{ profileFirstLetters }}</span>
+            </VAvatar>
+            {{ profileFullName }}
+          </VListItem>
 
-    <!-- Pets -->
-    <h6 class="text-h6">
-      <VIcon icon="mdi-paw" color="primary" />
-      {{ $t('Pet', 2) }}
-    </h6>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Nickname') }}:
+            </span>
+            <span class="text-body-2">{{ data.profile.nickname || '-' }}</span>
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Birthday') }}:
+            </span>
+            <span class="text-body-2">{{ data.profile.birthDate || '-' }}</span>
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Gender') }}:
+            </span>
+            <span class="text-body-2">{{ data.profile.gender ? $t(`Genders.${data.profile.gender}`) : '-' }}</span>
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Description') }}:
+            </span>
+            <span class="text-body-2">{{ data.profile.description || '-' }}</span>
+          </VListItem>
+        </VList>
+      </VCol>
 
-    <VList>
-      <VListItem
-        v-for="(pet, petIndex) in petList"
-        :key="`summary_pet_${petIndex}`"
-        :title="pet.name"
-      >
-        <template #prepend>
-          <VAvatar
-            :image="imagePreviewSrc(pet, 'image')"
-            variant="tonal"
-            class="cursor-pointer"
+      <VCol cols="12" md="6">
+        <!-- Pets -->
+        <h6 class="text-h6">
+          <VIcon
+            icon="mdi-paw"
             color="primary"
-            size="40"
-          >
-            <span>{{ petFirstLetter(pet) }}</span>
-          </VAvatar>
-        </template>
-      </VListItem>
-    </VList>
+          />
+          {{ $t('Favorite') }}
+        </h6>
+
+        <VList>
+          <VListItem class="mb-3">
+            <VAvatar
+              :image="imagePreviewSrc(data.pet, 'images')"
+              variant="tonal"
+              class="cursor-pointer"
+              color="primary"
+              size="40"
+            >
+              <span>{{ petFirstLetter }}</span>
+            </VAvatar>
+            {{ data.pet.name }}
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Breed') }}:
+            </span>
+            <span class="text-body-2">{{ data.profile.breed || '-' }}</span>
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Color') }}:
+            </span>
+            <span class="text-body-2">{{ data.profile.color || '-' }}</span>
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Personality') }}:
+            </span>
+            <span class="text-body-2">{{ data.profile.personality || '-' }}</span>
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Birthday') }}:
+            </span>
+            <span class="text-body-2">{{ data.profile.birthDate || '-' }}</span>
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Description') }}:
+            </span>
+            <span class="text-body-2">{{ data.profile.description || '-' }}</span>
+          </VListItem>
+        </VList>
+      </VCol>
+    </VRow>
   </div>
 </template>
 

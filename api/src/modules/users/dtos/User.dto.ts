@@ -1,18 +1,17 @@
+import {CreateUserProfileDto} from "./UserProfile.dto";
+
 export class CreateUserDto {
-    firstName: string
-    lastName: string
     username?: string
     email: string
     phone?: string
     password: string
     confirmPassword?: string
     role?: string
-    avatar?: any
+    profile?: CreateUserProfileDto | any
 }
 
 export class UpdateUserDto {
     email?: string
     phone?: string
     role?: string
-    avatar?: any
 }

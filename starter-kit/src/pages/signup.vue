@@ -2,7 +2,7 @@
 import { VForm } from 'vuetify/components/VForm'
 import { confirmedValidator, emailValidator, requiredValidator } from '@core/utils/validators'
 
-import registerMultiStepsIllustration from '@images/pages/auth-register-multi-steps-illustration.png'
+import signup2Ilustration from '@images/pages/ilustracja.png'
 
 // import ProfileList from '@/views/pages/auth/signup/ProfileList.vue'
 // import PetList from '@/views/pages/auth/signup/PetList.vue'
@@ -47,24 +47,27 @@ const items = [
 ]
 
 const form = reactive({
-  username: 'adam',
-  email: 'test@wp.pl',
+  username: `Adamiak ${new Date().toLocaleDateString()}${new Date().getTime()}}`,
+  email: `test.${new Date().toLocaleDateString()}${new Date().getTime()}@wp.pl`,
   password: '444',
   confirmPassword: '444',
   profile: {
     avatar: [],
-    firstName: 'test',
-    lastName: 'test',
-    description: '123',
+    firstName: 'Adam',
+    lastName: 'Tester',
+    nickname: 'Testowiron',
+    description: 'Lorem ipsum dolor sit amet, consect',
+    birthDate: new Date(),
+    gender: 'MALE',
   },
   pet: {
     images: [],
-    name: 'Nowy',
-    description: '123',
-    personality: '321',
-    color: '',
-    breed: '',
-    age: 5,
+    name: 'Java',
+    description: 'Lorem ipsum dolor sit amet, consect',
+    personality: 'Łagodna',
+    color: 'Tri color',
+    breed: 'Bernese Mountain Dog',
+    birthDate: new Date(),
   },
 })
 
@@ -176,12 +179,14 @@ const nextStep = () => {
     <VCol
       md="4"
       class="d-none d-md-flex align-center"
+      style="background-color: rgb(var(--v-theme-primary));"
     >
       <!-- here your illustration -->
       <VImg
-        :src="registerMultiStepsIllustration"
+        :src="signup2Ilustration"
         class="auth-illustration"
-        height="560px"
+        cover
+        style="height: 100%; box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px;"
       />
     </VCol>
 
@@ -194,12 +199,13 @@ const nextStep = () => {
       <VCard
         flat
         class="mt-12 px-1"
-        style="max-width: 625px"
+        style="max-width: 700px; width: 100%"
       >
         <div>
           <AppStepper
             v-model:current-step="currentStep"
             :items="items"
+            align="start"
             :direction="$vuetify.display.smAndUp ? 'horizontal' : 'vertical'"
             class="mb-8"
             :is-active-step-valid="isCurrentStepValid"
@@ -209,7 +215,7 @@ const nextStep = () => {
         <VWindow
           v-model="currentStep"
           class="disable-tab-transition"
-          style="max-width: 550px"
+          style="max-width: 700px"
         >
           <VWindowItem>
             <h5 class="text-h5 mb-1">
@@ -280,7 +286,7 @@ const nextStep = () => {
           <VWindowItem>
             <div
               class="d-flex justify-space-between align-center"
-              style="max-width: 365px"
+              style="max-width: 700px"
             >
               <div>
                 <h5 class="text-h5 mb-1">
@@ -290,23 +296,8 @@ const nextStep = () => {
                   {{ $t('signup.CreateAPlayerProfiles') }}
                 </p>
               </div>
-              <!--              <VBtn -->
-              <!--                variant="flat" -->
-              <!--                icon -->
-              <!--                color="success" -->
-              <!--                :disabled="form.profiles.length === 3" -->
-              <!--                @click="addProfile" -->
-              <!--              > -->
-              <!--                <VIcon icon="mdi-plus" /> -->
-              <!--              </VBtn> -->
             </div>
             <VForm ref="profileFormRef">
-              <!--              <ProfileList -->
-              <!--                :profiles="form.profiles" -->
-              <!--                @remove-profile="form.profiles.splice($event, 1)" -->
-              <!--                @change-profile-field="form.profiles[$event.index][$event.key] = $event.value" -->
-              <!--                @change-primary-profile="changePrimaryProfile" -->
-              <!--              /> -->
               <ProfileListCard
                 :profile="form.profile"
                 @change-field="form.profile[$event.key] = $event.value"
@@ -317,7 +308,7 @@ const nextStep = () => {
           <VWindowItem>
             <div
               class="d-flex justify-space-between align-center"
-              style="max-width: 365px"
+              style="max-width: 700px"
             >
               <div>
                 <h5 class="text-h5 mb-1">
@@ -327,22 +318,8 @@ const nextStep = () => {
                   {{ $t('signup.AddOwnPetsToAccount') }}
                 </p>
               </div>
-              <!--              <VBtn -->
-              <!--                variant="flat" -->
-              <!--                icon -->
-              <!--                color="success" -->
-              <!--                :disabled="form.pets.length === 3" -->
-              <!--                @click="addPet" -->
-              <!--              > -->
-              <!--                <VIcon icon="mdi-plus" /> -->
-              <!--              </VBtn> -->
             </div>
             <VForm ref="petFormRef">
-              <!--              <PetList -->
-              <!--                :pets="form.pets" -->
-              <!--                @remove-pet="form.pets.splice($event, 1)" -->
-              <!--                @change-pet-field="form.pets[$event.index][$event.key] = $event.value" -->
-              <!--              /> -->
               <PetListCard
                 :pet="form.pet"
                 @change-field="form.pet[$event.key] = $event.value"
@@ -383,7 +360,7 @@ const nextStep = () => {
             append-icon="mdi-check"
             @click="onSubmit"
           >
-            {{ $t('Submit') }}
+            {{ $t('Confirm') }}
           </VBtn>
 
           <VBtn
@@ -415,6 +392,12 @@ const nextStep = () => {
     .v-input__details {
       margin-top: -20px !important;
     }
+  }
+
+  .v-list-item {
+    min-height: 32px !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
   }
 }
 </style>

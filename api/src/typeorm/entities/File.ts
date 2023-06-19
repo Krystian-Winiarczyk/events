@@ -26,6 +26,5 @@ export class File extends BaseEntity {
     userProfile: UserProfile
 
     @ManyToOne(() => Pet, (pet) => pet.images, { nullable: true })
-    @JoinTable()
     pet: Pet
 }

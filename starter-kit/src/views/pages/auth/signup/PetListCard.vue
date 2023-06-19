@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { requiredValidator } from '@core/utils/validators'
+import type { Pet } from '@/globals/types/types'
 
 interface Props {
-  pet: any
+  pet: Pet
 }
 
 const props = defineProps<Props>()
@@ -10,6 +11,7 @@ const emits = defineEmits(['changeField'])
 
 const petAvatarUpload = ref(null)
 
+// START :: Computed
 const imagePreviewSrc = computed(() => {
   const image = props.pet.images[0]
   if (!image)
@@ -28,41 +30,39 @@ const petFirstLetters = computed(() => {
   <VRow class="pt-2">
     <VCol
       cols="12"
-      class="d-flex align-center justify-center mb-0 pb-0"
+      class="d-flex align-center justify-center"
     >
-      <VFileInput
-        ref="petAvatarUpload"
-        class="d-none"
-        show-size
-        accept="image/png, image/jpeg, image/bmp, image/jpg, image/webp"
-        :model-value="pet.images"
-        @update:modelValue="emits('changeField', { value: $event, key: 'images' })"
-      />
-      <VAvatar
-        :image="imagePreviewSrc"
-        variant="tonal"
-        class="cursor-pointer"
-        color="primary"
-        size="70"
-        @click="petAvatarUpload.click()"
-      >
-        <span v-if="petFirstLetters">{{ petFirstLetters }}</span>
-        <VIcon
-          v-else
-          icon="mdi-cloud-upload"
+      <div>
+        <VFileInput
+          ref="petAvatarUpload"
+          class="d-none"
+          show-size
+          accept="image/png, image/jpeg, image/bmp, image/jpg, image/webp"
+          :model-value="pet.images"
+          @update:modelValue="emits('changeField', { value: $event, key: 'images' })"
         />
-      </VAvatar>
-    </VCol>
-    <VCol
-      cols="12"
-      class="text-center"
-    >
+        <VAvatar
+          :image="imagePreviewSrc"
+          variant="tonal"
+          class="cursor-pointer"
+          color="primary"
+          size="60"
+          @click="petAvatarUpload.click()"
+        >
+          <span v-if="petFirstLetters">{{ petFirstLetters }}</span>
+          <VIcon
+            v-else
+            icon="mdi-cloud-upload"
+          />
+        </VAvatar>
+      </div>
+
       <VTextField
+        class="pt-0 pl-2"
         variant="plain"
         :model-value="pet.name"
         :rules="[requiredValidator]"
-        class="centred-input"
-        placeholder="Wpisz Imię pupila"
+        :placeholder="$t('signup.TypePetName')"
         @update:modelValue="emits('changeField', { value: $event, key: 'name' })"
       />
     </VCol>
@@ -72,7 +72,7 @@ const petFirstLetters = computed(() => {
     >
       <VTextField
         :model-value="pet.breed"
-        label="Rasa"
+        :label="$t('Breed')"
         placeholder="Border Collie"
         @update:modelValue="emits('changeField', { value: $event, key: 'breed' })"
       />
@@ -83,8 +83,8 @@ const petFirstLetters = computed(() => {
     >
       <VTextField
         :model-value="pet.color"
-        label="Kolor"
-        placeholder="Border Collie"
+        :label="$t('Color')"
+        placeholder="Mera"
         @update:modelValue="emits('changeField', { value: $event, key: 'color' })"
       />
     </VCol>
@@ -94,7 +94,7 @@ const petFirstLetters = computed(() => {
     >
       <VTextField
         :model-value="pet.personality"
-        label="Osobowość"
+        :label="$t('Personality')"
         placeholder="Border Collie"
         @update:modelValue="emits('changeField', { value: $event, key: 'personality' })"
       />
@@ -103,21 +103,18 @@ const petFirstLetters = computed(() => {
       cols="12"
       md="6"
     >
-      <VTextField
-        :model-value="pet.age"
-        type="number"
-        label="Wiek"
-        @update:modelValue="emits('changeField', { value: $event, key: 'age' })"
+      <AppDateTimePicker
+        :model-value="pet.birthDate"
+        :label="$t('Birthday')"
+        :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'Y-m-d' }"
+        @update:modelValue="emits('changeField', { value: $event, key: 'birthDate' })"
       />
     </VCol>
-    <VCol
-      cols="12"
-      md="6"
-    >
+    <VCol cols="12">
       <VTextarea
         :model-value="pet.description"
         rows="2"
-        label="Opis pupila"
+        :label="$t('PetDescription')"
         @update:modelValue="emits('changeField', { value: $event, key: 'description' })"
       />
     </VCol>

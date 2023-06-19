@@ -9,8 +9,8 @@ const messages = Object.fromEntries(
 
 const instance = createI18n({
   legacy: false,
-  locale: 'en',
-  fallbackLocale: 'en',
+  locale: 'pl',
+  fallbackLocale: 'pl',
   messages,
 })
 

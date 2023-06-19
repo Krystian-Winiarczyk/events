@@ -14,6 +14,7 @@ import i18n from '@/plugins/i18n'
 /*    START::Utils    */
 import extensions from './utils/extensions'
 import properties from './utils/properties'
+import defaults from './utils/defaults'
 
 /*    END::Utils    */
 
@@ -28,13 +29,15 @@ await loadFonts()
 const app = createApp(App)
 
 // Use plugins
-app.use(vuetify)
-app.use(extensions)
-app.use(properties)
 app.use(createPinia())
-app.use(router)
 app.use(layoutsPlugin)
+app.use(vuetify)
+app.use(router)
 app.use(i18n)
+app.use(defaults)
+
+app.use(properties)
+app.use(extensions)
 
 app.mixin(breakpointsMixin)
 
