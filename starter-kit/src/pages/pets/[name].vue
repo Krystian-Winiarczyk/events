@@ -2,6 +2,7 @@
 import type { Ref } from 'vue'
 import type { Pet, User } from '@/globals/types/types'
 import avatar from '@images/avatars/avatar-1.png'
+import ReadMore from '@/components/root/ReadMore.vue'
 
 const avatarPet = 'https://cdn.pixabay.com/photo/2018/05/11/08/11/dog-3389729_1280.jpg'
 
@@ -71,28 +72,38 @@ const pet: Ref<Pet> = ref(
     </div>
     <!--    END::Header    -->
 
-    <VRow>
-      <VCol
-        cols="6"
-        sm="6"
-      >
-        <VCard
-          title="Breed"
-          subtitle="Golden"
-        />
-      </VCol>
+    <div class="d-flex flex-wrap gap-x-6 gap-y-3">
+      <div>
+        <p class="mb-0">
+          Breed
+        </p>
 
-      <VCol
-        cols="6"
-        sm="6"
-      >
-        <VCard
-          title="Weight"
-          subtitle="2.4kg"
-        />
-      </VCol>
-    </VRow>
+        <p class="text-h6 mb-0">
+          Golden
+        </p>
+      </div>
 
-    {{ pet.dsc }}
+      <div>
+        <p class="mb-0">
+          Weight
+        </p>
+
+        <p class="text-h6 mb-0">
+          2.4kg
+        </p>
+      </div>
+
+      <div>
+        <p class="mb-0">
+          Age
+        </p>
+
+        <p class="text-h6 mb-0">
+          5
+        </p>
+      </div>
+    </div>
+
+    <ReadMore :text="pet.dsc" />
   </div>
 </template>
