@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { requiredValidator } from '@core/utils/validators'
 import type { Pet } from '@/globals/types/types'
+import {GENDER} from "@/globals/enums/enums";
 
 interface Props {
   pet: Pet
@@ -8,6 +9,11 @@ interface Props {
 
 const props = defineProps<Props>()
 const emits = defineEmits(['changeField'])
+
+const genders: Array<any> = [
+  { value: GENDER.FEMALE, label: GENDER.FEMALE },
+  { value: GENDER.MALE, label: GENDER.MALE },
+]
 
 const petAvatarUpload = ref(null)
 
@@ -109,6 +115,22 @@ const petFirstLetters = computed(() => {
         :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'Y-m-d' }"
         @update:modelValue="emits('changeField', { value: $event, key: 'birthDate' })"
       />
+    </VCol>
+    <VCol cols="12">
+      <VSelect
+        :model-value="pet.gender"
+        :items="genders"
+        :label="$t('Gender')"
+        clearable
+        :item-title="t => $t(`PetGenders.${t.label}`)"
+        clear-icon="mdi-close"
+        @update:modelValue="emits('changeField', { value: $event, key: 'gender' })"
+      >
+        <template #selection="data">
+          <!-- HTML that describe how select should render items when the select is open -->
+          {{ $t(`PetGenders.${data.item.value}`) }}
+        </template>
+      </VSelect>
     </VCol>
     <VCol cols="12">
       <VTextarea

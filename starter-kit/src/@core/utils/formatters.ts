@@ -1,5 +1,7 @@
 import { isToday } from './index'
 
+import { instance as i18n } from '@/plugins/i18n/index'
+
 export const avatarText = (value: string) => {
   if (!value)
     return ''
@@ -26,7 +28,7 @@ export const formatDate = (value: string, formatting: Intl.DateTimeFormatOptions
   if (!value)
     return value
 
-  return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
+  return new Intl.DateTimeFormat(<string> (i18n.global?.locale?.value || 'pl'), formatting).format(new Date(value))
 }
 
 /**

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {formatDate} from "@core/utils/formatters";
 interface Props {
   data: any
 }
@@ -93,7 +94,7 @@ const profileFullName = computed(() => {
             <span class="font-weight-bold">
               {{ $t('Birthday') }}:
             </span>
-            <span class="text-body-2">{{ data.profile.birthDate || '-' }}</span>
+            <span class="text-body-2">{{ formatDate(data.profile.birthDate) || '-' }}</span>
           </VListItem>
           <VListItem>
             <span class="font-weight-bold">
@@ -137,31 +138,37 @@ const profileFullName = computed(() => {
             <span class="font-weight-bold">
               {{ $t('Breed') }}:
             </span>
-            <span class="text-body-2">{{ data.profile.breed || '-' }}</span>
+            <span class="text-body-2">{{ data.pet.breed || '-' }}</span>
           </VListItem>
           <VListItem>
             <span class="font-weight-bold">
               {{ $t('Color') }}:
             </span>
-            <span class="text-body-2">{{ data.profile.color || '-' }}</span>
+            <span class="text-body-2">{{ data.pet.color || '-' }}</span>
           </VListItem>
           <VListItem>
             <span class="font-weight-bold">
               {{ $t('Personality') }}:
             </span>
-            <span class="text-body-2">{{ data.profile.personality || '-' }}</span>
+            <span class="text-body-2">{{ data.pet.personality || '-' }}</span>
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
+              {{ $t('Gender') }}:
+            </span>
+            <span class="text-body-2">{{ data.pet.gender ? $t(`PetGenders.${data.pet.gender}`) : '-' }}</span>
           </VListItem>
           <VListItem>
             <span class="font-weight-bold">
               {{ $t('Birthday') }}:
             </span>
-            <span class="text-body-2">{{ data.profile.birthDate || '-' }}</span>
+            <span class="text-body-2">{{ formatDate(data.pet.birthDate) || '-' }}</span>
           </VListItem>
           <VListItem>
             <span class="font-weight-bold">
               {{ $t('Description') }}:
             </span>
-            <span class="text-body-2">{{ data.profile.description || '-' }}</span>
+            <span class="text-body-2">{{ data.pet.description || '-' }}</span>
           </VListItem>
         </VList>
       </VCol>

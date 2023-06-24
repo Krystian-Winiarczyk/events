@@ -38,11 +38,6 @@ const profileFirstLetters = computed((): string => {
 const profileFullName = computed((): string => {
   return `${props.profile.firstName || ''} ${props.profile.lastName || ''}`.trim()
 })
-
-const changeValue = ($event) => {
-  console.log($event)
-  emits('changeField', { value: $event, key: 'gender' })
-}
 </script>
 
 <template>
@@ -107,7 +102,7 @@ const changeValue = ($event) => {
         clearable
         :item-title="t => $t(`Genders.${t.label}`)"
         clear-icon="mdi-close"
-        @update:modelValue="changeValue"
+        @update:modelValue="emits('changeField', { value: $event, key: 'gender' })"
       >
         <template #selection="data">
           <!-- HTML that describe how select should render items when the select is open -->

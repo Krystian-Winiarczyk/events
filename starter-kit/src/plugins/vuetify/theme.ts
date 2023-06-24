@@ -10,7 +10,9 @@ const theme: VuetifyOptions['theme'] = {
       dark: false,
       colors: {
         // 'primary': localStorage.getItem(`${themeConfig.app.title}-lightThemePrimaryColor`) || staticPrimaryColor,
-        'primary': '#4844B0',
+        'primary': '#8C82C5',
+        // 'primary': '#EA8AB1',
+        // 'primary': '#835284',
         'on-primary': '#fff',
         'secondary': '#6d788d',
         'on-secondary': '#fff',
@@ -70,7 +72,7 @@ const theme: VuetifyOptions['theme'] = {
       colors: {
         // 'primary': localStorage.getItem(`${themeConfig.app.title}-darkThemePrimaryColor`) || staticPrimaryColor,
         // 'primary': '#A66A6F',
-        'primary': '#4844B0',
+        'primary': '#b984b9',
         'on-primary': '#fff',
         'secondary': '#8F848F',
         'on-secondary': '#fff',

@@ -77,21 +77,13 @@ const onSubmit = async () => {
   const avatar = form.profile.avatar?.length ? form.profile.avatar[0] : null
   const petImage = form.pet.images?.length ? form.pet.images[0] : null
 
-  console.log(formItem)
-
   const avatarsResponse = avatar ? await upload([avatar], 'Avatars', 'mdi-user') : null
   const petImagesResponse = petImage ? await upload([petImage], 'PetImages', 'mdi-paw') : null
 
   formItem.profile.avatar = avatarsResponse?.data?.items[0]?.id ?? null
   formItem.pet.images = [petImagesResponse?.data?.items[0]?.id].filter(Boolean)
 
-  console.log(formItem)
 
-  const resp = await axiosIns.post('auth/signup', formItem)
-
-  console.log(resp)
-
-  alert('Submitted..!!')
 }
 
 // const addProfile = (): void => {
@@ -186,7 +178,7 @@ const nextStep = () => {
         :src="signup2Ilustration"
         class="auth-illustration"
         cover
-        style="height: 100%; box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px;"
+        style="max-height: 400px;"
       />
     </VCol>
 

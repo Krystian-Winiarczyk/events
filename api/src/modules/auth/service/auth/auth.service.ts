@@ -14,6 +14,8 @@ import {Roles} from "../../../../decorators/roles.decorator";
 import {Ranks} from "../../../../constants/Ranks";
 import {CreateUserProfileDto} from "../../../users/dtos/UserProfile.dto";
 import {CreatePetDto} from "../../../users/dtos/Pet.dto";
+import {Pet} from "../../../../typeorm/entities/Pet";
+import {UserProfile} from "../../../../typeorm/entities/UserProfile";
 
 @Injectable()
 export class AuthService {
@@ -73,9 +75,9 @@ export class AuthService {
 
     async signIn(userData: LoginUserDto) {
         // Check if user exists
-        const user = await this.usersService.findOneBy({
+        const user: User = await this.usersService.findOneBy({
             where: { email: userData.email },
-            relations: [],
+            relations: ['pets', 'profiles'],
             select: [
                 'id',
                 'email',
@@ -115,9 +117,9 @@ export class AuthService {
             where,
         });
 
-        // if (userWithEmailExists) {
-        //     throw new BadRequestException('User already exists');
-        // }
+        if (userWithEmailExists) {
+            throw new BadRequestException('User already exists');
+        }
 
         const newUser: User = await this.usersService.create({
             email: signupDto.email,
@@ -126,13 +128,18 @@ export class AuthService {
             role: Ranks.USER,
         });
 
-        await this.userProfilesService.create({ ...signupDto.profile, isPrimary: true, user: newUser.id })
-        await this.petService.create({ ...signupDto.pet, user: newUser.id })
+        const profile: UserProfile = await this.userProfilesService.create({ ...signupDto.profile, isPrimary: true, user: newUser.id })
+        const pet: Pet = await this.petService.create({ ...signupDto.pet, user: newUser.id })
 
-        // delete newUser.password;
-        // const tokens = await this.getTokens({ ...newUser });
-        // await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-        // return { ...newUser, ...tokens };
+        delete newUser.password;
+        const tokens = await this.getTokens({ ...newUser });
+        await this.updateRefreshToken(newUser.id, tokens.refreshToken);
+        return {
+            ...newUser,
+            profiles: [profile],
+            pets: [pet],
+            ...tokens
+        };
     }
 
     async logout(userId: number) {
