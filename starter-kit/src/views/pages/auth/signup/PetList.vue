@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PetListCard from '@/views/pages/auth/signup/PetListCard.vue'
 
-interface Pet {
+interface UserPet {
   name: string
   description: string
   iamge: any

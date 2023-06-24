@@ -22,14 +22,14 @@ import { ControllerInterface } from '../../../../interfaces/Controller.interface
 import { User } from '../../../../typeorm/entities/User';
 import { UpdateResult } from 'typeorm';
 import { RoleGuard } from '../../../../guard/role/role.guard';
-import { Ranks } from '../../../../constants/Ranks';
+import { Role } from '../../../../constants/Role';
 import { Roles } from '../../../../decorators/roles.decorator';
 import {UserProfilesService} from "../../service/user-profiles/user-profiles.service";
 import {PetService} from "../../service/pet/pet.service";
 import {UsersService} from "../../service/users/users.service";
 import {CreateUserProfileDto} from "../../dtos/UserProfile.dto";
 import {CreatePetDto} from "../../dtos/Pet.dto";
-import {Pet} from "../../../../typeorm/entities/Pet";
+import {UserPet} from "../../../../typeorm/entities/UserPet";
 import {UserProfile} from "../../../../typeorm/entities/UserProfile";
 
 // @UseGuards(JwtAuthGuard, RoleGuard)
@@ -68,7 +68,7 @@ export class UsersController
     }
 
     @Get(':id')
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async getOneById(
         @Req() req: Request,
         @Res() res: Response,
@@ -86,7 +86,7 @@ export class UsersController
     }
 
     @Post()
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async create(
         @Req() req: Request,
         @Res() res: Response,
@@ -107,7 +107,7 @@ export class UsersController
     }
 
     @Patch(':id')
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async updateOneById(
         @Req() req: Request,
         @Res() res: Response,
@@ -127,7 +127,7 @@ export class UsersController
     }
 
     @Delete(':id')
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async deleteOneById(
         @Req() req: Request,
         @Res() res: Response,
@@ -183,7 +183,7 @@ export class UsersController
         @Param('id', ParseIntPipe) id: number
     ) {
         try {
-            const data: Pet[] = await this.petService.findAll({ where: {
+            const data: UserPet[] = await this.petService.findAll({ where: {
                 user: { id }
             }});
 
@@ -200,7 +200,7 @@ export class UsersController
         @Body() createPetDto: CreatePetDto
     ) {
         try {
-            const data: Pet = await this.petService.create({ ...createPetDto, user: id })
+            const data: UserPet = await this.petService.create({ ...createPetDto, user: id })
 
             this.apiSuccessResponse(res, req, data)
         } catch (error) {

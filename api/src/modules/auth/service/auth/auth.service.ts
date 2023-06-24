@@ -11,10 +11,10 @@ import {create} from "domain";
 import {PetService} from "../../../users/service/pet/pet.service";
 import {UserProfilesService} from "../../../users/service/user-profiles/user-profiles.service";
 import {Roles} from "../../../../decorators/roles.decorator";
-import {Ranks} from "../../../../constants/Ranks";
+import {Role} from "../../../../constants/Role";
 import {CreateUserProfileDto} from "../../../users/dtos/UserProfile.dto";
 import {CreatePetDto} from "../../../users/dtos/Pet.dto";
-import {Pet} from "../../../../typeorm/entities/Pet";
+import {UserPet} from "../../../../typeorm/entities/UserPet";
 import {UserProfile} from "../../../../typeorm/entities/UserProfile";
 
 @Injectable()
@@ -125,11 +125,11 @@ export class AuthService {
             email: signupDto.email,
             username: signupDto.username,
             password: signupDto.password,
-            role: Ranks.USER,
+            role: Role.USER,
         });
 
         const profile: UserProfile = await this.userProfilesService.create({ ...signupDto.profile, isPrimary: true, user: newUser.id })
-        const pet: Pet = await this.petService.create({ ...signupDto.pet, user: newUser.id })
+        const pet: UserPet = await this.petService.create({ ...signupDto.pet, user: newUser.id })
 
         delete newUser.password;
         const tokens = await this.getTokens({ ...newUser });

@@ -15,7 +15,7 @@ const imagePreviewSrc = (object: any, key = 'avatar') => {
   return URL.createObjectURL(object[key][0])
 }
 
-// Pet
+// UserPet
 const petFirstLetter = computed(() => {
   return `${props.data.pet?.name[0] || ''}`.trim().toUpperCase()
 })

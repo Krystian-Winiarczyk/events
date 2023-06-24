@@ -30,7 +30,7 @@ defineProps({
       class="px-4 py-3 d-flex flex-row align-center justify-space-between gap-2 rounded-lg"
       style="background: rgba(var(--v-theme-surface), .9)"
     >
-      <!--    START::Owner Name & Pet Name    -->
+      <!--    START::Owner Name & UserPet Name    -->
       <div class="d-flex flex-column">
         <p class="text-h6 text-white mb-0">
           {{ pet.name }}
@@ -46,7 +46,7 @@ defineProps({
           {{ pet.owner.name }}
         </div>
       </div>
-      <!--    END::Owner Name & Pet Name    -->
+      <!--    END::Owner Name & UserPet Name    -->
 
       <VIcon
         icon="mdi-gender-male"

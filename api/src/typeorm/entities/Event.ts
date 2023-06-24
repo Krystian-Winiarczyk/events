@@ -1,7 +1,5 @@
-import { Competition } from './Competition';
-import { Entity, Column, JoinTable, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
-import { EventCompetitionLevel } from './EventCompetitionLevel';
 
 @Entity({ name: 'events' })
 export class Event extends BaseEntity {
@@ -28,8 +26,4 @@ export class Event extends BaseEntity {
 
     @Column({ type: 'text', nullable: true })
     locationDescription: string
-
-    @OneToMany(() => EventCompetitionLevel, (eventCompetition) => eventCompetition.event)
-    @JoinTable()
-    eventCompetitions: EventCompetitionLevel[]
 }

@@ -1,38 +1,61 @@
-import { Entity, Column, OneToMany, JoinTable, VirtualColumn } from 'typeorm';
+import { Entity, Column, OneToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
-import { Pet } from './Pet';
+import { UserPet } from './UserPet';
 import { UserProfile } from './UserProfile';
 import {Exclude} from "class-transformer";
+import {Role} from "../../constants/Role";
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
-    // @Column({ unique: true, nullable: false })
-    // @Column({ nullable: false })
-    // username: string;
-
-    // @Column({ unique: true, nullable: false })
-    @Column({ nullable: false })
+    /**
+     * @Description User account email address
+     * @Required true
+     * @Unique true
+     * @Type string
+     */
+    @Column({ unique: true, nullable: false })
     email: string;
 
+    /**
+     * @Description User password
+     * @Required true
+     * @Type string
+     */
     @Column({ nullable: false, select: false })
     password: string;
 
-    @Column({ default: 'USER', nullable: false })
-    role: string;
+    /**
+     * @Description Rank of user
+     * @Required true
+     * @Type Rank
+     */
+    @Column('enum', { default: Role.USER, enum: Role })
+    role: Role;
 
-    @OneToMany(() => Pet, (pet) => pet.user)
+    /**
+     * @Description List of all assigned pets
+     * @Required true
+     * @Type Pet[]
+     */
+    @OneToMany(() => UserPet, (pet) => pet.user)
     @JoinTable()
-    pets: Pet[]
+    pets: UserPet[]
 
+    /**
+     * @Description User profiles
+     * @Required true
+     * @Type UserProfile[]
+     */
     @OneToMany(() => UserProfile, (profile) => profile.user)
     @JoinTable()
     profiles: UserProfile[]
 
+    /**
+     * @Description Refresh authorization token
+     * @Required false
+     * @Type string
+     */
     @Column({ nullable: true })
     @Exclude()
     public refreshToken?: string;
-    // @VirtualColumn()
-    // get mainProfile() {
-        // return this.profiles.find(profile => profile.isPrimary)
-    // }
 }

@@ -1,4 +1,4 @@
-export enum Ranks {
+export enum Role {
   USER = 'USER',
   WORKER = 'WORKER',
   ADMIN = 'ADMIN',

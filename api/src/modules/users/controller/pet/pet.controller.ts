@@ -18,9 +18,9 @@ import {CreatePetDto, UpdatePetDto} from '../../dtos/Pet.dto';
 import { JwtAuthGuard } from 'src/guard/jwt-auth/jwt-auth.guard';
 import { Request, Response } from 'express';
 import {UserProfile} from "../../../../typeorm/entities/UserProfile";
-import {Pet} from "../../../../typeorm/entities/Pet";
+import {UserPet} from "../../../../typeorm/entities/UserPet";
 import {Roles} from "../../../../decorators/roles.decorator";
-import {Ranks} from "../../../../constants/Ranks";
+import {Role} from "../../../../constants/Role";
 import {CreateUserProfileDto, UpdateUserProfileDto} from "../../dtos/UserProfile.dto";
 import {UpdateResult} from "typeorm";
 
@@ -41,7 +41,7 @@ export class PetController extends BaseController {
         @Query('q') q,
     ) {
         try {
-            const pets: Pet[] = await this.petService.findAll({
+            const pets: UserPet[] = await this.petService.findAll({
                 pagination: this.paginationFragment(limit, page),
                 relations: ['user'],
                 where: this.resolveFilters(q),
@@ -61,7 +61,7 @@ export class PetController extends BaseController {
         @Param('id', ParseIntPipe) id: number,
     ) {
         try {
-            const pet: Pet = await this.petService.findOneById(id, {
+            const pet: UserPet = await this.petService.findOneById(id, {
                 relations: ['user']
             });
 
@@ -72,14 +72,14 @@ export class PetController extends BaseController {
     }
 
     @Post()
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async create(
         @Req() req: Request,
         @Res() res: Response,
         @Body() createDto: CreatePetDto,
     ) {
         try {
-            const pet: Pet = await this.petService.create(createDto);
+            const pet: UserPet = await this.petService.create(createDto);
 
             this.apiSuccessResponse(res, req, pet);
         } catch (error) {
@@ -88,7 +88,7 @@ export class PetController extends BaseController {
     }
 
     @Patch(':id')
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async updateOneById(
         @Req() req: Request,
         @Res() res: Response,
@@ -108,7 +108,7 @@ export class PetController extends BaseController {
     }
 
     @Delete(':id')
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async deleteOneById(
         @Req() req: Request,
         @Res() res: Response,

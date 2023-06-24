@@ -4,7 +4,7 @@ import {CreateUserProfileDto, UpdateUserProfileDto} from "../../dtos/UserProfile
 import { UserProfilesService } from "../../service/user-profiles/user-profiles.service";
 import { Request, Response } from 'express';
 import {Roles} from "../../../../decorators/roles.decorator";
-import {Ranks} from "../../../../constants/Ranks";
+import {Role} from "../../../../constants/Role";
 import {UpdateResult} from "typeorm";
 import {UserProfile} from "../../../../typeorm/entities/UserProfile";
 
@@ -53,7 +53,7 @@ export class UserProfilesController extends BaseController {
     }
 
     @Post()
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async create(
         @Req() req: Request,
         @Res() res: Response,
@@ -69,7 +69,7 @@ export class UserProfilesController extends BaseController {
     }
 
     @Patch(':id')
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async updateOneById(
         @Req() req: Request,
         @Res() res: Response,
@@ -89,7 +89,7 @@ export class UserProfilesController extends BaseController {
     }
 
     @Delete(':id')
-    @Roles(Ranks.WORKER, Ranks.ADMIN, Ranks.SUPER_ADMIN, Ranks.USER)
+    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async deleteOneById(
         @Req() req: Request,
         @Res() res: Response,

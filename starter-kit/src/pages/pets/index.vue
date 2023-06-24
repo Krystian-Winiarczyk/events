@@ -103,7 +103,7 @@ const pets: Ref<Pet[]> = ref([
     </div>
     <!--    END::Filters    -->
 
-    <!--    START::Pet List    -->
+    <!--    START::UserPet List    -->
     <VRow>
       <VCol
         v-for="(pet, i) in pets"
@@ -115,7 +115,7 @@ const pets: Ref<Pet[]> = ref([
         <ListItem :pet="pet" />
       </VCol>
     </VRow>
-    <!--    END::Pet List    -->
+    <!--    END::UserPet List    -->
   </div>
 </template>
 

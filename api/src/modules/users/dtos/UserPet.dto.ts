@@ -1,32 +1,35 @@
-import { Size } from "src/constants/Size"
 import { Gender } from "../../../constants/Gender";
 import { User } from "../../../typeorm/entities/User";
 
-export class CreatePetDto {
+export class CreateUserPetDto {
     name: string
+    passportNumber: string
+
     breed?: string
     color?: string
     description?: string
     personality?: string
     birthDate?: Date
-
+    weight?: string
+    breeding?: string
     gender?: Gender
-    size?: Size
 
     images?: Array<File | any>
     user?: User | any
 }
 
-export class UpdatePetDto {
+export class UpdateUserPetDto {
     name?: string
+    passportNumber?: string
+
     breed?: string
     color?: string
     description?: string
     personality?: string
     birthDate?: Date
-
+    weight?: string
+    breeding?: string
     gender?: Gender
-    size?: Size
 
     images?: Array<File | any>
     user?: User | any

@@ -1,4 +1,4 @@
-import { Pet } from 'src/typeorm/entities/Pet';
+import { UserPet } from 'src/typeorm/entities/UserPet';
 import { CreatePetDto, UpdatePetDto } from '../../dtos/Pet.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,14 +7,14 @@ import {BaseService} from "../../../../base/BaseService";
 import {File} from "../../../../typeorm/entities/File";
 
 @Injectable()
-export class PetService extends BaseService<Pet> {
-    constructor(@InjectRepository(Pet) private petRepository: Repository<Pet>) {
+export class PetService extends BaseService<UserPet> {
+    constructor(@InjectRepository(UserPet) private petRepository: Repository<UserPet>) {
         super(petRepository)
     }
 
-    async create(createPetDto: CreatePetDto): Promise<Pet> {
+    async create(createPetDto: CreatePetDto): Promise<UserPet> {
         console.log(createPetDto)
-        const newPet: Pet = this.petRepository.create({
+        const newPet: UserPet = this.petRepository.create({
                 ...createPetDto,
                 // images: createPetDto.images?.length ? createPetDto.images : null,
                 user: <any> createPetDto.user ?? null,

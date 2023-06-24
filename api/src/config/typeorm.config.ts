@@ -5,14 +5,11 @@ import {
 } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/entities/User';
 import { AppModes } from '../constants/AppModes';
-import {Pet} from "../typeorm/entities/Pet";
-import {UserProfile} from "../typeorm/entities/UserProfile";
-import {Event} from "../typeorm/entities/Event";
-import {Competition} from "../typeorm/entities/Competition";
-import {CompetitionLevel} from "../typeorm/entities/CompetitionLevel";
-import {EventRegistration} from "../typeorm/entities/EventRegistration";
-import {EventCompetitionLevel} from "../typeorm/entities/EventCompetitionLevel";
-import {File} from "../typeorm/entities/File";
+import { UserPet } from "../typeorm/entities/UserPet";
+import { UserProfile } from "../typeorm/entities/UserProfile";
+import { Event } from "../typeorm/entities/Event";
+import { Competition } from "../typeorm/entities/Competition";
+import { File } from "../typeorm/entities/File";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -27,7 +24,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
-      entities: [User, Pet, UserProfile, Event, Competition, CompetitionLevel, EventRegistration, EventCompetitionLevel, File],
+      entities: [User, UserPet, UserProfile, Event, Competition, File],
       synchronize: true || configService.get('APP_MODE') === AppModes.DEVELOPMENT,
     };
   },

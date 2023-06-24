@@ -1,17 +1,16 @@
-import {CreateUserProfileDto} from "./UserProfile.dto";
+import { CreateUserProfileDto } from "./UserProfile.dto";
+import { CreateUserPetDto } from "./UserPet.dto";
 
 export class CreateUserDto {
-    username?: string
     email: string
-    phone?: string
     password: string
     confirmPassword?: string
     role?: string
-    profile?: CreateUserProfileDto | any
+
+    profile: CreateUserProfileDto | any
+    pet?: CreateUserPetDto | any
 }
 
 export class UpdateUserDto {
     email?: string
-    phone?: string
-    role?: string
 }

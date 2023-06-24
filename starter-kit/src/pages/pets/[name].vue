@@ -35,7 +35,7 @@ const pet: Ref<Pet> = ref(
 
     <!--    START::Header    -->
     <div class="d-flex flex-row align-center justify-space-between gap-2">
-      <!--    START::Owner Name & Pet Name    -->
+      <!--    START::Owner Name & UserPet Name    -->
       <div class="d-flex flex-column">
         <p class="text-h6 text-white mb-0">
           {{ pet.name }}
@@ -62,7 +62,7 @@ const pet: Ref<Pet> = ref(
           </VBtn>
         </div>
       </div>
-      <!--    END::Owner Name & Pet Name    -->
+      <!--    END::Owner Name & UserPet Name    -->
 
       <VBtn
         variant="text"

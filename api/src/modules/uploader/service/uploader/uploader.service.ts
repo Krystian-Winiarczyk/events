@@ -2,7 +2,6 @@ import {Injectable} from '@nestjs/common';
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {File} from "../../../../typeorm/entities/File";
-import {ImageType} from "../../../../constants/ImageType";
 
 @Injectable()
 export class UploaderService {
@@ -20,7 +19,6 @@ export class UploaderService {
             fileEntity.path = file.path
             fileEntity.mimetype = file.mimetype
             fileEntity.filename = file.filename
-            fileEntity.imageType = ImageType.ANY
 
             entities.push(fileEntity)
         })
