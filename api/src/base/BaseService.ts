@@ -48,7 +48,7 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
         return await this.repository.findOne({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            where: { id: params.id },
+            where: { id },
             relations: params.relations ?? [],
             select: params.select ?? [],
             withDeleted: false,

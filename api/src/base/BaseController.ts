@@ -12,7 +12,7 @@ import {
   Not,
 } from 'typeorm';
 import * as process from 'process';
-import { AppModes } from '../constants/AppModes';
+import { AppMode } from '../constants/AppMode';
 
 export abstract class BaseController {
 
@@ -100,7 +100,7 @@ export abstract class BaseController {
       error?.message ||
       (typeof error === 'string' ? error : null);
 
-    if (process.env.APP_MODE === AppModes.DEVELOPMENT) {
+    if (process.env.APP_MODE === AppMode.DEVELOPMENT) {
       payload.dev = error;
     }
 

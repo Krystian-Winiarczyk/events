@@ -4,7 +4,7 @@ import {
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
 import { User } from 'src/typeorm/entities/User';
-import { AppModes } from '../constants/AppModes';
+import { AppMode } from '../constants/AppMode';
 import { UserPet } from "../typeorm/entities/UserPet";
 import { UserProfile } from "../typeorm/entities/UserProfile";
 import { Event } from "../typeorm/entities/Event";
@@ -25,7 +25,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
       entities: [User, UserPet, UserProfile, Event, Competition, File],
-      synchronize: true || configService.get('APP_MODE') === AppModes.DEVELOPMENT,
+      synchronize: true || configService.get('APP_MODE') === AppMode.DEVELOPMENT,
     };
   },
 };

@@ -8,7 +8,7 @@ import {Role} from "../../../../constants/Role";
 import {UpdateResult} from "typeorm";
 import {UserProfile} from "../../../../typeorm/entities/UserProfile";
 
-@Controller('api/user/profiles')
+@Controller('api/users/profiles')
 export class UserProfilesController extends BaseController {
     constructor(private userProfileService: UserProfilesService) {
         super();
@@ -53,7 +53,7 @@ export class UserProfilesController extends BaseController {
     }
 
     @Post()
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async create(
         @Req() req: Request,
         @Res() res: Response,
@@ -69,7 +69,7 @@ export class UserProfilesController extends BaseController {
     }
 
     @Patch(':id')
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async updateOneById(
         @Req() req: Request,
         @Res() res: Response,
@@ -89,7 +89,7 @@ export class UserProfilesController extends BaseController {
     }
 
     @Delete(':id')
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async deleteOneById(
         @Req() req: Request,
         @Res() res: Response,

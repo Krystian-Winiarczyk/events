@@ -7,74 +7,65 @@ import {Gender} from "../../constants/Gender";
 @Entity({ name: 'user_profiles' })
 export class UserProfile extends BaseEntity {
     /**
-     * @Description First name of player
-     * @Required true
-     * @Type string
+     *  First name of player
+     * @returns {string} firstName
      */
     @Column({ nullable: true })
     firstName: string;
 
     /**
-     * @Description Last name of player
-     * @Required true
-     * @Type string
+     *  Last name of player
+     * @returns {string} lastName
      */
     @Column({ nullable: true })
     lastName: string;
 
     /**
-     * @Description Nickname of the player
-     * @Required false
-     * @Type string
+     *  Nickname of the player
+     * @returns {string} nickname
      */
     @Column()
     nickname: string;
 
     /**
-     * @Description Player gender
-     * @Required false
-     * @Type Gender
+     *  Player gender
+     * @returns {Gender} gender
      */
     @Column('enum', { default: Gender.MALE, enum: Gender })
     gender: Gender;
 
     /**
-     * @Description Player description
-     * @Required false
-     * @Type text
+     *  Player description
+     * @returns {text} description
      */
     @Column({ nullable: true, type: 'text' })
     description: string
 
     /**
-     * @Description Player birthday
-     * @Required false
-     * @Type datetime
+     *  Player birthday
+     * @returns {datetime} birthDate
      */
     @Column({ nullable: true, type: 'datetime' })
     birthDate: Date;
 
     /**
-     * @Description Main user profile
-     * @Required true
-     * @Type boolean
+     *  Main user profile
+     * @returns {boolean} isPrimary
      */
     @Column({ default: false })
     isPrimary: boolean;
 
     /**
-     * @Description User profile owner
-     * @Required true
-     * @Type User
+     *  User profile owner
+     * @returns {User} user
      */
     @ManyToOne(() => User, (user) => user.pets)
     @JoinTable()
     user: User
 
     /**
-     * @Description User profile avatar
-     * @Required false
-     * @Type File
+     *  User profile avatar
+     * @returns {File} avatar
      */
     @OneToOne(() => File, (file) => file.userProfile)
     avatar: File

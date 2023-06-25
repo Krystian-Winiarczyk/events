@@ -1,5 +1,4 @@
-import { CreateUserParams } from './../../../../utils/types';
-import { UsersService } from './../../../users/service/users/users.service';
+import { UsersService } from '../../../users/service/users/users.service';
 import {BadRequestException, ForbiddenException, Injectable} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {User} from "../../../../typeorm/entities/User";
@@ -7,22 +6,17 @@ import {LoginUserDto} from "../../dtos/LoginUser.dto";
 import * as argon2 from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import {SignupDto} from "../../dtos/Signup.dto";
-import {create} from "domain";
-import {PetService} from "../../../users/service/pet/pet.service";
+import {UserPetsService} from "../../../users/service/user-pets/user-pets.service";
 import {UserProfilesService} from "../../../users/service/user-profiles/user-profiles.service";
-import {Roles} from "../../../../decorators/roles.decorator";
 import {Role} from "../../../../constants/Role";
-import {CreateUserProfileDto} from "../../../users/dtos/UserProfile.dto";
-import {CreatePetDto} from "../../../users/dtos/Pet.dto";
 import {UserPet} from "../../../../typeorm/entities/UserPet";
 import {UserProfile} from "../../../../typeorm/entities/UserProfile";
-
 @Injectable()
 export class AuthService {
     constructor(
         private usersService: UsersService,
         private userProfilesService: UserProfilesService,
-        private petService: PetService,
+        private petService: UserPetsService,
         private jwtService: JwtService,
         private configService: ConfigService,
     ) {}
@@ -123,7 +117,6 @@ export class AuthService {
 
         const newUser: User = await this.usersService.create({
             email: signupDto.email,
-            username: signupDto.username,
             password: signupDto.password,
             role: Role.USER,
         });

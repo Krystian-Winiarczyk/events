@@ -7,104 +7,92 @@ import { File } from "./File";
 @Entity({ name: 'user_pets' })
 export class UserPet extends BaseEntity {
     /**
-     * @Description Name of the dog
-     * @Required true
-     * @Type string
+     *  Name of the dog
+     * @returns {string} name
      */
     @Column()
     name: string
 
     /**
-     * @Description Number of dog passport
-     * @Required true
-     * @Type string
+     *  Number of dog passport
+     * @returns {string} passportNumber
      */
     @Column()
     passportNumber: string
 
     /**
-     * @Description Dog breed
-     * @Required false
-     * @Type string
+     *  Dog breed
+     * @returns {string} breed
      */
     @Column({ nullable: true })
     breed: string
 
     /**
-     * @Description Dog weight
-     * @Required false
-     * @Type number
+     *  Dog weight
+     * @returns {number} weight
      */
     @Column({ nullable: true })
     weight: number
 
     /**
-     * @Description Color of the dog
-     * @Required false
-     * @Type string
+     *  Color of the dog
+     * @returns {string} color
      */
     @Column({ nullable: true })
     color: string
 
     /**
-     * @Description Dog breeding
-     * @Required false
-     * @Type string
+     *  Dog breeding
+     * @returns {string} breeding
      */
     @Column({ nullable: true })
     breeding: string
 
     /**
-     * @Description Dog personality
-     * @Required false
-     * @Type string
+     *  Dog personality
+     * @returns {string} personality
      */
     @Column({ nullable: true })
     personality: string
 
     /**
-     * @Description Dog gender
-     * @Required false
-     * @Type Gender
+     *  Dog gender
+     * @returns {Gender} gender
      */
     @Column('enum', { default: Gender.MALE, enum: Gender })
     gender: Gender;
 
     /**
-     * @Description Dog description
-     * @Required false
-     * @Type text
+     *  Dog description
+     * @returns {text} description
      */
     @Column({ nullable: true, type: 'text' })
     description: string
 
     /**
-     * @Description Date of do birthday
-     * @Required false
-     * @Type datetime
+     *  Date of do birthday
+     * @returns {datetime} birthDate
      */
     @Column({ nullable: true, type: 'datetime' })
     birthDate: Date;
 
     /**
-     * @Description Dog owner
-     * @Required true
-     * @Type User
+     *  Dog owner
+     * @returns {User} user
      */
     @ManyToOne(() => User, (user) => user.pets)
     @JoinTable()
     user: User
 
     /**
-     * @Description Dog images
-     * @Required false
-     * @Type File[]
+     *  Dog images
+     * @returns {File[]} images
      */
     @OneToMany(() => File, file => file.pet)
     @JoinColumn()
     images: File[]
 
-    // @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.pet)
+    // @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.user-user-pets)
     // @JoinTable()
     // eventRegistrations: EventRegistration[]
 }

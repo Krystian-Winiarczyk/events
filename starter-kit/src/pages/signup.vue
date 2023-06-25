@@ -107,7 +107,7 @@ const onSubmit = async () => {
 
 // Pets
 // const addPet = (): void => {
-//   const pet = {
+//   const user-user-pets = {
 //     image: [],
 //     name: '',
 //     description: '',
@@ -117,7 +117,7 @@ const onSubmit = async () => {
 //     age: 5,
 //   }
 //
-//   form.pets.push(pet)
+//   form.pets.push(user-user-pets)
 // }
 
 const validateAccountForm = () => {

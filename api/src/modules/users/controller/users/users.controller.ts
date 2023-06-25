@@ -25,10 +25,10 @@ import { RoleGuard } from '../../../../guard/role/role.guard';
 import { Role } from '../../../../constants/Role';
 import { Roles } from '../../../../decorators/roles.decorator';
 import {UserProfilesService} from "../../service/user-profiles/user-profiles.service";
-import {PetService} from "../../service/pet/pet.service";
+import {UserPetsService} from "../../service/user-pets/user-pets.service";
 import {UsersService} from "../../service/users/users.service";
 import {CreateUserProfileDto} from "../../dtos/UserProfile.dto";
-import {CreatePetDto} from "../../dtos/Pet.dto";
+import { CreateUserPetDto } from "../../dtos/UserPet.dto";
 import {UserPet} from "../../../../typeorm/entities/UserPet";
 import {UserProfile} from "../../../../typeorm/entities/UserProfile";
 
@@ -41,7 +41,7 @@ export class UsersController
     constructor(
         private userService: UsersService,
         private userProfileService: UserProfilesService,
-        private petService: PetService,
+        private petService: UserPetsService,
     ) {
         super();
     }
@@ -57,7 +57,7 @@ export class UsersController
         try {
             const users: User[] = await this.userService.findAll({
                 pagination: this.paginationFragment(limit, page),
-                relations: ['profiles'],
+                relations: ['profiles', 'pets'],
                 where: this.resolveFilters(q),
             });
 
@@ -68,15 +68,16 @@ export class UsersController
     }
 
     @Get(':id')
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async getOneById(
         @Req() req: Request,
         @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
     ) {
+        console.log('123')
         try {
             const user: User = await this.userService.findOneById(id, {
-                relations: ['profiles']
+                relations: ['profiles', 'pets']
             });
 
             this.apiSuccessResponse(res, req, user);
@@ -86,7 +87,7 @@ export class UsersController
     }
 
     @Post()
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async create(
         @Req() req: Request,
         @Res() res: Response,
@@ -107,7 +108,7 @@ export class UsersController
     }
 
     @Patch(':id')
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async updateOneById(
         @Req() req: Request,
         @Res() res: Response,
@@ -127,7 +128,7 @@ export class UsersController
     }
 
     @Delete(':id')
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async deleteOneById(
         @Req() req: Request,
         @Res() res: Response,
@@ -197,7 +198,7 @@ export class UsersController
     async createUserPet(
         @Req() req: Request, @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
-        @Body() createPetDto: CreatePetDto
+        @Body() createPetDto: CreateUserPetDto
     ) {
         try {
             const data: UserPet = await this.petService.create({ ...createPetDto, user: id })

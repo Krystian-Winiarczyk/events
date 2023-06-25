@@ -1,5 +1,5 @@
-import {CreatePetDto} from "../../users/dtos/Pet.dto";
-import {CreateUserProfileDto} from "../../users/dtos/UserProfile.dto";
+import { CreateUserPetDto } from "../../users/dtos/UserPet.dto";
+import { CreateUserProfileDto } from "../../users/dtos/UserProfile.dto";
 
 export class SignupDto {
     username?: string
@@ -7,6 +7,6 @@ export class SignupDto {
     password: string
     confirmPassword?: string
 
-    pet: CreatePetDto
+    pet: CreateUserPetDto
     profile: CreateUserProfileDto
 }

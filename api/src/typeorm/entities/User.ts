@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, JoinTable } from 'typeorm';
+import {Entity, Column, OneToMany, JoinTable, Unique} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import { UserPet } from './UserPet';
 import { UserProfile } from './UserProfile';
@@ -8,52 +8,45 @@ import {Role} from "../../constants/Role";
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
     /**
-     * @Description User account email address
-     * @Required true
-     * @Unique true
-     * @Type string
+     *  User account email address
+     * @returns{string} email
      */
     @Column({ unique: true, nullable: false })
     email: string;
 
     /**
-     * @Description User password
-     * @Required true
-     * @Type string
+     *  User password
+     * @returns {string} password
      */
     @Column({ nullable: false, select: false })
     password: string;
 
     /**
-     * @Description Rank of user
-     * @Required true
-     * @Type Rank
+     *  Rank of user
+     * @returns {Rank} role
      */
     @Column('enum', { default: Role.USER, enum: Role })
     role: Role;
 
     /**
-     * @Description List of all assigned pets
-     * @Required true
-     * @Type Pet[]
+     *  List of all assigned pets
+     * @returns {Pet[]} pets
      */
     @OneToMany(() => UserPet, (pet) => pet.user)
     @JoinTable()
     pets: UserPet[]
 
     /**
-     * @Description User profiles
-     * @Required true
-     * @Type UserProfile[]
+     *  User profiles
+     * @returns {UserProfile[]} profiles
      */
     @OneToMany(() => UserProfile, (profile) => profile.user)
     @JoinTable()
     profiles: UserProfile[]
 
     /**
-     * @Description Refresh authorization token
-     * @Required false
-     * @Type string
+     *  Refresh authorization token
+     * @returns {string} refreshToken
      */
     @Column({ nullable: true })
     @Exclude()

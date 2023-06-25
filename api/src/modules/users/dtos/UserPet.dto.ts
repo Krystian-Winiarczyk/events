@@ -10,11 +10,11 @@ export class CreateUserPetDto {
     description?: string
     personality?: string
     birthDate?: Date
-    weight?: string
+    weight?: number
     breeding?: string
     gender?: Gender
 
-    images?: Array<File | any>
+    images?: Array<File | any> | any
     user?: User | any
 }
 
@@ -27,7 +27,7 @@ export class UpdateUserPetDto {
     description?: string
     personality?: string
     birthDate?: Date
-    weight?: string
+    weight?: number
     breeding?: string
     gender?: Gender
 
