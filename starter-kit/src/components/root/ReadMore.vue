@@ -8,5 +8,7 @@ defineProps({
 </script>
 
 <template>
-  {{ text | $filters.island(20) }}
+  <p>
+    {{ text }}
+  </p>
 </template>
