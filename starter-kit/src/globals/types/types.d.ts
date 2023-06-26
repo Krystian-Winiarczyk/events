@@ -5,10 +5,17 @@ export declare type User = {
   name: string
   role: string
   email: string
+  createdAt?: Date
+}
+
+export declare type Profile = {
+  avatar?: string
+  name: string
   gender?: GENDER
   socials?: Array<object>
   birth?: string
-  createdAt?: string
+  createdAt?: Date
+  user: User
 }
 
 export declare type Pet = {
@@ -17,5 +24,11 @@ export declare type Pet = {
   owner: User
   gender?: GENDER
   birth?: string
-  createdAt?: string
+  createdAt?: Date
+  user: User
+  profiles?: Profile
+}
+
+export declare type Role = {
+  name: string
 }
