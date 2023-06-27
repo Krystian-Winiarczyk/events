@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { User } from '@/globals/objects/root/User'
+import { useAuthStore } from '@/stores/root/Auth'
 
-const Admin = {
-  name: 'admin',
-}
-
-const test = new User(Admin, 'test@tesuto.ts')
+const auth = useAuthStore()
+const user = auth.user
 </script>
 
 <template>
@@ -18,7 +15,7 @@ const test = new User(Admin, 'test@tesuto.ts')
 
     :style="isSM ? 'row-gap: 2rem' : 'row-gap: 1rem'"
   >
-    {{ test.email }}
+    {{ user?.email }}
 
     <!--    <Header :user="user" /> -->
 

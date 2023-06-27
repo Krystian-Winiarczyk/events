@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia'
 import { User } from '@/globals/objects/root/User'
 
 export const useAuthStore = defineStore('auth', {
@@ -6,7 +7,7 @@ export const useAuthStore = defineStore('auth', {
   }),
 
   getters: {
-    user(): User | null { return this.user },
+    getUser: state => state.user,
   },
 
   actions: {
@@ -16,11 +17,13 @@ export const useAuthStore = defineStore('auth', {
           name: 'admin',
         }
 
-        this.$state.user = new User(Admin, email)
+        this.user = new User(Admin, email)
 
         console.log('Hello! <3', email, password)
       }
-      catch (err) { return err }
+      catch (err) {
+        return err
+      }
     },
   },
 })
