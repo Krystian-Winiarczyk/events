@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import { useAuthStore } from '../stores/root/Auth'
 import { useGenerateImageVariant } from '@/@core/composable/useGenerateImageVariant'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import authV1LoginMaskDark from '@images/pages/auth-v1-login-mask-dark.png'
 import authV1LoginMaskLight from '@images/pages/auth-v1-login-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
+import router from '@/router'
+
+const auth = useAuthStore()
 
 const form = ref({
   email: '',
@@ -14,6 +18,13 @@ const form = ref({
 
 const authV1ThemeLoginMask = useGenerateImageVariant(authV1LoginMaskLight, authV1LoginMaskDark)
 const isPasswordVisible = ref(false)
+
+const login = () => {
+  const { email, password } = form.value
+
+  if (email && password)
+    auth.signIn(email, password).then(() => router.push({ path: '/' }))
+}
 </script>
 
 <template>
@@ -45,7 +56,7 @@ const isPasswordVisible = ref(false)
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm @submit.prevent="login">
           <VRow>
             <!-- email -->
             <VCol cols="12">

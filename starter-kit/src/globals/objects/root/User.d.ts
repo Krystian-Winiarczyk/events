@@ -1,6 +1,6 @@
 import {Role} from '../../types/types'
-import Profile = require('./Profile');
-import Pet = require('./Pet');
+import Profile = require('./Profile')
+import Pet = require('./Pet')
 
 export as namespace user
 
