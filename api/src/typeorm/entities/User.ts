@@ -1,9 +1,11 @@
-import {Entity, Column, OneToMany, JoinTable, Unique} from 'typeorm';
+import {Entity, Column, OneToMany, JoinTable, Unique, AfterLoad, AfterInsert, AfterUpdate} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import { UserPet } from './UserPet';
 import { UserProfile } from './UserProfile';
 import {Exclude} from "class-transformer";
 import {Role} from "../../constants/Role";
+import {IsOptional} from "class-validator";
+import {ApiProperty} from "@nestjs/swagger";
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -51,4 +53,21 @@ export class User extends BaseEntity {
     @Column({ nullable: true })
     @Exclude()
     public refreshToken?: string;
+
+    // Computed
+    /**
+     *  User profile with {isPrimary} set to true
+     * @returns {UserProfile} primaryProfile
+     */
+    @IsOptional()
+    public primaryProfile?: UserProfile
+
+    @AfterLoad()
+    @AfterInsert()
+    @AfterUpdate()
+    getPrimaryProfile?(): void {
+        this.primaryProfile = this.profiles.find((profile: UserProfile) => profile.isPrimary);
+    }
+
+
 }
