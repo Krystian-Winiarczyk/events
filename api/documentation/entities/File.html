@@ -43,15 +43,15 @@
 
 <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a href="#info"
+            <a href="#info" 
                 class="nav-link"
                 class="nav-link active"
                 role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
         <li class="nav-item">
-            <a href="#source"
+            <a href="#source" 
                 class="nav-link"
-
+                
                 role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
@@ -119,7 +119,7 @@
 </section>
 
             <section data-compodoc="block-properties">
-
+    
     <h3 id="inputs">
         Properties
     </h3>
@@ -152,7 +152,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/typeorm/entities/File.ts:30</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/typeorm/entities/File.ts:27</a></div>
                         </td>
                     </tr>
 
@@ -194,7 +194,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/typeorm/entities/File.ts:38</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/typeorm/entities/File.ts:34</a></div>
                         </td>
                     </tr>
 
@@ -236,7 +236,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/typeorm/entities/File.ts:14</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/typeorm/entities/File.ts:13</a></div>
                         </td>
                     </tr>
 
@@ -278,7 +278,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/typeorm/entities/File.ts:22</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/typeorm/entities/File.ts:20</a></div>
                         </td>
                     </tr>
 
@@ -320,7 +320,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/typeorm/entities/File.ts:55</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/typeorm/entities/File.ts:49</a></div>
                         </td>
                     </tr>
 
@@ -363,7 +363,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/typeorm/entities/File.ts:47</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/typeorm/entities/File.ts:42</a></div>
                         </td>
                     </tr>
 
@@ -390,39 +390,35 @@ import {UserProfile} from &quot;./UserProfile&quot;;
 export class File extends BaseEntity {
     /**
      *  Orginal file name
-     * @Type string
+     * @returns {string} orginalName
      */
     @Column()
     orginalName: string;
 
     /**
      *  Path to file
-     * @Required true
-     * @Type string
+     * @returns {string} path
      */
     @Column()
     path: string;
 
     /**
      *  Filename
-     * @Required true
-     * @Type string
+     * @returns {string} filename
      */
     @Column()
     filename: string;
 
     /**
      *  File mimetype
-     * @Required true
-     * @Type string
+     * @returns {string} mimetype
      */
     @Column()
     mimetype: string;
 
     /**
      *  Assigned file user profile
-     * @Required false
-     * @Type UserProfile
+     * @returns {UserProfile} userProfile
      */
     @OneToOne(() &#x3D;&gt; UserProfile, (userProfile) &#x3D;&gt; userProfile.avatar, { nullable: true })
     @JoinColumn()
@@ -430,8 +426,7 @@ export class File extends BaseEntity {
 
     /**
      *  Assigned file user user-user-pets
-     * @Required false
-     * @Type UserPet
+     * @returns {UserPet} pet
      */
     @ManyToOne(() &#x3D;&gt; UserPet, (userPet) &#x3D;&gt; userPet.images, { nullable: true })
     pet: UserPet

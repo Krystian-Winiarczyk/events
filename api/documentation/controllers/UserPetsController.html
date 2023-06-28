@@ -68,7 +68,7 @@
                 <h3>Prefix</h3>
             </p>
             <p class="comment">
-                <code>pets</code>
+                <code>api/user/pets</code>
             </p>
 
 
@@ -97,12 +97,10 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier"></span>
-                                    <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#create" >create</a>
                             </li>
                             <li>
-                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#deleteOneById" >deleteOneById</a>
@@ -118,7 +116,6 @@
                                 <a href="#getOneById" >getOneById</a>
                             </li>
                             <li>
-                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                     <span class="modifier">Async</span>
                                 <a href="#updateOneById" >updateOneById</a>
@@ -167,7 +164,6 @@
                     <a name="create"></a>
                     <span class="name">
                         <span class="modifier"></span>
-                        <span class="modifier"></span>
                         <span class="modifier">Async</span>
                         <span ><b>create</b></span>
                         <a href="#create"><span class="icon ion-ios-link"></span></a>
@@ -185,14 +181,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Post()<br />@Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)<br /></code>
+                    <code>@Post()<br /></code>
                 </td>
             </tr>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="73"
-                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:73</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="61"
+                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:61</a></div>
                 </td>
             </tr>
 
@@ -271,7 +267,6 @@
                     <a name="deleteOneById"></a>
                     <span class="name">
                         <span class="modifier"></span>
-                        <span class="modifier"></span>
                         <span class="modifier">Async</span>
                         <span ><b>deleteOneById</b></span>
                         <a href="#deleteOneById"><span class="icon ion-ios-link"></span></a>
@@ -289,14 +284,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Delete(&#x27;:id&#x27;)<br />@Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)<br /></code>
+                    <code>@Delete(&#x27;:id&#x27;)<br /></code>
                 </td>
             </tr>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="109"
-                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:109</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="97"
+                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:97</a></div>
                 </td>
             </tr>
 
@@ -398,8 +393,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="33"
-                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:33</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="21"
+                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:21</a></div>
                 </td>
             </tr>
 
@@ -537,8 +532,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="55"
-                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:55</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="43"
+                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:43</a></div>
                 </td>
             </tr>
 
@@ -617,7 +612,6 @@
                     <a name="updateOneById"></a>
                     <span class="name">
                         <span class="modifier"></span>
-                        <span class="modifier"></span>
                         <span class="modifier">Async</span>
                         <span ><b>updateOneById</b></span>
                         <a href="#updateOneById"><span class="icon ion-ios-link"></span></a>
@@ -635,14 +629,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Patch(&#x27;:id&#x27;)<br />@Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)<br /></code>
+                    <code>@Patch(&#x27;:id&#x27;)<br /></code>
                 </td>
             </tr>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="89"
-                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:89</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="77"
+                            class="link-to-prism">src/modules/users/controller/user-pets/user-pets.controller.ts:77</a></div>
                 </td>
             </tr>
 
@@ -1324,32 +1318,20 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { BaseController } from &#x27;../../../../base/BaseController&#x27;;
-import { UserPetsService } from &#x27;../../service/user-pets/user-pets.service&#x27;;
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    Query,
-    Req,
-    Res,
-    UseGuards
-} from &#x27;@nestjs/common&#x27;;
-import { CreateUserPetDto, UpdateUserPetDto } from &#x27;../../dtos/UserPet.dto&#x27;;
-import { JwtAuthGuard } from &#x27;src/guard/jwt-auth/jwt-auth.guard&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, Res } from &#x27;@nestjs/common&#x27;;
 import { Request, Response } from &#x27;express&#x27;;
-import { UserPet } from &quot;../../../../typeorm/entities/UserPet&quot;;
-import { Roles } from &quot;../../../../decorators/roles.decorator&quot;;
-import { Role } from &quot;../../../../constants/Role&quot;;
 import { UpdateResult } from &quot;typeorm&quot;;
 
-@Controller(&#x27;pets&#x27;)
-@UseGuards(JwtAuthGuard)
+import { BaseController } from &#x27;../../../../base/BaseController&#x27;;
+
+import { UserPet } from &quot;../../../../typeorm/entities/UserPet&quot;;
+
+import { CreateUserPetDto, UpdateUserPetDto } from &#x27;../../dtos/UserPet.dto&#x27;;
+
+import { UserPetsService } from &#x27;../../service/user-pets/user-pets.service&#x27;;
+
+@Controller(&#x27;api/user/pets&#x27;)
+// @UseGuards(JwtAuthGuard)
 export class UserPetsController extends BaseController {
     constructor(private petService: UserPetsService) {
         super()
@@ -1395,7 +1377,7 @@ export class UserPetsController extends BaseController {
     }
 
     @Post()
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async create(
         @Req() req: Request,
         @Res() res: Response,
@@ -1411,7 +1393,7 @@ export class UserPetsController extends BaseController {
     }
 
     @Patch(&#x27;:id&#x27;)
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async updateOneById(
         @Req() req: Request,
         @Res() res: Response,
@@ -1431,7 +1413,7 @@ export class UserPetsController extends BaseController {
     }
 
     @Delete(&#x27;:id&#x27;)
-    @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async deleteOneById(
         @Req() req: Request,
         @Res() res: Response,

@@ -95,6 +95,12 @@
                             </li>
                             <li>
                                     <span class="modifier"></span>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#primaryProfile" >primaryProfile</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
                                     <span class="modifier"></span>
                                 <a href="#profiles" >profiles</a>
                             </li>
@@ -198,7 +204,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/typeorm/entities/User.ts:25</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/typeorm/entities/User.ts:24</a></div>
                         </td>
                     </tr>
 
@@ -241,13 +247,57 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/typeorm/entities/User.ts:42</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/typeorm/entities/User.ts:39</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p> List of all assigned pets</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="primaryProfile"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>primaryProfile</b></span>
+                        <a href="#primaryProfile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../entitys/UserProfile.html" target="_self" >UserProfile</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @IsOptional()<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/typeorm/entities/User.ts:62</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p> User profile with {isPrimary} set to true</p>
 </div>
                 </td>
             </tr>
@@ -284,7 +334,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/typeorm/entities/User.ts:51</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/typeorm/entities/User.ts:47</a></div>
                         </td>
                     </tr>
 
@@ -329,7 +379,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/typeorm/entities/User.ts:60</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/typeorm/entities/User.ts:55</a></div>
                         </td>
                     </tr>
 
@@ -371,7 +421,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/typeorm/entities/User.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/typeorm/entities/User.ts:31</a></div>
                         </td>
                     </tr>
 
@@ -389,44 +439,41 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Entity, Column, OneToMany, JoinTable } from &#x27;typeorm&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {Entity, Column, OneToMany, JoinTable, Unique, AfterLoad, AfterInsert, AfterUpdate} from &#x27;typeorm&#x27;;
 import { BaseEntity } from &#x27;../../base/BaseEntity&#x27;;
 import { UserPet } from &#x27;./UserPet&#x27;;
 import { UserProfile } from &#x27;./UserProfile&#x27;;
 import {Exclude} from &quot;class-transformer&quot;;
 import {Role} from &quot;../../constants/Role&quot;;
+import {IsOptional} from &quot;class-validator&quot;;
+import {ApiProperty} from &quot;@nestjs/swagger&quot;;
 
 @Entity({ name: &#x27;users&#x27; })
 export class User extends BaseEntity {
     /**
      *  User account email address
-     * @Required true
-     * @Unique true
-     * @Type string
+     * @returns{string} email
      */
     @Column({ unique: true, nullable: false })
     email: string;
 
     /**
      *  User password
-     * @Required true
-     * @Type string
+     * @returns {string} password
      */
     @Column({ nullable: false, select: false })
     password: string;
 
     /**
      *  Rank of user
-     * @Required true
-     * @Type Rank
+     * @returns {Rank} role
      */
     @Column(&#x27;enum&#x27;, { default: Role.USER, enum: Role })
     role: Role;
 
     /**
      *  List of all assigned pets
-     * @Required true
-     * @Type Pet[]
+     * @returns {Pet[]} pets
      */
     @OneToMany(() &#x3D;&gt; UserPet, (pet) &#x3D;&gt; pet.user)
     @JoinTable()
@@ -434,8 +481,7 @@ export class User extends BaseEntity {
 
     /**
      *  User profiles
-     * @Required true
-     * @Type UserProfile[]
+     * @returns {UserProfile[]} profiles
      */
     @OneToMany(() &#x3D;&gt; UserProfile, (profile) &#x3D;&gt; profile.user)
     @JoinTable()
@@ -443,12 +489,27 @@ export class User extends BaseEntity {
 
     /**
      *  Refresh authorization token
-     * @Required false
-     * @Type string
+     * @returns {string} refreshToken
      */
     @Column({ nullable: true })
     @Exclude()
     public refreshToken?: string;
+
+    /**
+     *  User profile with {isPrimary} set to true
+     * @returns {UserProfile} primaryProfile
+     */
+    @IsOptional()
+    public primaryProfile?: UserProfile
+
+    @AfterLoad()
+    @AfterInsert()
+    @AfterUpdate()
+    getPrimaryProfile?(): void {
+        this.primaryProfile &#x3D; this.profiles.find((profile: UserProfile) &#x3D;&gt; profile.isPrimary);
+    }
+
+
 }
 </code></pre>
     </div>
