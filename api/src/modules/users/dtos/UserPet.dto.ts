@@ -14,6 +14,13 @@ export class CreateUserPetDto {
     breeding?: string
     gender?: Gender
 
+    websiteUrl?: string
+    youtubeUrl?: string
+    facebookUrl?: string
+    instagramUrl?: string
+    tiktokUrl?: string
+    twitterUrl?: string
+
     images?: Array<File | any> | any
     user?: User | any
 }
@@ -30,6 +37,13 @@ export class UpdateUserPetDto {
     weight?: number
     breeding?: string
     gender?: Gender
+
+    websiteUrl?: string
+    youtubeUrl?: string
+    facebookUrl?: string
+    instagramUrl?: string
+    tiktokUrl?: string
+    twitterUrl?: string
 
     images?: Array<File | any>
     user?: User | any

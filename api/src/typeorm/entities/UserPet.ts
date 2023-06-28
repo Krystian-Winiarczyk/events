@@ -77,6 +77,48 @@ export class UserPet extends BaseEntity {
     birthDate: Date;
 
     /**
+     *  Social media url
+     * @returns {string} websiteUrl
+     */
+    @Column({ nullable: true })
+    websiteUrl: string
+
+    /**
+     *  Social media url
+     * @returns {string} youtubeUrl
+     */
+    @Column({ nullable: true })
+    youtubeUrl: string
+
+    /**
+     *  Social media url
+     * @returns {string} facebookUrl
+     */
+    @Column({ nullable: true })
+    facebookUrl: string
+
+    /**
+     *  Social media url
+     * @returns {string} instagramUrl
+     */
+    @Column({ nullable: true })
+    instagramUrl: string
+
+    /**
+     *  Social media url
+     * @returns {string} tiktokUrl
+     */
+    @Column({ nullable: true })
+    tiktokUrl: string
+
+    /**
+     *  Social media url
+     * @returns {string} twitter
+     */
+    @Column({ nullable: true })
+    twitterUrl: string
+
+    /**
      *  Dog owner
      * @returns {User} user
      */

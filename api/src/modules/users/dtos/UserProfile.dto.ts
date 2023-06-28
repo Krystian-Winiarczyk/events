@@ -11,6 +11,13 @@ export class CreateUserProfileDto extends BaseDto {
     isPrimary?: boolean
     birthDate?: Date
 
+    websiteUrl?: string
+    youtubeUrl?: string
+    facebookUrl?: string
+    instagramUrl?: string
+    tiktokUrl?: string
+    twitterUrl?: string
+
     user?: User | any
     avatar?: File | any
 }
@@ -23,6 +30,13 @@ export class UpdateUserProfileDto extends BaseDto {
     description?: string
     birthDate?: Date
     isPrimary?: boolean
+
+    websiteUrl?: string
+    youtubeUrl?: string
+    facebookUrl?: string
+    instagramUrl?: string
+    tiktokUrl?: string
+    twitterUrl?: string
 
     avatar?: File | any
 }
