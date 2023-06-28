@@ -54,7 +54,6 @@ export class User extends BaseEntity {
     @Exclude()
     public refreshToken?: string;
 
-    // Computed
     /**
      *  User profile with {isPrimary} set to true
      * @returns {UserProfile} primaryProfile
