@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
-import { User } from '@/globals/objects/root/User'
+import User from '@/globals/objects/root/User'
+import { LANGS, PRONOUNS } from '@/globals/enums/enums'
+import Profile from '@/globals/objects/root/Profile'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -17,7 +19,21 @@ export const useAuthStore = defineStore('auth', {
           name: 'admin',
         }
 
-        this.user = new User(Admin, email)
+        const profile = new Profile(
+          'Emily Totsu',
+          PRONOUNS.FLUID,
+          LANGS.ANG,
+          'Neko1998',
+          'Hello there! The pyramid is full of justice. Emptiness hurts when you experience with love.',
+        )
+
+        const profile2 = new Profile(
+          'Testowy Gostek',
+          PRONOUNS.HE,
+          LANGS.ANG,
+        )
+
+        this.user = new User(Admin, email, [profile, profile2])
 
         console.log('Hello! <3', email, password)
       }

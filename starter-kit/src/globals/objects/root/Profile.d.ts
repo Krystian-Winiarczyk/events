@@ -1,9 +1,7 @@
-import { Role } from '../../types/types'
-
 export as namespace profile
 
 export = Profile
 
 declare class Profile {
-  constructor()
+  constructor(name: string, pronouns?: PRONOUNS, language?: LANGS, nickname?: string, dsc?: string, avatar?: string, socials?: Array<string>)
 }

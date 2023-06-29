@@ -1,16 +1,17 @@
 import type { Role } from '@/globals/types/types'
+import type Profile from '@/globals/objects/root/Profile'
 
-export class User {
+export default class User {
   private _role: Role
   private _email: string
-  private _profiles: Array<Profile>
-  private _pets: Array<Pet>
+  private _profiles: Array<Profile> | undefined
+  private _pets: Array<Pet> | undefined
 
   constructor(role: Role, email: string, profiles?: Array<Profile>, pets?: Array<Pet>) {
     this._role = role
     this._email = email
-    this._profiles = profiles || []
-    this._pets = pets || []
+    this._profiles = profiles || undefined
+    this._pets = pets || undefined
   }
 
   /*    START::Role    */

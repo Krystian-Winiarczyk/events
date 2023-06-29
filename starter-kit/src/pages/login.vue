@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAuthStore } from '../stores/root/Auth'
+import { useAuthStore } from '@/stores/root/Auth'
 import { useGenerateImageVariant } from '@/@core/composable/useGenerateImageVariant'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import authV1LoginMaskDark from '@images/pages/auth-v1-login-mask-dark.png'
