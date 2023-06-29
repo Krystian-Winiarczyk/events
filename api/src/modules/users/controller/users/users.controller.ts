@@ -74,7 +74,6 @@ export class UsersController
         @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,
     ) {
-        console.log('123')
         try {
             const user: User = await this.userService.findOneById(id, {
                 relations: ['profiles', 'pets']

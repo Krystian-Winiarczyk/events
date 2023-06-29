@@ -24,8 +24,8 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
-      entities: [User, UserPet, UserProfile, Event, Competition, File],
-      synchronize: true || configService.get('APP_MODE') === AppMode.DEVELOPMENT,
+      entities: [Event, Competition, File, User, UserPet, UserProfile],
+      synchronize: configService.get('APP_MODE') === AppMode.DEVELOPMENT,
     };
   },
 };

@@ -34,7 +34,7 @@ export class User extends BaseEntity {
      *  List of all assigned pets
      * @returns {Pet[]} pets
      */
-    @OneToMany(() => UserPet, (pet) => pet.user)
+    @OneToMany(() => UserPet, (pet) => pet.user, { onDelete: 'CASCADE' })
     @JoinTable()
     pets: UserPet[]
 
@@ -42,7 +42,7 @@ export class User extends BaseEntity {
      *  User profiles
      * @returns {UserProfile[]} profiles
      */
-    @OneToMany(() => UserProfile, (profile) => profile.user)
+    @OneToMany(() => UserProfile, (profile) => profile.user, { onDelete: 'CASCADE' })
     @JoinTable()
     profiles: UserProfile[]
 

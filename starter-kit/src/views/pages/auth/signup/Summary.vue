@@ -136,21 +136,21 @@ const profileFullName = computed(() => {
           </VListItem>
           <VListItem>
             <span class="font-weight-bold">
+              {{ $t('PassportNumber') }}:
+            </span>
+            <span class="text-body-2">{{ data.pet.passportNumber || '-' }}</span>
+          </VListItem>
+          <VListItem>
+            <span class="font-weight-bold">
               {{ $t('Breed') }}:
             </span>
             <span class="text-body-2">{{ data.pet.breed || '-' }}</span>
           </VListItem>
           <VListItem>
             <span class="font-weight-bold">
-              {{ $t('Color') }}:
+              {{ $t('HeightAtTheWithers') }}:
             </span>
-            <span class="text-body-2">{{ data.pet.color || '-' }}</span>
-          </VListItem>
-          <VListItem>
-            <span class="font-weight-bold">
-              {{ $t('Personality') }}:
-            </span>
-            <span class="text-body-2">{{ data.pet.personality || '-' }}</span>
+            <span class="text-body-2">{{ data.pet.height || 0 }} cm</span>
           </VListItem>
           <VListItem>
             <span class="font-weight-bold">

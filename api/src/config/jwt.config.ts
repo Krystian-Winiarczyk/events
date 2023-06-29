@@ -5,9 +5,7 @@ import appConfig from './app.config';
 export const jwtConfig: JwtModuleAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
-  useFactory: async (
-    configService: ConfigService,
-  ): Promise<JwtModuleOptions> => {
+  useFactory: async (): Promise<JwtModuleOptions> => {
     return {
       secret: appConfig().jwtSecret,
       signOptions: { expiresIn: appConfig().jwtExpires + 's' },

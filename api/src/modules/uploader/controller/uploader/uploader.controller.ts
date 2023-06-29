@@ -1,10 +1,11 @@
-import {Controller, Post, Req, Res, UploadedFiles, UseInterceptors} from '@nestjs/common';
+import {Body, Controller, Post, Req, Res, UploadedFiles, UseInterceptors} from '@nestjs/common';
 import {FilesInterceptor} from "@nestjs/platform-express";
 import {diskStorage} from "multer";
 import {UploaderService} from "../../service/uploader/uploader.service";
 import {BaseController} from "../../../../base/BaseController";
 import {Request, Response} from "express";
 import {File} from "../../../../typeorm/entities/File";
+import {FileType} from "../../../../constants/FileType";
 
 export const editFileName = (req, file, callback) => {
     const name = file.originalname.split('.')[0];
@@ -33,9 +34,10 @@ export class UploaderController extends BaseController {
         @Req() req: Request,
         @Res() res: Response,
         @UploadedFiles() files: Array<Express.Multer.File>,
+        @Body('type') type: FileType,
     ) {
         try {
-            const uploadedFiles: File[] = await this.uploaderService.createFiles(files)
+            const uploadedFiles: File[] = await this.uploaderService.createFiles(files, type)
             this.apiSuccessResponse(res, req, uploadedFiles)
         } catch (err) {
             this.apiErrorResponse(res, req, err)

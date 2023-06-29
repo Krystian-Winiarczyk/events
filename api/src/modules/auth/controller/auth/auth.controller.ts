@@ -10,7 +10,7 @@ import {JwtRefreshAuthGuard} from "../../../../guard/jwt-refresh-auth/jwt-refres
 import {User} from "../../../../typeorm/entities/User";
 import {SignupDto} from "../../dtos/Signup.dto";
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController extends BaseController {
 
     constructor(private authService: AuthService) {

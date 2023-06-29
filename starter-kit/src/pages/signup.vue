@@ -47,7 +47,7 @@ const items = [
 ]
 
 const form = reactive({
-  username: `Adamiak ${new Date().toLocaleDateString()}${new Date().getTime()}}`,
+  username: `Adamiak ${new Date().toLocaleDateString()}${new Date().getTime()}`,
   email: `test.${new Date().toLocaleDateString()}${new Date().getTime()}@wp.pl`,
   password: '444',
   confirmPassword: '444',
@@ -63,9 +63,9 @@ const form = reactive({
   pet: {
     images: [],
     name: 'Java',
+    passportNumber: 'XYZ123-312',
+    height: 52,
     description: 'Lorem ipsum dolor sit amet, consect',
-    personality: 'Łagodna',
-    color: 'Tri color',
     breed: 'Bernese Mountain Dog',
     birthDate: new Date(),
   },
@@ -82,8 +82,6 @@ const onSubmit = async () => {
 
   formItem.profile.avatar = avatarsResponse?.data?.items[0]?.id ?? null
   formItem.pet.images = [petImagesResponse?.data?.items[0]?.id].filter(Boolean)
-
-
 }
 
 // const addProfile = (): void => {
@@ -397,4 +395,5 @@ const nextStep = () => {
 <route lang="yaml">
 meta:
   layout: blank
+  public: true
 </route>

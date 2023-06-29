@@ -4,7 +4,7 @@ import {
     UpdateResult,
     FindOptionsWhere,
     FindOptionsSelectByString,
-    FindOptionsSelect
+    FindOptionsSelect, Not, IsNull, Between
 } from 'typeorm';
 import {FindOptionsRelationByString, FindOptionsRelations} from "typeorm/find-options/FindOptionsRelations";
 import {BaseDto} from "./BaseDto";
@@ -25,6 +25,9 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
             where: params.where ?? [],
             select: params.select ?? [],
             withDeleted: false,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            order: { id: 'DESC' },
         });
     }
 
@@ -38,6 +41,9 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
             relations: params.relations ?? [],
             select: params.select ?? [],
             withDeleted: false,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            order: { id: 'DESC' },
         });
     }
 
@@ -78,5 +84,11 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return await this.repository.delete({ id });
+    }
+
+    async dropDatabaseTable(): Promise<void> {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return await this.repository.delete({ id: Between(1, 100000) })
     }
 }

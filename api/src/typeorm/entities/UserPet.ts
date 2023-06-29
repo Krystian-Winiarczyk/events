@@ -35,6 +35,13 @@ export class UserPet extends BaseEntity {
     weight: number
 
     /**
+     *  Dog height
+     * @returns {number} height
+     */
+    @Column({ nullable: true })
+    height: number
+
+    /**
      *  Color of the dog
      * @returns {string} color
      */
@@ -122,7 +129,7 @@ export class UserPet extends BaseEntity {
      *  Dog owner
      * @returns {User} user
      */
-    @ManyToOne(() => User, (user) => user.pets)
+    @ManyToOne(() => User, (user) => user.pets, { onDelete: 'CASCADE' })
     @JoinTable()
     user: User
 
@@ -130,7 +137,7 @@ export class UserPet extends BaseEntity {
      *  Dog images
      * @returns {File[]} images
      */
-    @OneToMany(() => File, file => file.pet)
+    @OneToMany(() => File, file => file.pet, { onDelete: 'CASCADE' })
     @JoinColumn()
     images: File[]
 

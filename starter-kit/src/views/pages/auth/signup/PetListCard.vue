@@ -77,6 +77,17 @@ const petFirstLetters = computed(() => {
       md="6"
     >
       <VTextField
+        :model-value="pet.passportNumber"
+        :label="$t('PassportNumber')"
+        placeholder="PL5532-123"
+        @update:modelValue="emits('changeField', { value: $event, key: 'passportNumber' })"
+      />
+    </VCol>
+    <VCol
+      cols="12"
+      md="6"
+    >
+      <VTextField
         :model-value="pet.breed"
         :label="$t('Breed')"
         placeholder="Border Collie"
@@ -88,21 +99,11 @@ const petFirstLetters = computed(() => {
       md="6"
     >
       <VTextField
-        :model-value="pet.color"
-        :label="$t('Color')"
-        placeholder="Mera"
-        @update:modelValue="emits('changeField', { value: $event, key: 'color' })"
-      />
-    </VCol>
-    <VCol
-      cols="12"
-      md="6"
-    >
-      <VTextField
-        :model-value="pet.personality"
-        :label="$t('Personality')"
-        placeholder="Border Collie"
-        @update:modelValue="emits('changeField', { value: $event, key: 'personality' })"
+        :model-value="pet.height"
+        :label="$t('HeightAtTheWithers')"
+        placeholder="50"
+        suffix="cm"
+        @update:modelValue="emits('changeField', { value: $event, key: 'height' })"
       />
     </VCol>
     <VCol

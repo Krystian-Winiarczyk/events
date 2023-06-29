@@ -101,7 +101,7 @@ export class UserProfile extends BaseEntity {
      *  User profile owner
      * @returns {User} user
      */
-    @ManyToOne(() => User, (user) => user.pets)
+    @ManyToOne(() => User, (user) => user.pets, { onDelete: 'CASCADE' })
     @JoinTable()
     user: User
 
@@ -109,7 +109,7 @@ export class UserProfile extends BaseEntity {
      *  User profile avatar
      * @returns {File} avatar
      */
-    @OneToOne(() => File, (file) => file.userProfile)
+    @OneToOne(() => File, (file) => file.userProfile, { onDelete: 'CASCADE' })
     avatar: File
 
     // @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.userProfile)

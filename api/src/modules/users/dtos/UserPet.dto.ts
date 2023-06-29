@@ -11,6 +11,7 @@ export class CreateUserPetDto {
     personality?: string
     birthDate?: Date
     weight?: number
+    height?: number
     breeding?: string
     gender?: Gender
 
@@ -35,6 +36,7 @@ export class UpdateUserPetDto {
     personality?: string
     birthDate?: Date
     weight?: number
+    height?: number
     breeding?: string
     gender?: Gender
 

@@ -7,5 +7,6 @@ import {File} from "../../typeorm/entities/File";
   controllers: [UploaderController],
   imports: [TypeOrmModule.forFeature([File])],
   providers: [UploaderService],
+  exports: [UploaderService]
 })
 export class UploaderModule {}
