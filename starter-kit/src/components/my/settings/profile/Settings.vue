@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { User } from '@/globals/types/types'
+import User from '@/globals/objects/root/User'
 
 defineProps({
   user: {
-    type: Object as () => User,
+    type: User,
     required: true,
   },
 })

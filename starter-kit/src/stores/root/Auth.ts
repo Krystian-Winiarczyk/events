@@ -19,6 +19,7 @@ export const useAuthStore = defineStore('auth', {
           name: 'admin',
         }
 
+        // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
         const profile = new Profile(
           'Emily Totsu',
           PRONOUNS.FLUID,
@@ -27,6 +28,7 @@ export const useAuthStore = defineStore('auth', {
           'Hello there! The pyramid is full of justice. Emptiness hurts when you experience with love.',
         )
 
+        // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
         const profile2 = new Profile(
           'Testowy Gostek',
           PRONOUNS.HE,

@@ -43,7 +43,6 @@ watch([isVerticalNavCollapsed, isAppRtl], val => {
 
         <VSpacer />
 
-
         <NavBarI18n />
 
         <UserProfile />

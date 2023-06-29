@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import avatar1 from '@images/avatars/avatar-1.png'
+import { useAuthStore } from '@/stores/root/Auth'
+
+const auth = useAuthStore()
+const user = auth.user
 </script>
 
 <template>
@@ -16,7 +19,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
+      <VImg :src="user.profiles[0].avatar" />
 
       <!-- SECTION Menu -->
       <VMenu
@@ -41,7 +44,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar1" />
+                    <VImg :src="user.profiles[0].avatar" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>

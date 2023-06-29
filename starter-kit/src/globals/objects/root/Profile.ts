@@ -1,6 +1,7 @@
 import { LANGS, PRONOUNS } from '@/globals/enums/enums'
 
-const baseAvatar = 'https://cdn.pixabay.com/photo/2017/07/21/09/49/cat-2525220_960_720.jpg'
+// ℹ️ Random avatar to show. ONLY FOR TESTING!!!
+const baseAvatar = 'https://img.freepik.com/free-psd/3d-render-cat-emoji_23-2150311911.jpg?w=1380&t=st=1688062434~exp=1688063034~hmac=b445a5fc159ad7c93b71391d554b5fff25c51d70a74621abfc4f99f7319c44ba'
 
 export default class Profile {
   private _name: string
