@@ -10,3 +10,9 @@ export enum LANGS {
   ANG = 'ENGLISH',
   PL = 'POLISH',
 }
+
+export enum SOCIAL_LINK {
+  FACEBOOK = 'FACEBOOK',
+  TWITTER = 'TWITTER',
+  INSTAGRAM = 'INSTAGRAM',
+}

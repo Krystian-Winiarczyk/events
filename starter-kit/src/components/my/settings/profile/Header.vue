@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import User from '@/globals/objects/root/User'
 
+// The User only changes during the login process
+// eslint-disable-next-line vue/no-setup-props-destructure
 const { user } = defineProps({
   user: {
     type: User,
@@ -8,8 +10,10 @@ const { user } = defineProps({
   },
 })
 
-// Just for now the first profile is the actual active profile
-const activeProfile = user?.profiles[0]
+// Show badge if Profile is User's main profile
+const isRootProfile = true
+
+const openLink = url => window.open(url, '_blank')
 </script>
 
 <template>
@@ -30,7 +34,7 @@ const activeProfile = user?.profiles[0]
     >
       <!--    START::Avatar    -->
       <VAvatar
-        :image="activeProfile.avatar"
+        :image="user.activeProfile.avatar"
         :size="isSM ? '50%' : '2.5rem'"
       />
       <!--    END::Avatar    -->
@@ -50,9 +54,10 @@ const activeProfile = user?.profiles[0]
             text-md-body-1
           "
         >
-          {{ activeProfile.name }}
+          {{ user.activeProfile.name }}
 
           <VIcon
+            v-if="isRootProfile"
             icon="mdi-star-four-points-circle"
             size="18"
             color="success"
@@ -73,14 +78,19 @@ const activeProfile = user?.profiles[0]
     </div>
 
     <!--    START::Socials Links    -->
-    <div class="d-flex flex-row gap-4">
+    <div
+      v-if="user.activeProfile.socials?.length"
+      class="d-flex flex-row gap-4"
+    >
       <VAvatar
-        v-for="social in activeProfile.socials"
+        v-for="social in user.activeProfile.socials"
         :key="social.type"
         :icon="`mdi-${social.type.toLowerCase()}`"
         color="secondary"
         rounded="sm"
         variant="tonal"
+        class="cursor-pointer"
+        @click="openLink(social.url)"
       />
     </div>
     <!--    END::Socials Links    -->

@@ -4,13 +4,15 @@ import type Profile from '@/globals/objects/root/Profile'
 export default class User {
   private _role: Role
   private _email: string
+  private _activeProfile: Profile
   private _profiles: Array<Profile> | undefined
   private _pets: Array<Pet> | undefined
 
-  constructor(role: Role, email: string, profiles?: Array<Profile>, pets?: Array<Pet>) {
+  constructor(role: Role, email: string, profiles: Array<Profile>, activeProfile: Profile, pets?: Array<Pet>) {
     this._role = role
     this._email = email
-    this._profiles = profiles || undefined
+    this._profiles = profiles
+    this._activeProfile = activeProfile || profiles[0]
     this._pets = pets || undefined
   }
 
@@ -25,6 +27,12 @@ export default class User {
   public set email(email: string) { this._email = email }
 
   /*    END::Email    */
+
+  /*    START::Active Profile    */
+  public get activeProfile(): Profile { return this._activeProfile }
+  public set activeProfile(profile: Profile) { this._activeProfile = profile }
+
+  /*    END::Active Profile    */
 
   /*    START::Profiles    */
   public get profiles(): Array<Profile> { return this._profiles }

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import User from '@/globals/objects/root/User'
-import { LANGS, PRONOUNS } from '@/globals/enums/enums'
+import { LANGS, PRONOUNS, SOCIAL_LINK } from '@/globals/enums/enums'
 import Profile from '@/globals/objects/root/Profile'
 
 export const useAuthStore = defineStore('auth', {
@@ -26,6 +26,8 @@ export const useAuthStore = defineStore('auth', {
           LANGS.ANG,
           'Neko1998',
           'Hello there! The pyramid is full of justice. Emptiness hurts when you experience with love.',
+          '',
+          [{ type: SOCIAL_LINK.INSTAGRAM, url: 'https://www.google.com/' }, { type: SOCIAL_LINK.FACEBOOK, url: 'https://www.google.com/' }],
         )
 
         // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
