@@ -1,5 +1,7 @@
 import { LANGS, PRONOUNS } from '@/globals/enums/enums'
 
+const baseAvatar = 'https://cdn.pixabay.com/photo/2017/07/21/09/49/cat-2525220_960_720.jpg'
+
 export default class Profile {
   private _name: string
   private _nickname: string
@@ -14,7 +16,7 @@ export default class Profile {
     this._nickname = nickname || name
     this._pronouns = pronouns
     this._language = language
-    this._avatar = avatar
+    this._avatar = avatar || baseAvatar
     this._dsc = dsc
     this._socials = socials
   }
@@ -24,4 +26,7 @@ export default class Profile {
 
   public get nickname(): string { return this._nickname }
   public set nickname(nickname: string) { this._nickname = nickname }
+
+  public get avatar(): string { return this._avatar || '' }
+  public set avatar(avatar: string) { this._avatar = avatar }
 }

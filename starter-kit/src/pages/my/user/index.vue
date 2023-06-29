@@ -15,11 +15,8 @@ const user = auth.user
 
     :style="isSM ? 'row-gap: 2rem' : 'row-gap: 1rem'"
   >
-    {{ user?.email }}
-    {{ user?.profiles[0].nickname }}
+    <Header :user="user" />
 
-    <!--    <Header :user="user" /> -->
-
-    <!--    <Settings :user="user" /> -->
+    <Settings :user="user" />
   </div>
 </template>
