@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import User from '@/globals/objects/root/User'
+import { SOCIAL_LINK } from '@/globals/enums/enums'
 
 defineProps({
   user: {
@@ -7,6 +8,8 @@ defineProps({
     required: true,
   },
 })
+
+const socialList = Object.values(SOCIAL_LINK)
 </script>
 
 <template>
@@ -46,12 +49,14 @@ defineProps({
         <VDivider />
 
         <VListItem
-          :value="user.name"
-          title="My Pets"
-          @click="$router.push({ path: '/pets' })"
+          title="My Profiles"
+          @click="$router.push({ path: '/my/profiles' })"
         >
           <template #prepend>
-            <VIcon icon="mdi-paw" />
+            <VAvatar
+              :image="user.profiles[0].avatar"
+              size="20"
+            />
           </template>
 
           <template #append>
@@ -67,6 +72,22 @@ defineProps({
         >
           <template #prepend>
             <VIcon icon="mdi-users" />
+          </template>
+
+          <template #append>
+            <VIcon icon="mdi-chevron-right" />
+          </template>
+        </VListItem>
+
+        <VDivider />
+
+        <VListItem
+          :value="user.name"
+          title="My Pets"
+          @click="$router.push({ path: '/pets' })"
+        >
+          <template #prepend>
+            <VIcon icon="mdi-paw" />
           </template>
 
           <template #append>
@@ -108,16 +129,16 @@ defineProps({
         density="comfortable"
       >
         <template
-          v-for="(social, key) in user.socials"
-          :key="key"
+          v-for="(social, i) in socialList"
+          :key="i"
         >
           <VListItem
-            :value="social.type"
-            :title="social.type.toLowerCase()"
-            :subtitle="social.href"
+            :value="social"
+            :title="social"
+            :subtitle="user.activeProfile.socials.find(item => item.type.toLowerCase() === social.toLowerCase())?.url.split('/')[3]"
           >
             <template #prepend>
-              <VIcon :icon="`mdi-${social.type.toLowerCase()}`" />
+              <VIcon :icon="`mdi-${social.toLowerCase()}`" />
             </template>
 
             <template #append>
@@ -128,7 +149,7 @@ defineProps({
             </template>
           </VListItem>
 
-          <VDivider v-if="key !== user.socials.length - 1" />
+          <VDivider v-if="i !== socialList.length - 1" />
         </template>
       </VList>
     </div>

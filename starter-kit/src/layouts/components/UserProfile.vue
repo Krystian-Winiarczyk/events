@@ -58,7 +58,39 @@ const user = auth.user
 
           <VDivider class="my-2" />
 
-          <!-- 👉 My Pets -->
+          <!-- 👉 Pets -->
+          <VListItem
+            link
+            @click="$router.push({ path: '/my/profiles' })"
+          >
+            <template #prepend>
+              <VAvatar
+                class="me-2"
+                :image="user.profiles[0].avatar"
+                size="22"
+              />
+            </template>
+
+            <VListItemTitle>Profiles</VListItemTitle>
+          </VListItem>
+
+          <!-- 👉 Friends -->
+          <VListItem
+            link
+            @click="$router.push({ path: '/my/friends' })"
+          >
+            <template #prepend>
+              <VIcon
+                class="me-2"
+                icon="mdi-users"
+                size="22"
+              />
+            </template>
+
+            <VListItemTitle>Friends</VListItemTitle>
+          </VListItem>
+
+          <!-- 👉 Pets -->
           <VListItem
             link
             @click="$router.push({ path: '/pets' })"
@@ -71,7 +103,7 @@ const user = auth.user
               />
             </template>
 
-            <VListItemTitle>My Pets</VListItemTitle>
+            <VListItemTitle>Pets</VListItemTitle>
           </VListItem>
 
           <!-- Divider -->

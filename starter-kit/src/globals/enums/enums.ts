@@ -6,11 +6,13 @@ export enum PRONOUNS {
   FLUID = 'FLUID', // Losowe zaimki jedna podstrona taka druga taka i to jest jako default
 }
 
+// This is a list of all available languages
 export enum LANGS {
   ANG = 'ENGLISH',
   PL = 'POLISH',
 }
 
+// This is a list of all available social links
 export enum SOCIAL_LINK {
   FACEBOOK = 'FACEBOOK',
   TWITTER = 'TWITTER',

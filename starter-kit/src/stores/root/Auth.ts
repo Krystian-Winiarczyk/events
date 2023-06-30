@@ -26,8 +26,8 @@ export const useAuthStore = defineStore('auth', {
           LANGS.ANG,
           'Neko1998',
           'Hello there! The pyramid is full of justice. Emptiness hurts when you experience with love.',
-          '',
-          [{ type: SOCIAL_LINK.INSTAGRAM, url: 'https://www.google.com/' }, { type: SOCIAL_LINK.FACEBOOK, url: 'https://www.google.com/' }],
+          'https://img.freepik.com/free-psd/3d-render-cat-emoji_23-2150311887.jpg?w=1380&t=st=1688156478~exp=1688157078~hmac=37083273c9f1885ce5ea0852394c2916397a41c27e522d0746f04994bb584c3a',
+          [{ type: SOCIAL_LINK.INSTAGRAM, url: 'https://www.google.com/e-totsu/' }, { type: SOCIAL_LINK.FACEBOOK, url: 'https://www.google.com/e-totsu' }],
         )
 
         // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
@@ -37,7 +37,14 @@ export const useAuthStore = defineStore('auth', {
           LANGS.ANG,
         )
 
-        this.user = new User(Admin, email, [profile, profile2])
+        // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
+        const profile3 = new Profile(
+          'Testowy Gostek',
+          PRONOUNS.HE,
+          LANGS.ANG,
+        )
+
+        this.user = new User(Admin, email, [profile, profile2, profile3])
 
         console.log('Hello! <3', email, password)
       }
