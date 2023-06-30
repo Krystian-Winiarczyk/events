@@ -29,6 +29,9 @@ export default class Profile {
   public get nickname(): string { return this._nickname }
   public set nickname(nickname: string) { this._nickname = nickname }
 
+  public get dsc(): string { return this._dsc || '' }
+  public set dsc(dsc: string) { this._dsc = dsc }
+
   public get avatar(): string { return this._avatar || '' }
   public set avatar(avatar: string) { this._avatar = avatar }
 

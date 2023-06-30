@@ -35,16 +35,11 @@ export const useAuthStore = defineStore('auth', {
           'Testowy Gostek',
           PRONOUNS.HE,
           LANGS.ANG,
+          '',
+          'Emptiness hurts when you experience with love.',
         )
 
-        // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
-        const profile3 = new Profile(
-          'Testowy Gostek',
-          PRONOUNS.HE,
-          LANGS.ANG,
-        )
-
-        this.user = new User(Admin, email, [profile, profile2, profile3])
+        this.user = new User(Admin, email, [profile, profile2, profile2, profile2, profile2, profile2])
 
         console.log('Hello! <3', email, password)
       }
