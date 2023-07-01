@@ -65,7 +65,7 @@ export class User extends BaseEntity {
     @AfterInsert()
     @AfterUpdate()
     getPrimaryProfile?(): void {
-        this.primaryProfile = this.profiles.find((profile: UserProfile) => profile.isPrimary);
+        this.primaryProfile = this.profiles?.find((profile: UserProfile) => profile.isPrimary) || null;
     }
 
 

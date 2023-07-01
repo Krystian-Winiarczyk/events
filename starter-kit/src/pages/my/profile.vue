@@ -1,29 +1,12 @@
 <script setup lang="ts">
 import Header from '@/components/my/settings/profile/Header.vue'
 import Settings from '@/components/my/settings/profile/Settings.vue'
-import type { User } from '@/globals/types/types'
-import avatar from '@images/avatars/avatar-1.png'
 
-const user: User = {
-  avatar,
-  name: 'Emily Totsu',
-  role: 'Pet Owner',
-  email: 'etotsu@tesuto.eu',
-  socials: [
-    {
-      type: 'FACEBOOK',
-      href: 'https://www.facebook.com/',
-    },
-    {
-      type: 'LINKEDIN',
-      href: 'https://www.linkedin.com/',
-    },
-    {
-      type: 'INSTAGRAM',
-      href: 'https://www.instagram.com/',
-    },
-  ],
-}
+import { useAuthStore } from "@/store/auth";
+const authStore = useAuthStore()
+
+const { user } = storeToRefs(authStore)
+
 </script>
 
 <template>

@@ -18,8 +18,6 @@ const form = ref({
 })
 
 const onSubmit = () => {
-
-  console.log(authStore)
   loginFormRef.value?.validate().then(async (valid: { valid: any }) => {
     if (valid.valid)
       await authStore.login(form.value.email, form.value.password)

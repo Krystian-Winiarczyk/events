@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import User from '@/globals/objects/root/User'
+// import User from '@/globals/objects/root/User'
 
 // The User only changes during the login process
 // eslint-disable-next-line vue/no-setup-props-destructure
 const { user } = defineProps({
   user: {
-    type: User,
     required: true,
   },
 })
@@ -34,7 +33,7 @@ const openLink = url => window.open(url, '_blank')
     >
       <!--    START::Avatar    -->
       <VAvatar
-        :image="user.activeProfile.avatar"
+        :image="user.primaryProfile.avatar"
         :size="isSM ? '50%' : '2.5rem'"
       />
       <!--    END::Avatar    -->
@@ -54,7 +53,7 @@ const openLink = url => window.open(url, '_blank')
             text-md-body-1
           "
         >
-          {{ user.activeProfile.name }}
+          {{ user.primaryProfile.firstName }}
 
           <VIcon
             v-if="isRootProfile"
@@ -78,21 +77,21 @@ const openLink = url => window.open(url, '_blank')
     </div>
 
     <!--    START::Socials Links    -->
-    <div
-      v-if="user.activeProfile.socials?.length"
-      class="d-flex flex-row gap-4"
-    >
-      <VAvatar
-        v-for="social in user.activeProfile.socials"
-        :key="social.type"
-        :icon="`mdi-${social.type.toLowerCase()}`"
-        color="secondary"
-        rounded="sm"
-        variant="tonal"
-        class="cursor-pointer"
-        @click="openLink(social.url)"
-      />
-    </div>
+<!--    <div-->
+<!--      v-if="user.primaryProfile.socials?.length"-->
+<!--      class="d-flex flex-row gap-4"-->
+<!--    >-->
+<!--      <VAvatar-->
+<!--        v-for="social in user.primaryProfile.socials"-->
+<!--        :key="social.type"-->
+<!--        :icon="`mdi-${social.type.toLowerCase()}`"-->
+<!--        color="secondary"-->
+<!--        rounded="sm"-->
+<!--        variant="tonal"-->
+<!--        class="cursor-pointer"-->
+<!--        @click="openLink(social.url)"-->
+<!--      />-->
+<!--    </div>-->
     <!--    END::Socials Links    -->
   </div>
 </template>
