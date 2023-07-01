@@ -32,7 +32,7 @@ import { CreateUserPetDto } from "../../dtos/UserPet.dto";
 import {UserPet} from "../../../../typeorm/entities/UserPet";
 import {UserProfile} from "../../../../typeorm/entities/UserProfile";
 
-// @UseGuards(JwtAuthGuard, RoleGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 @Controller('api/users')
 export class UsersController
     extends BaseController
