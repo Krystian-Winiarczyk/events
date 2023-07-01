@@ -69,6 +69,7 @@ const socialList = Object.values(SOCIAL_LINK)
         <VListItem
           :value="user.name"
           title="My Firends"
+          @click="$router.push({ path: '/my/friends' })"
         >
           <template #prepend>
             <VIcon icon="mdi-users" />

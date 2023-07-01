@@ -2,7 +2,7 @@
 import { useAuthStore } from '@/stores/root/Auth'
 
 const auth = useAuthStore()
-const profiles = auth.user.profiles
+const friends = auth.user.activeProfile.friends
 </script>
 
 <template>
@@ -12,20 +12,20 @@ const profiles = auth.user.profiles
     rounded
   >
     <template
-      v-for="(profile, index) of profiles"
-      :key="profile.name"
+      v-for="(friend, index) of friends"
+      :key="friend.name"
     >
       <VListItem>
         <template #prepend>
-          <VAvatar :image="profile.avatar" />
+          <VAvatar :image="friend.avatar" />
         </template>
 
         <VListItemTitle>
-          {{ profile.name }}
+          {{ friend.name }}
         </VListItemTitle>
 
         <VListItemSubtitle class="mt-1">
-          {{ profile.dsc.split('.')[0] }}.
+          {{ friend.dsc.split('.')[0] }}.
         </VListItemSubtitle>
 
         <template #append>
@@ -37,7 +37,7 @@ const profiles = auth.user.profiles
         </template>
       </VListItem>
 
-      <VDivider v-if="index !== profiles.length - 1" />
+      <VDivider v-if="index !== friends.length - 1" />
     </template>
   </VList>
 </template>

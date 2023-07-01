@@ -12,8 +12,9 @@ export default class Profile {
   private _avatar: string | undefined
   private _dsc: string | undefined
   private _socials: Array<SocialLink> | undefined
+  private _friends: Array<Profile> | undefined
 
-  constructor(name: string, pronouns: PRONOUNS = PRONOUNS.FLUID, language: LANGS = LANGS.ANG, nickname?: string, dsc?: string, avatar?: string, socials?: Array<SocialLink>) {
+  constructor(name: string, pronouns: PRONOUNS = PRONOUNS.FLUID, language: LANGS = LANGS.ANG, nickname?: string, dsc?: string, avatar?: string, socials?: Array<SocialLink>, friends?: Array<Profile>) {
     this._name = name
     this._nickname = nickname || name
     this._pronouns = pronouns
@@ -21,6 +22,7 @@ export default class Profile {
     this._avatar = avatar || baseAvatar
     this._dsc = dsc
     this._socials = socials
+    this._friends = friends
   }
 
   public get name(): string { return this._name }
@@ -37,4 +39,7 @@ export default class Profile {
 
   public get socials(): Array<SocialLink> { return this._socials || [] }
   public set socials(socials: Array<SocialLink>) { this._socials = socials }
+
+  public get friends(): Array<Profile> { return this._friends || [] }
+  public set friends(friends: Array<Profile>) { this._friends = friends }
 }
