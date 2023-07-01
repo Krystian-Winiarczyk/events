@@ -1,16 +1,29 @@
 <script setup lang="ts">
 import { useGenerateImageVariant } from '@/@core/composable/useGenerateImageVariant'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import authV1LoginMaskDark from '@images/pages/auth-v1-login-mask-dark.png'
 import authV1LoginMaskLight from '@images/pages/auth-v1-login-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
+import { requiredValidator } from '@validators'
+import { useAuthStore } from '@/store/auth'
+
+const authStore = useAuthStore()
+
+const loginFormRef = ref()
 
 const form = ref({
   email: '',
   password: '',
   remember: false,
 })
+
+const onSubmit = () => {
+  console.log(loginFormRef.value)
+  loginFormRef.value?.validate().then(async (valid: { valid: any }) => {
+    if (valid.valid)
+      await authStore.login(form.value.email, form.value.password)
+  })
+}
 
 const authV1ThemeLoginMask = useGenerateImageVariant(authV1LoginMaskLight, authV1LoginMaskDark)
 const isPasswordVisible = ref(false)
@@ -45,7 +58,10 @@ const isPasswordVisible = ref(false)
       </VCardText>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm
+          ref="loginFormRef"
+          @submit.prevent="onSubmit"
+        >
           <VRow>
             <!-- email -->
             <VCol cols="12">
@@ -115,14 +131,6 @@ const isPasswordVisible = ref(false)
               <VDivider />
               <span class="mx-4">or</span>
               <VDivider />
-            </VCol>
-
-            <!-- auth providers -->
-            <VCol
-              cols="12"
-              class="text-center"
-            >
-              <AuthProvider />
             </VCol>
           </VRow>
         </VForm>

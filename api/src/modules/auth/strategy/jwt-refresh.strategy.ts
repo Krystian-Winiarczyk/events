@@ -21,7 +21,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
 
   async validate(req: Request, payload: any) {
     const { email } = payload;
-    const user = await this.usersService.findOneBy({ where: { email } });
+    const user = await this.usersService.findOneBy({ where: { email }, relations: ['profiles'] });
 
     if (!user) {
       throw new UnauthorizedException();
@@ -31,6 +31,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
       .get('Authorization')
       .replace('Bearer', '')
       .trim();
+
     return { ...user, refreshToken };
   }
 }

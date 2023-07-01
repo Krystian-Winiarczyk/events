@@ -1,37 +1,92 @@
-import axiosIns from "@axios";
+import axiosIns from '@axios'
+
+import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(JSON.parse(localStorage.getItem('user') ?? ''))
+  const user = ref(localStorage.getItem('userDetails') ? JSON.parse(localStorage.getItem('userDetails') ?? '') : null)
+  const userRefreshToken = ref(localStorage.getItem('refreshToken') ? localStorage.getItem('refreshToken') : null)
   const loggedIn = ref(false)
-  const refreshTokenTimeout = ref(null)
+  const refreshTokenTimeout = ref()
 
-  const refreshToken = () => {
-    this.user = await axiosIns.post(`/refresh-token`, {  });
-    this.startRefreshTokenTimer();
-  },
+  const router = useRouter()
+
   const startRefreshTokenTimer = () => {
-    refreshTokenTimeout.value = setTimeout(refreshToken, timeout);
+    // refreshTokenTimeout.value = setTimeout(refreshToken, process.env.REFRESH_TOKEN_TIMEOUT);
+    refreshTokenTimeout.value = setTimeout(reloadRefreshToken, 5000)
   }
+
+  const stopRefreshTokenTimer = () => {
+    if (refreshTokenTimeout.value)
+      clearTimeout(refreshTokenTimeout.value)
+  }
+
+  const reloadRefreshToken = async () => {
+    if (!userRefreshToken.value)
+      return
+
+    const tokensResponse = await axiosIns.get('/auth/refresh', {
+      headers: {
+        Authorization: `Bearer ${userRefreshToken.value}`,
+      },
+    })
+
+    const [tokens] = tokensResponse?.data?.items
+
+    if (!tokens)
+      return
+
+    userRefreshToken.value = tokens.refreshToken
+    localStorage.setItem('refreshToken', tokens.refreshToken)
+
+    localStorage.setItem('accessToken', tokens.accessToken)
+
+    startRefreshTokenTimer()
+  }
+
+  const logout = async () => {
+    await axiosIns.post(`/auth/logout`);
+
+    stopRefreshTokenTimer();
+
+    user.value = null
+    userRefreshToken.value = ''
+    loggedIn.value = false
+
+    await router.push('/login');
+  }
+
   const login = async (email: string, password: string) => {
-    user.value = await axiosIns.post('login', { email, password })
-    startRefreshTokenTimer();
+    try {
+      const authResponse = await axiosIns.post('/auth/login', { email, password })
+
+      const [userData] = authResponse?.data?.items
+      if (!userData)
+        return
+
+      console.log('User => ', userData)
+      const { refreshToken, accessToken, ...userDetails } = userData
+
+      userRefreshToken.value = refreshToken
+      localStorage.setItem('refreshToken', refreshToken)
+
+      localStorage.setItem('accessToken', accessToken)
+
+      user.value = userDetails
+      localStorage.setItem('userDetails', JSON.stringify(userDetails))
+
+      loggedIn.value = true
+
+      startRefreshTokenTimer()
+
+      await router.push('/my/settings')
+    } catch (err) {
+      console.log(err)
+    }
   }
 
-
-
-  return {}
+  return {
+    login,
+    logout,
+    reloadRefreshToken,
+  }
 })
-
-async login(username, password) {
-  this.user = await fetchWrapper.post(`${baseUrl}/authenticate`, { username, password }, { credentials: 'include' });
-  this.startRefreshTokenTimer();
-},
-logout() {
-  fetchWrapper.post(`${baseUrl}/revoke-token`, {}, { credentials: 'include' });
-  this.stopRefreshTokenTimer();
-  this.user = null;
-  router.push('/login');
-},
-stopRefreshTokenTimer() {
-  clearTimeout(this.refreshTokenTimeout);
-}
