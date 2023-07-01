@@ -20,8 +20,6 @@ export default {
       },
 
       island(value: string, max = 50, clamp = '…'): string {
-        console.log(true)
-
         if (!value)
           return ''
 

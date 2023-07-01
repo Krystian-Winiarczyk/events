@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import avatar1 from '@images/avatars/avatar-1.png'
+import { useAuthStore } from '@/stores/root/Auth'
+
+const auth = useAuthStore()
+const user = auth.user
 </script>
 
 <template>
@@ -16,7 +19,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
+      <VImg :src="user.profiles[0].avatar" />
 
       <!-- SECTION Menu -->
       <VMenu
@@ -27,7 +30,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
       >
         <VList>
           <!-- 👉 User Avatar & Name -->
-          <VListItem @click="$router.push({ path: '/my/settings' })">
+          <VListItem @click="$router.push({ path: '/my/user' })">
             <template #prepend>
               <VListItemAction start>
                 <VBadge
@@ -41,7 +44,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar1" />
+                    <VImg :src="user.profiles[0].avatar" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
@@ -55,7 +58,39 @@ import avatar1 from '@images/avatars/avatar-1.png'
 
           <VDivider class="my-2" />
 
-          <!-- 👉 My Pets -->
+          <!-- 👉 Pets -->
+          <VListItem
+            link
+            @click="$router.push({ path: '/my/profiles' })"
+          >
+            <template #prepend>
+              <VAvatar
+                class="me-2"
+                :image="user.profiles[0].avatar"
+                size="22"
+              />
+            </template>
+
+            <VListItemTitle>Profiles</VListItemTitle>
+          </VListItem>
+
+          <!-- 👉 Friends -->
+          <VListItem
+            link
+            @click="$router.push({ path: '/my/friends' })"
+          >
+            <template #prepend>
+              <VIcon
+                class="me-2"
+                icon="mdi-users"
+                size="22"
+              />
+            </template>
+
+            <VListItemTitle>Friends</VListItemTitle>
+          </VListItem>
+
+          <!-- 👉 Pets -->
           <VListItem
             link
             @click="$router.push({ path: '/pets' })"
@@ -68,7 +103,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
               />
             </template>
 
-            <VListItemTitle>My Pets</VListItemTitle>
+            <VListItemTitle>Pets</VListItemTitle>
           </VListItem>
 
           <!-- Divider -->
