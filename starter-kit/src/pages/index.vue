@@ -1,25 +1,71 @@
-<template>
-  <div>
-    <VCard
-      class="mb-6"
-      title="Kick start your project 🚀"
-    >
-      <VCardText>All the best for your new project.</VCardText>
-      <VCardText>
-        Please make sure to read our <a
-          href="https://demos.pixinvent.com/materialize-vuejs-admin-template/documentation/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-decoration-none"
-        >
-          Template Documentation
-        </a> to understand where to go from here and how to use our template.
-      </VCardText>
-    </VCard>
+<script setup>
+</script>
 
-    <VCard title="Want to integrate JWT? 🔒">
-      <VCardText>We carefully crafted JWT flow so you can implement JWT with ease and with minimum efforts.</VCardText>
-      <VCardText>Please read our  JWT Documentation to get more out of JWT authentication.</VCardText>
+<template>
+  <div class="d-flex flex-column gap-5">
+    <!--    START::Tob Banner    -->
+    <VCard
+      style="background: linear-gradient(0deg, #B53D47 0%, #F25260 100%)"
+      rounded="lg"
+    >
+      <VCardItem>
+        <VCardTitle>
+          Save The Animals!
+        </VCardTitle>
+      </VCardItem>
+
+      <VCardText class="d-flex flex-column align-start">
+        Many animals require our help! See how you can assist them alongside us.
+
+        <VBtn
+          rounded="pill"
+          class="mt-5"
+        >
+          Help!
+
+          <VIcon
+            end
+            icon="mdi-heart"
+          />
+        </VBtn>
+      </vcardtext>
     </VCard>
+    <!--    END::Tob Banner    -->
+
+    <VTimeline class="basic-timeline">
+      <VTimelineItem
+        class="basic-timeline-item"
+        small
+        left
+        inverted
+      >
+        <template #default>
+          <h3 class="title">
+            Event Title
+          </h3>
+          <p>Event description</p>
+        </template>
+        <template #opposite>
+          <p>Event date</p>
+        </template>
+      </VTimelineItem>
+
+      <VTimelineItem
+        class="basic-timeline-item"
+        small
+        left
+        inverted
+      >
+        <template #default>
+          <h3 class="title">
+            Another Event
+          </h3>
+          <p>Another event description</p>
+        </template>
+        <template #opposite>
+          <p>Another event date</p>
+        </template>
+      </VTimelineItem>
+    </VTimeline>
   </div>
 </template>

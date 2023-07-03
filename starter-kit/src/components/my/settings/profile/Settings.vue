@@ -49,6 +49,25 @@ const socialList = Object.values(SOCIAL_LINK)
         <VDivider />
 
         <VListItem
+          :value="user.activeProfile.dsc"
+          title="About Me"
+          :subtitle="user.activeProfile.dsc"
+        >
+          <template #prepend>
+            <VIcon icon="mdi-message-text-outline" />
+          </template>
+
+          <template #append>
+            <VIcon
+              icon="mdi-edit"
+              size="18"
+            />
+          </template>
+        </VListItem>
+
+        <VDivider />
+
+        <VListItem
           title="My Profiles"
           @click="$router.push({ path: '/my/profiles' })"
         >
