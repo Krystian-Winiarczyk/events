@@ -1,4 +1,16 @@
 {
+  "MyData": "Moje dane",
+  "MyProfiles":"Moje profile",
+  "MyPupils": "Moi pupile",
+  "MyEvents":"Moje wydarzenia",
+  "Socials": "Media społecznościowe",
+  "Security":"Bezpieczeństwo",
+  "MyPassword": "Moje hasło",
+  "MyEmail":"Mój email",
+  "Support": "Wsparcie",
+  "HelpMe":"Pomoc",
+  "DeleteMyAccount": "Usuń moje konto",
+
   "Next": "Dalej",
   "Previous": "Poprzedni",
   "Back": "Cofnij",

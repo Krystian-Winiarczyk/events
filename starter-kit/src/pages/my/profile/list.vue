@@ -1,23 +1,26 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/root/Auth'
+import CpAvatar from '@/components/core/Avatar.vue'
 
-const auth = useAuthStore()
-const profiles = auth.user.profiles
+import { useAuthStore } from "@/store/auth";
+const { user } = storeToRefs(useAuthStore())
+
+const getProfilesList = computed(() => {
+  return user.value?.profiles || []
+})
 </script>
 
 <template>
   <VList
-    lines="two"
     border
     rounded
   >
     <template
-      v-for="(profile, index) of profiles"
+      v-for="(profile, index) in getProfilesList"
       :key="profile.name"
     >
       <VListItem>
         <template #prepend>
-          <VAvatar :image="profile.avatar" />
+          <CpAvatar class="mr-2" :item="profile" />
         </template>
 
         <VListItemTitle>
@@ -25,7 +28,7 @@ const profiles = auth.user.profiles
         </VListItemTitle>
 
         <VListItemSubtitle class="mt-1">
-          {{ profile.dsc.split('.')[0] }}.
+<!--          {{ profile.dsc.split('.')[0] }}.-->
         </VListItemSubtitle>
 
         <template #append>
@@ -37,7 +40,7 @@ const profiles = auth.user.profiles
         </template>
       </VListItem>
 
-      <VDivider v-if="index !== profiles.length - 1" />
+      <VDivider v-if="index !== getProfilesList.length - 1" />
     </template>
   </VList>
 </template>

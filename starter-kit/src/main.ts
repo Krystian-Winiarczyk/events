@@ -12,7 +12,7 @@ import { createApp } from 'vue'
 import i18n from '@/plugins/i18n'
 
 /*    START::Utils    */
-import extensions from './utils/extensions'
+import prototypes from './utils/prototypes'
 import properties from './utils/properties'
 import defaults from './utils/defaults'
 
@@ -37,7 +37,7 @@ app.use(i18n)
 app.use(defaults)
 
 app.use(properties)
-app.use(extensions)
+app.use(prototypes)
 
 app.mixin(breakpointsMixin)
 

@@ -55,6 +55,21 @@ export class User extends BaseEntity {
     public refreshToken?: string;
 
     /**
+     *  User profile (fiull name) with {isPrimary} set to true
+     * @returns {string} primaryProfile
+     */
+    @IsOptional()
+    public name?: string
+
+    @AfterLoad()
+    @AfterInsert()
+    @AfterUpdate()
+    getPrimaryProfileFullName?(): void {
+        const primaryProfile = this.profiles?.find((profile: UserProfile) => profile.isPrimary) || null;
+        this.name = primaryProfile ? primaryProfile.firstName + ' ' + primaryProfile.lastName : '-'
+    }
+
+    /**
      *  User profile with {isPrimary} set to true
      * @returns {UserProfile} primaryProfile
      */

@@ -3,9 +3,7 @@ import Header from '@/components/my/settings/profile/Header.vue'
 import Settings from '@/components/my/settings/profile/Settings.vue'
 
 import { useAuthStore } from "@/store/auth";
-const authStore = useAuthStore()
-
-const { user } = storeToRefs(authStore)
+const { user } = storeToRefs(useAuthStore())
 
 </script>
 

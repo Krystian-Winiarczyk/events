@@ -1,8 +1,9 @@
-import {Entity, Column, ManyToOne, JoinTable, OneToOne} from 'typeorm';
+import {Entity, Column, ManyToOne, JoinTable, OneToOne, AfterLoad, AfterInsert, AfterUpdate} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import { User } from './User';
 import {File} from "./File";
 import {Gender} from "../../constants/Gender";
+import {IsOptional} from "class-validator";
 
 @Entity({ name: 'user_profiles' })
 export class UserProfile extends BaseEntity {
@@ -111,6 +112,20 @@ export class UserProfile extends BaseEntity {
      */
     @OneToOne(() => File, (file) => file.userProfile, { onDelete: 'CASCADE' })
     avatar: File
+
+    /**
+     *  User profile full name
+     * @returns {string} primaryProfile
+     */
+    @IsOptional()
+    public name?: string
+
+    @AfterLoad()
+    @AfterInsert()
+    @AfterUpdate()
+    getFullName?(): void {
+        this.name = this.firstName + ' ' + this.lastName
+    }
 
     // @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.userProfile)
     // @JoinTable()

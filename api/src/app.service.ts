@@ -54,7 +54,7 @@ export class AppService {
           breed: faker.animal.dog(),
           color: faker.vehicle.color(),
           description: faker.lorem.text(),
-          personality: faker.person.bio(),
+          personality: faker.person.jobArea(),
           birthDate: new Date(),
           weight: Math.round(Math.random() * 20),
           breeding: faker.company.name(),

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/root/Auth'
-
-const auth = useAuthStore()
-const user = auth.user
 </script>
 
 <template>

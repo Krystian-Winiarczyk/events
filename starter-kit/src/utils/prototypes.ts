@@ -11,7 +11,6 @@ export default {
 
       return Number(this)
     }
-
     /*    END::Math -> Range    */
 
     /*    START::Math -> Round    */

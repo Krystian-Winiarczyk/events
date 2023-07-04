@@ -22,7 +22,7 @@ declare module '@vue/runtime-core' {
     AppPricing: typeof import('./src/components/AppPricing.vue')['default']
     AppSearchHeader: typeof import('./src/components/AppSearchHeader.vue')['default']
     AppStepper: typeof import('./src/@core/components/AppStepper.vue')['default']
-    Avatar: typeof import('./src/components/user/avatar/Avatar.vue')['default']
+    Avatar: typeof import('./src/components/core/Avatar.vue')['default']
     BuyNow: typeof import('./src/@core/components/BuyNow.vue')['default']
     CardAddEditDialog: typeof import('./src/components/dialogs/CardAddEditDialog.vue')['default']
     CardStatisticsHorizontal: typeof import('./src/@core/components/cards/CardStatisticsHorizontal.vue')['default']

@@ -3,7 +3,6 @@ import { useTheme } from 'vuetify'
 import ScrollToTop from '@core/components/ScrollToTop.vue'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { hexToRgb } from '@layouts/utils'
-import { useAuthStore } from '@/stores/root/Auth'
 
 const { syncInitialLoaderTheme, syncVuetifyThemeWithTheme: syncConfigThemeWithVuetifyTheme, isAppRtl, handleSkinChanges } = useThemeConfig()
 
@@ -13,13 +12,6 @@ const { global } = useTheme()
 syncInitialLoaderTheme()
 syncConfigThemeWithVuetifyTheme()
 handleSkinChanges()
-
-const auth = useAuthStore()
-
-// ℹ️ Auto login. ONLY FOR TESTING!!!
-onBeforeMount(() => {
-  auth.signIn('test@tesuto.pl', 'password')
-})
 </script>
 
 <template>

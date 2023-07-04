@@ -30,15 +30,20 @@ export const useAuthStore = defineStore('auth', () => {
       },
     })
 
-    const [tokens] = tokensResponse?.data?.items
+    const [data] = tokensResponse?.data?.items
 
-    if (!tokens)
+    if (!data)
       return
 
-    userRefreshToken.value = tokens.refreshToken
-    localStorage.setItem('refreshToken', tokens.refreshToken)
+    const { refreshToken, accessToken, ...userDetails } = data
 
-    localStorage.setItem('accessToken', tokens.accessToken)
+    user.value = userDetails
+    localStorage.setItem('userDetails', JSON.stringify(userDetails))
+
+    userRefreshToken.value = refreshToken
+    localStorage.setItem('refreshToken', refreshToken)
+
+    localStorage.setItem('accessToken', accessToken)
 
     startRefreshTokenTimer()
   }
@@ -63,7 +68,6 @@ export const useAuthStore = defineStore('auth', () => {
       if (!userData)
         return
 
-      console.log('User => ', userData)
       const { refreshToken, accessToken, ...userDetails } = userData
 
       userRefreshToken.value = refreshToken
