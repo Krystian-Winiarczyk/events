@@ -50,7 +50,7 @@ export class UserProfile extends BaseEntity {
     birthDate: Date;
 
     /**
-     *  Main user profile
+     *  Main my profile
      * @returns {boolean} isPrimary
      */
     @Column({ default: false })
@@ -100,7 +100,7 @@ export class UserProfile extends BaseEntity {
 
     /**
      *  User profile owner
-     * @returns {User} user
+     * @returns {User} my
      */
     @ManyToOne(() => User, (user) => user.pets, { onDelete: 'CASCADE' })
     @JoinTable()

@@ -120,14 +120,14 @@ export const useLayouts = () => {
           We will assign `appContentLayoutNav` value to `lgAndUpNav` because at this point both constant is same
           Hence, for `lgAndUpNav` it will take value from theme config file
         else
-          It will always show vertical nav and if user increase the window width it will fallback to `appContentLayoutNav` value
+          It will always show vertical nav and if my increase the window width it will fallback to `appContentLayoutNav` value
           But `appContentLayoutNav` will be value set in theme config file
     */
     const lgAndUpNav = ref(appContentLayoutNav.value)
 
     /*
       There might be case where we manually switch from vertical to horizontal nav and vice versa in `lgAndUp` screen
-      So when user comes back from `mdAndDown` to `lgAndUp` we can set updated nav type
+      So when my comes back from `mdAndDown` to `lgAndUp` we can set updated nav type
       For this we need to update the `lgAndUpNav` value if screen is `lgAndUp`
     */
     watch(appContentLayoutNav, value => {

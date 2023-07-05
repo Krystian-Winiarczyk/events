@@ -31,7 +31,7 @@ const suggestionGroups: SuggestionGroup[] = [
       { icon: 'mdi-chart-donut', title: 'Analytics', url: { name: 'dashboards-analytics' } },
       { icon: 'mdi-chart-bubble', title: 'CRM', url: { name: 'dashboards-crm' } },
       { icon: 'mdi-file-outline', title: 'Invoice List', url: { name: 'apps-invoice-list' } },
-      { icon: 'mdi-account-group-outline', title: 'User List', url: { name: 'apps-user-list' } },
+      { icon: 'mdi-account-group-outline', title: 'User List', url: { name: 'apps-my-list' } },
     ],
   },
   {

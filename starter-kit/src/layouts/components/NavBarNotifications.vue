@@ -18,7 +18,7 @@ const notifications = ref<Notification[]>([
   {
     id: 2,
     text: 'Tom Holland',
-    title: 'New user registered.',
+    title: 'New my registered.',
     subtitle: '5 hours ago',
     time: 'Yesterday',
     isSeen: false,

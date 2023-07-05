@@ -57,11 +57,11 @@ const isRootProfile = true
 
     <!--    START::Socials Links    -->
 <!--    <div-->
-<!--      v-if="user.primaryProfile.socials?.length"-->
+<!--      v-if="my.primaryProfile.socials?.length"-->
 <!--      class="d-flex flex-row gap-4"-->
 <!--    >-->
 <!--      <VAvatar-->
-<!--        v-for="social in user.primaryProfile.socials"-->
+<!--        v-for="social in my.primaryProfile.socials"-->
 <!--        :key="social.type"-->
 <!--        :icon="`mdi-${social.type.toLowerCase()}`"-->
 <!--        color="secondary"-->

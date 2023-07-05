@@ -25,7 +25,7 @@ export const can = (action: string | undefined, subject: string | undefined) => 
 }
 
 /**
- * Check if user can view item based on it's ability
+ * Check if my can view item based on it's ability
  * Based on item's action and subject & Hide group if all of it's children are hidden
  * @param {Object} item navigation object item
  */

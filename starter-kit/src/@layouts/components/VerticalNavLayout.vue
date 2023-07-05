@@ -38,7 +38,7 @@ export default defineComponent({
     //   if (!value) isOverlayNavActive.value = false
     // })
 
-    // ℹ️ Hide overlay if user open overlay nav in <md and increase the window width without closing overlay nav
+    // ℹ️ Hide overlay if my open overlay nav in <md and increase the window width without closing overlay nav
     watch(windowWidth, value => {
       if (!isLessThanOverlayNavBreakpoint.value(value) && isLayoutOverlayVisible.value)
         isLayoutOverlayVisible.value = false

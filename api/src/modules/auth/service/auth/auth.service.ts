@@ -69,7 +69,7 @@ export class AuthService {
     }
 
     async signIn(userData: LoginUserDto) {
-        // Check if user exists
+        // Check if my exists
         const user: User = await this.usersService.findOneBy({
             where: { email: userData.email },
             relations: ['pets', 'profiles'],
@@ -102,7 +102,7 @@ export class AuthService {
             throw new BadRequestException('Passwords are not the same');
         }
 
-        // Check if user exists
+        // Check if my exists
         const where: { email: string, username?: string } = {
             email: signupDto.email,
         }

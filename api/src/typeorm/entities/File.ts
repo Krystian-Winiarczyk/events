@@ -42,7 +42,7 @@ export class File extends BaseEntity {
     type: FileType;
 
     /**
-     *  Assigned file user profile
+     *  Assigned file my profile
      * @returns {UserProfile} userProfile
      */
     @OneToOne(() => UserProfile, (userProfile) => userProfile.avatar, { nullable: true, onDelete: 'CASCADE' })
@@ -50,7 +50,7 @@ export class File extends BaseEntity {
     userProfile: UserProfile
 
     /**
-     *  Assigned file user user-user-pets
+     *  Assigned file my my-my-pets
      * @returns {UserPet} pet
      */
     @ManyToOne(() => UserPet, (userPet) => userPet.images, { nullable: true, onDelete: 'CASCADE' })

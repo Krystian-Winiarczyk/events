@@ -127,7 +127,7 @@ export class UserPet extends BaseEntity {
 
     /**
      *  Dog owner
-     * @returns {User} user
+     * @returns {User} my
      */
     @ManyToOne(() => User, (user) => user.pets, { onDelete: 'CASCADE' })
     @JoinTable()
@@ -141,7 +141,7 @@ export class UserPet extends BaseEntity {
     @JoinColumn()
     images: File[]
 
-    // @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.user-user-pets)
+    // @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.my-my-pets)
     // @JoinTable()
     // eventRegistrations: EventRegistration[]
 }

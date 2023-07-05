@@ -82,7 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       startRefreshTokenTimer()
 
-      await router.push('/my/settings')
+      await router.push('/my/profile')
     } catch (err) {
       console.log(err)
     }

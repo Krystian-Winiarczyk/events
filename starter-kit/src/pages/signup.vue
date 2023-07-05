@@ -77,7 +77,7 @@ const onSubmit = async () => {
   const avatar = form.profile.avatar?.length ? form.profile.avatar[0] : null
   const petImage = form.pet.images?.length ? form.pet.images[0] : null
 
-  const avatarsResponse = avatar ? await upload([avatar], 'Avatars', 'mdi-user') : null
+  const avatarsResponse = avatar ? await upload([avatar], 'Avatars', 'mdi-my') : null
   const petImagesResponse = petImage ? await upload([petImage], 'PetImages', 'mdi-paw') : null
 
   formItem.profile.avatar = avatarsResponse?.data?.items[0]?.id ?? null
@@ -105,7 +105,7 @@ const onSubmit = async () => {
 
 // Pets
 // const addPet = (): void => {
-//   const user-user-pets = {
+//   const my-my-pets = {
 //     image: [],
 //     name: '',
 //     description: '',
@@ -115,7 +115,7 @@ const onSubmit = async () => {
 //     age: 5,
 //   }
 //
-//   form.pets.push(user-user-pets)
+//   form.pets.push(my-my-pets)
 // }
 
 const validateAccountForm = () => {

@@ -58,7 +58,7 @@ const updatePopper = async () => {
 
 /*
  💡 Only add scroll event listener for updating position once horizontal nav is made static.
-  We don't want to update position every time user scrolls when horizontal nav is sticky
+  We don't want to update position every time my scrolls when horizontal nav is sticky
 */
 until(config.horizontalNav.type)
   .toMatch(type => type === 'static')

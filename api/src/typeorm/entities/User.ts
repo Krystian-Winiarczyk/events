@@ -24,7 +24,7 @@ export class User extends BaseEntity {
     password: string;
 
     /**
-     *  Rank of user
+     *  Rank of my
      * @returns {Rank} role
      */
     @Column('enum', { default: Role.USER, enum: Role })

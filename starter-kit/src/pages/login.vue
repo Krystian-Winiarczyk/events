@@ -12,8 +12,8 @@ const authStore = useAuthStore()
 const loginFormRef = ref()
 
 const form = ref({
-  email: '',
-  password: '',
+  email: 'admin@catchparty.eu',
+  password: 'admin1234',
   remember: false,
 })
 
@@ -31,32 +31,28 @@ const isPasswordVisible = ref(false)
 <template>
   <div class="auth-wrapper d-flex align-center justify-center pa-4">
     <VCard
-      class="auth-card pa-2 pt-7"
+      class="auth-card"
       max-width="448"
     >
       <VCardItem class="justify-center">
         <template #prepend>
-          <div class="me-n2">
-            <VNodeRenderer :nodes="themeConfig.app.logo" />
+          <div>
+            <VNodeRenderer :nodes="themeConfig.app.logo" style="max-height: 100px" />
           </div>
         </template>
-
-        <VCardTitle class="text-2xl font-weight-bold text-capitalize">
-          {{ themeConfig.app.title }}
-        </VCardTitle>
       </VCardItem>
 
-      <VCardText class="pt-2">
+      <VCardText class="px-8">
         <h5 class="text-h5 mb-1">
-          Welcome to <span class="text-capitalize">{{ themeConfig.app.title }}! 👋🏻</span>
+          Witaj w <span class="text-capitalize">{{ themeConfig.app.title }}! 👋🏻</span>
         </h5>
 
         <p class="mb-0">
-          Please sign-in to your account and start the adventure
+          Zaloguj się do swojego konta i rozpocznij zabawę
         </p>
       </VCardText>
 
-      <VCardText>
+      <VCardText class="px-8">
         <VForm
           ref="loginFormRef"
           @submit.prevent="onSubmit"
@@ -78,7 +74,7 @@ const isPasswordVisible = ref(false)
             <VCol cols="12">
               <VTextField
                 v-model="form.password"
-                label="Password"
+                label="Hasło"
                 placeholder="············"
                 :type="isPasswordVisible ? 'text' : 'password'"
                 :append-inner-icon="isPasswordVisible ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
@@ -87,16 +83,12 @@ const isPasswordVisible = ref(false)
 
               <!-- remember me checkbox -->
               <div class="d-flex align-center justify-space-between flex-wrap mt-1 mb-4">
-                <VCheckbox
-                  v-model="form.remember"
-                  label="Remember me"
-                />
-
+                <div></div>
                 <RouterLink
                   class="text-primary ms-2 mb-1"
                   :to="{ name: 'index' }"
                 >
-                  Forgot Password?
+                  Zapomniałeś hasła?
                 </RouterLink>
               </div>
 
@@ -105,7 +97,7 @@ const isPasswordVisible = ref(false)
                 block
                 type="submit"
               >
-                Login
+                Zaloguj
               </VBtn>
             </VCol>
 
@@ -114,22 +106,13 @@ const isPasswordVisible = ref(false)
               cols="12"
               class="text-center text-base"
             >
-              <span>New on our platform?</span>
+              <span>Jesteś nowy na platformie?</span>
               <RouterLink
                 class="text-primary ms-2"
                 :to="{ name: 'signup' }"
               >
-                Create an account
+                Utwórz konto
               </RouterLink>
-            </VCol>
-
-            <VCol
-              cols="12"
-              class="d-flex align-center"
-            >
-              <VDivider />
-              <span class="mx-4">or</span>
-              <VDivider />
             </VCol>
           </VRow>
         </VForm>

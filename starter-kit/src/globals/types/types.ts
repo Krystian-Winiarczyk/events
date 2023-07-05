@@ -3,7 +3,7 @@ import { GENDER } from "@/globals/enums/enums";
 export type User = {
   email: string
   role: string
-  pets: UserPet[],
+  pets: UserPet[]
   profiles: UserProfile[]
   refreshToken: string
   name: string

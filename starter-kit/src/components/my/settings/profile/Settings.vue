@@ -69,7 +69,7 @@ const primaryProfile = computed(() => {
         <VDivider />
 
 <!--        <VListItem-->
-<!--          :value="user.name"-->
+<!--          :value="my.name"-->
 <!--          title="My Firends"-->
 <!--          @click="$router.push({ path: '/my/friends' })"-->
 <!--        >-->
@@ -137,7 +137,7 @@ const primaryProfile = computed(() => {
 <!--          <VListItem-->
 <!--            :value="social"-->
 <!--            :title="social"-->
-<!--            :subtitle="user.activeProfile.socials.find(item => item.type.toLowerCase() === social.toLowerCase())?.url.split('/')[3]"-->
+<!--            :subtitle="my.activeProfile.socials.find(item => item.type.toLowerCase() === social.toLowerCase())?.url.split('/')[3]"-->
 <!--          >-->
 <!--            <template #prepend>-->
 <!--              <VIcon :icon="`mdi-${social.toLowerCase()}`" />-->

@@ -15,7 +15,7 @@
 <!--      color="primary"-->
 <!--      variant="tonal"-->
 <!--    >-->
-<!--      <VImg :src="user.profiles[0].avatar" />-->
+<!--      <VImg :src="my.profiles[0].avatar" />-->
 
 <!--      &lt;!&ndash; SECTION Menu &ndash;&gt;-->
 <!--      <VMenu-->
@@ -26,7 +26,7 @@
 <!--      >-->
 <!--        <VList>-->
 <!--          &lt;!&ndash; 👉 User Avatar & Name &ndash;&gt;-->
-<!--          <VListItem @click="$router.push({ path: '/my/user' })">-->
+<!--          <VListItem @click="$router.push({ path: '/my/my' })">-->
 <!--            <template #prepend>-->
 <!--              <VListItemAction start>-->
 <!--                <VBadge-->
@@ -40,7 +40,7 @@
 <!--                    color="primary"-->
 <!--                    variant="tonal"-->
 <!--                  >-->
-<!--                    <VImg :src="user.profiles[0].avatar" />-->
+<!--                    <VImg :src="my.profiles[0].avatar" />-->
 <!--                  </VAvatar>-->
 <!--                </VBadge>-->
 <!--              </VListItemAction>-->
@@ -62,7 +62,7 @@
 <!--            <template #prepend>-->
 <!--              <VAvatar-->
 <!--                class="me-2"-->
-<!--                :image="user.profiles[0].avatar"-->
+<!--                :image="my.profiles[0].avatar"-->
 <!--                size="22"-->
 <!--              />-->
 <!--            </template>-->
