@@ -5,6 +5,7 @@ import type { SocialLink } from '@/globals/types/types'
 const baseAvatar = 'https://img.freepik.com/free-psd/3d-render-cat-emoji_23-2150311911.jpg?w=1380&t=st=1688062434~exp=1688063034~hmac=b445a5fc159ad7c93b71391d554b5fff25c51d70a74621abfc4f99f7319c44ba'
 
 export default class Profile {
+  private _key: string
   private _name: string
   private _nickname: string
   private _pronouns: PRONOUNS
@@ -14,7 +15,8 @@ export default class Profile {
   private _socials: Array<SocialLink> | undefined
   private _friends: Array<Profile> | undefined
 
-  constructor(name: string, pronouns: PRONOUNS = PRONOUNS.FLUID, language: LANGS = LANGS.ANG, nickname?: string, dsc?: string, avatar?: string, socials?: Array<SocialLink>, friends?: Array<Profile>) {
+  constructor(key: string, name: string, pronouns: PRONOUNS = PRONOUNS.FLUID, language: LANGS = LANGS.ANG, nickname?: string, dsc?: string, avatar?: string, socials?: Array<SocialLink>, friends?: Array<Profile>) {
+    this._key = key
     this._name = name
     this._nickname = nickname || name
     this._pronouns = pronouns
@@ -24,6 +26,9 @@ export default class Profile {
     this._socials = socials
     this._friends = friends
   }
+
+  public get key(): string { return this._key }
+  public set key(key: string) { this._key = key }
 
   public get name(): string { return this._name }
   public set name(name: string) { this._name = name }

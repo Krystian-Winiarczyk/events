@@ -7,5 +7,5 @@ export as namespace user
 export = User
 
 declare class User {
-  constructor(role: Role, email: string, profiles: Array<Profile>, activeProfile?: Profile, pets?: Array<Pet>)
+  constructor(key: string, role: Role, email: string, profiles: Array<Profile>, activeProfile?: Profile, pets?: Array<Pet>)
 }

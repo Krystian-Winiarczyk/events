@@ -20,5 +20,14 @@ export default {
     }
 
     /*    END::Math -> Round    */
+
+    /*    START::String -> Capitalize    */
+    String.prototype.capitalize = function (): string {
+      if (this.length === 0 || /^[A-Z]/.test(this.toString()))
+        return this.toString()
+
+      return this.charAt(0).toUpperCase() + this.slice(1)
+    }
+    /*    END::String -> Capitalize    */
   },
 }

@@ -2,7 +2,11 @@
 import { useAuthStore } from '@/stores/root/Auth'
 
 const auth = useAuthStore()
-const user = auth.user
+const user = ref(auth.user)
+
+watch(auth, async n => {
+  user.value = n.user
+})
 </script>
 
 <template>
@@ -19,7 +23,7 @@ const user = auth.user
       color="primary"
       variant="tonal"
     >
-      <VImg :src="user.profiles[0].avatar" />
+      <VImg :src="user.activeProfile.avatar" />
 
       <!-- SECTION Menu -->
       <VMenu
@@ -44,16 +48,19 @@ const user = auth.user
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="user.profiles[0].avatar" />
+                    <VImg :src="user.activeProfile.avatar" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              {{ user.activeProfile.name }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+
+            <VListItemSubtitle>
+              {{ user.role.name.capitalize() }}
+            </VListItemSubtitle>
           </VListItem>
 
           <VDivider class="my-2" />

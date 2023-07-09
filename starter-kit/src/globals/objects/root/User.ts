@@ -2,19 +2,24 @@ import type { Role } from '@/globals/types/types'
 import type Profile from '@/globals/objects/root/Profile'
 
 export default class User {
+  private _key: string
   private _role: Role
   private _email: string
   private _activeProfile: Profile
   private _profiles: Array<Profile> | undefined
   private _pets: Array<Pet> | undefined
 
-  constructor(role: Role, email: string, profiles: Array<Profile>, activeProfile: Profile, pets?: Array<Pet>) {
+  constructor(key: string, role: Role, email: string, profiles: Array<Profile>, activeProfile: Profile, pets?: Array<Pet>) {
+    this._key = key
     this._role = role
     this._email = email
     this._profiles = profiles
     this._activeProfile = activeProfile || profiles[0]
     this._pets = pets || undefined
   }
+
+  public get key(): string { return this._key }
+  public set key(key: string) { this._key = key }
 
   /*    START::Role    */
   public get role(): Role { return this._role }

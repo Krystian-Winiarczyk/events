@@ -21,6 +21,7 @@ export const useAuthStore = defineStore('auth', {
 
         // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
         const friend = new Profile(
+          'Gostek#1',
           'Gostek Testowy',
           PRONOUNS.HE,
           LANGS.ANG,
@@ -30,6 +31,7 @@ export const useAuthStore = defineStore('auth', {
 
         // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
         const profile = new Profile(
+          'Emily#2',
           'Emily Totsu',
           PRONOUNS.FLUID,
           LANGS.ANG,
@@ -42,6 +44,7 @@ export const useAuthStore = defineStore('auth', {
 
         // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
         const profile2 = new Profile(
+          'Testowy#3',
           'Testowy Gostek',
           PRONOUNS.HE,
           LANGS.ANG,
@@ -49,13 +52,29 @@ export const useAuthStore = defineStore('auth', {
           'Emptiness hurts when you experience with love.',
         )
 
-        this.user = new User(Admin, email, [profile, profile2, profile2, profile2, profile2, profile2])
+        // ℹ️ Auto profile on login. ONLY FOR TESTING!!!
+        const profile4 = new Profile(
+          'Marcinek#4',
+          'Marcinek Testu',
+          PRONOUNS.HE,
+          LANGS.ANG,
+          '',
+          'Emptiness hurts when you experience with love.',
+        )
+
+        this.user = new User('Admin#1', Admin, email, [profile, profile2, profile4])
 
         console.log('Hello! <3', email, password)
       }
       catch (err) {
         return err
       }
+    },
+
+    async switchProfile(key: string) {
+      const profile = this.user.profiles.find(p => p.key === key)
+
+      this.user.activeProfile = profile
     },
   },
 })
