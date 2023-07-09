@@ -43,6 +43,11 @@ export default class User {
   public get profiles(): Array<Profile> { return this._profiles }
   public set profiles(profile: Array<Profile>) { this._profiles = profile }
   public addProfile(profile: Profile) { this._profiles.push(profile) }
+  public rmProfile(profile: Profile) {
+    const index = this._profiles?.findIndex(p => p.key === profile.key)
+
+    this._profiles?.splice(index, 1)
+  }
 
   /*    END::Profiles    */
 

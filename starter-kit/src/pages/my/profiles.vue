@@ -2,10 +2,12 @@
 import { useAuthStore } from '@/stores/root/Auth'
 
 const auth = useAuthStore()
-const activeProfile = ref(auth.user.activeProfile)
+const user = auth.user
+const activeProfile = ref(user.activeProfile)
 const profiles = auth.user.profiles
 
 const isDialogVisible = ref(false)
+const selectedProfile = ref()
 
 watch(auth, async n => {
   activeProfile.value = n.user.activeProfile
@@ -55,6 +57,7 @@ watch(auth, async n => {
                 icon="mdi-trash"
                 variant="text"
                 size="small"
+                @click="selectedProfile = profile"
               />
             </template>
 
@@ -63,7 +66,6 @@ watch(auth, async n => {
               <DialogCloseBtn
                 variant="text"
                 size="small"
-                @click="isDialogVisible = false"
               />
 
               <VCardText>
@@ -72,6 +74,7 @@ watch(auth, async n => {
 
               <VCardActions>
                 <VSpacer />
+
                 <VBtn
                   color="error"
                   @click="isDialogVisible = false"
@@ -81,7 +84,7 @@ watch(auth, async n => {
 
                 <VBtn
                   color="success"
-                  @click="isDialogVisible = false"
+                  @click="isDialogVisible = false; user.rmProfile(selectedProfile)"
                 >
                   OK
                 </VBtn>
