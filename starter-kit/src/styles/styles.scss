@@ -1,1 +1,11 @@
 // Write your overrides
+
+.sticky-to-top {
+  position: sticky;
+
+  top: 4rem;
+
+  background: var(--global-theme-primary);
+
+  z-index: 10;
+}
