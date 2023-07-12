@@ -1,25 +1,13 @@
-<template>
-  <div>
-    <VAvatar
-      :image="item.avatar"
-      variant="tonal"
-      class="cursor-pointer"
-      color="primary"
-      size="40"
-    >
-      <span>{{ avatarNoImageLetters }}</span>
-    </VAvatar>
-  </div>
-</template>
-
 <script setup lang="ts">
+import type { UserPet, UserProfile } from '@/globals/types/types'
 
 interface Props {
-  item: any,
+  item: UserProfile | UserPet
+  size: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  item: { name: '', avatar: '' },
+  size: 80,
 })
 
 const avatarNoImageLetters = computed(() => {
@@ -27,12 +15,21 @@ const avatarNoImageLetters = computed(() => {
 
   return `${firstName.slice(0, 1)}${lastName.slice(0, 1)}`.trim()
 })
-
-onMounted(() => {
-  console.log('123 321 ')
-})
-
 </script>
+
+<template>
+  <div>
+    <VAvatar
+      :image="item.avatar"
+      variant="tonal"
+      class="cursor-pointer"
+      color="primary"
+      :size="size"
+    >
+      <span>{{ avatarNoImageLetters }}</span>
+    </VAvatar>
+  </div>
+</template>
 
 <style scoped>
 

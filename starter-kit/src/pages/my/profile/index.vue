@@ -51,7 +51,7 @@ const getUserPets = computed((): UserPet[] => {
 
       <VWindow
         v-model="userTab"
-        class="mt-6 disable-tab-transition"
+        class="mt-2 disable-tab-transition"
         :touch="false"
       >
         <VWindowItem>
