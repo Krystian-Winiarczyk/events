@@ -22,8 +22,6 @@ const props = withDefaults(defineProps<Props>(), {
   item: { name: '', avatar: '' },
 })
 
-console.log(props.item)
-
 const avatarNoImageLetters = computed(() => {
   const [firstName = '', lastName = ''] = props.item.name.split(' ')
 

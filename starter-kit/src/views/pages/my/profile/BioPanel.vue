@@ -9,27 +9,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const userMediaObject = computed(() => {
-  const {
-    websiteUrl,
-    youtubeUrl,
-    facebookUrl,
-    instagramUrl,
-    tiktokUrl,
-    twitterUrl,
-  } = props.userData.primaryProfile
-
-  console.log(props.userData.primaryProfile)
-
-  return {
-    websiteUrl,
-    youtubeUrl,
-    facebookUrl,
-    instagramUrl,
-    tiktokUrl,
-    twitterUrl,
-  }
-})
 </script>
 
 <template>
@@ -166,7 +145,7 @@ const userMediaObject = computed(() => {
 
         <VDivider class="mt-4" />
 
-        <SocialMediaList :social-media-links="userMediaObject" />
+        <SocialMediaList :item="userData.primaryProfile" />
       </VCardText>
 
       <!-- 👉 Edit and Suspend button -->

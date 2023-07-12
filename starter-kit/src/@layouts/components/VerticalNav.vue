@@ -79,7 +79,7 @@ const handleNavScroll = (evt: Event) => {
           to="/"
           class="app-logo d-flex align-center gap-x-2 app-title-wrapper"
         >
-          <VNodeRenderer :nodes="config.app.logo" />
+          <VNodeRenderer :nodes="config.app.logo" style="max-width: 50px" />
 
           <Transition name="vertical-nav-app-title">
             <h1

@@ -1,47 +1,69 @@
 <script setup lang="ts">
+import {UserPet, UserProfile} from "@/globals/types/types";
+
 interface Props {
-  socialMediaLinks: {
-    websiteUrl?: string
-    youtubeUrl?: string
-    facebookUrl?: string
-    instagramUrl?: string
-    tiktokUrl?: string
-    twitterUrl?: string
-  }
+  item: UserProfile | UserPet
 }
 
 const props = defineProps<Props>()
 
-const styleByMediaType = (type: string): { icon: string; color: string } => {
-  if (type === 'websiteUrl')
-    return { icon: 'mdi-web', color: 'primary' }
-  if (type === 'youtubeUrl')
-    return { icon: 'mdi-youtube', color: 'rgba(255,0,0,0.5)' }
-  if (type === 'facebookUrl')
-    return { icon: 'mdi-facebook', color: 'rgba(24,119,242,0.56)' }
-  if (type === 'instagramUrl')
-    return { icon: 'mdi-instagram', color: 'rgba(195,42,163,0.55)' }
-  if (type === 'tiktokUrl')
-    return { icon: 'mdi-trash', color: '#010101' }
-  if (type === 'twitterUrl')
-    return { icon: 'mdi-twitter', color: 'rgba(29,161,242,0.56)' }
+const itemMediaObject = computed(() => {
+  const {
+    websiteUrl,
+    youtubeUrl,
+    facebookUrl,
+    instagramUrl,
+    tiktokUrl,
+    twitterUrl,
+  } = props.item
 
-  return { icon: 'mdi-minus', color: '' }
+  console.log(props.item)
+
+  return {
+    websiteUrl,
+    youtubeUrl,
+    facebookUrl,
+    instagramUrl,
+    tiktokUrl,
+    twitterUrl,
+  }
+})
+
+const styleByMediaType = (type: string): string => {
+  if (type === 'websiteUrl')
+    return 'mdi-web'
+  if (type === 'youtubeUrl')
+    return 'mdi-youtube'
+  if (type === 'facebookUrl')
+    return 'mdi-facebook'
+  if (type === 'instagramUrl')
+    return 'mdi-instagram'
+  if (type === 'tiktokUrl')
+    return 'mdi-trash'
+  if (type === 'twitterUrl')
+    return 'mdi-twitter'
+
+  return 'mdi-minus'
 }
+
+const openLink = (url: string) => window.open(url, '_blank')
 </script>
 
 <template>
   <div class="d-flex justify-center mt-3">
     <div
-      v-for="key in Object.keys(socialMediaLinks)"
+      v-for="key in Object.keys(itemMediaObject)"
       :key="`media_${key}`"
       class="mr-3 cursor-pointer"
-      :class="{ 'd-none': !socialMediaLinks[key] }"
+      :class="{ 'd-none': !itemMediaObject[key] }"
     >
       <VAvatar
-        :icon="styleByMediaType(<string> key).icon"
-        :color="styleByMediaType(<string> key).color"
-        class="text-white"
+        :icon="styleByMediaType(<string> key)"
+        color="secondary"
+        rounded="sm"
+        variant="tonal"
+        class="cursor-pointer"
+        @click="openLink(itemMediaObject[key])"
       />
     </div>
   </div>

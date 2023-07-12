@@ -4,12 +4,9 @@ enum GENDER {
   OTHER = 'OTHER',
 }
 
-enum SOCIAL_MEDIA {
-  FACEBOOK = 'FACEBOOK',
-  TWITTER = 'TWITTER',
-  INSTAGRAM = 'INSTAGRAM',
-  TIK_TOK = 'TIK_TOK',
-  SNAPCHAT = 'SNAPCHAT',
+enum VIEW_TYPE {
+  LIST = 'LIST',
+  CARD = 'CARD'
 }
 
-export { GENDER, SOCIAL_MEDIA }
+export { GENDER, VIEW_TYPE }
