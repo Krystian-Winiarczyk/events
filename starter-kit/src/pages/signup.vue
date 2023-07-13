@@ -47,7 +47,6 @@ const items = [
 ]
 
 const form = reactive({
-  username: `Adamiak ${new Date().toLocaleDateString()}${new Date().getTime()}`,
   email: `test.${new Date().toLocaleDateString()}${new Date().getTime()}@wp.pl`,
   password: '444',
   confirmPassword: '444',
@@ -81,7 +80,13 @@ const onSubmit = async () => {
   const petImagesResponse = petImage ? await upload([petImage], 'PetImages', 'mdi-paw') : null
 
   formItem.profile.avatar = avatarsResponse?.data?.items[0]?.id ?? null
-  formItem.pet.images = [petImagesResponse?.data?.items[0]?.id].filter(Boolean)
+  formItem.pet.avatar = [petImagesResponse?.data?.items[0]?.id].filter(Boolean)
+
+  try {
+    const response = await axiosIns.post('auth/signup', formItem)
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 // const addProfile = (): void => {
@@ -219,18 +224,6 @@ const nextStep = () => {
               <VRow>
                 <VCol
                   cols="12"
-                  md="6"
-                >
-                  <VTextField
-                    v-model="form.username"
-                    :label="$t('UserName')"
-                    placeholder="John Doe"
-                  />
-                </VCol>
-
-                <VCol
-                  cols="12"
-                  md="6"
                 >
                   <VTextField
                     v-model="form.email"

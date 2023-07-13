@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
 import { useAuthStore } from '@/store/auth'
 import BioPanel from '@/views/pages/my/profile/BioPanel.vue'
 import PetsTab from '@/views/pages/my/profile/PetsTab.vue'
 import type { UserPet } from '@/globals/types/types'
+import { defaultPet } from '@/globals/defaults'
 
 const { user } = storeToRefs(useAuthStore())
 
@@ -17,6 +19,19 @@ const tabs = [
 const getUserPets = computed((): UserPet[] => {
   return user.value.pets ?? []
 })
+
+// Edit pet
+const isEditPetDialogVisible: Ref<boolean> = ref(false)
+const editedPet: Ref<UserPet> = ref({ ...defaultPet })
+
+const openEditPet = (pet: UserPet): void => {
+  if (!pet)
+    editedPet.value = { ...defaultPet }
+  else
+    editedPet.value = { ...pet }
+
+  isEditPetDialogVisible.value = true
+}
 </script>
 
 <template>
@@ -55,10 +70,55 @@ const getUserPets = computed((): UserPet[] => {
         :touch="false"
       >
         <VWindowItem>
-          <PetsTab :pets="getUserPets" />
+          <PetsTab
+            :pets="getUserPets"
+            @open-edit="openEditPet"
+          />
         </VWindowItem>
       </VWindow>
     </VCol>
+
+    <!-- Pet Modal -->
+    <VDialog
+      v-model="isEditPetDialogVisible"
+      max-width="600"
+    >
+      <!-- Dialog Activator -->
+      <template #activator="{ props }">
+        <VBtn v-bind="props">
+          Open Dialog
+        </VBtn>
+      </template>
+
+      <!-- Dialog Content -->
+      <VCard title="User Profile">
+        <DialogCloseBtn
+          variant="text"
+          size="small"
+          @click="isEditPetDialogVisible = false"
+        />
+
+        <VCardText>
+          {{ editedPet }}
+        </VCardText>
+
+        <VCardActions>
+          <VSpacer />
+          <VBtn
+            color="error"
+            @click="isEditPetDialogVisible = false"
+          >
+            Close
+          </VBtn>
+          <VBtn
+            color="success"
+            @click="isEditPetDialogVisible = false"
+          >
+            Save
+          </VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
   </VRow>
 </template>
 

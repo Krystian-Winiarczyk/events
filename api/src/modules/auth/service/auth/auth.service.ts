@@ -121,10 +121,11 @@ export class AuthService {
             password: signupDto.password,
             role: Role.USER,
         });
-
+        console.log('1')
         const profile: UserProfile = await this.userProfilesService.create({ ...signupDto.profile, isPrimary: true, user: newUser.id })
+        console.log('2')
         const pet: UserPet = await this.petService.create({ ...signupDto.pet, user: newUser.id })
-
+        console.log('3')
         delete newUser.password;
         const tokens = await this.getTokens({ ...newUser });
         await this.updateRefreshToken(newUser.id, tokens.refreshToken);

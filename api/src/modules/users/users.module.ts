@@ -9,10 +9,11 @@ import { UserProfilesService } from './service/user-profiles/user-profiles.servi
 import { UserProfilesController } from './controller/user-profiles/user-profiles.controller';
 import { UserPetsController } from './controller/user-pets/user-pets.controller';
 import { UserPetsService } from './service/user-pets/user-pets.service';
+import {File} from "../../typeorm/entities/File";
 
 @Module({
   exports: [UsersService, UserProfilesService, UserPetsService],
-  imports: [TypeOrmModule.forFeature([User, UserPet, UserProfile])],
+  imports: [TypeOrmModule.forFeature([User, UserPet, UserProfile, File])],
   controllers: [UsersController, UserProfilesController, UserPetsController],
   providers: [UsersService, UserProfilesService, UserPetsService]
 })

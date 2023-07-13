@@ -17,12 +17,11 @@ export const editFileName = (req, file, callback) => {
     callback(null, `${name}-${randomName}.${fileExtName}`);
 };
 
-@Controller('uploader')
+@Controller('api/uploader')
 export class UploaderController extends BaseController {
     constructor(private uploaderService: UploaderService) {
         super()
     }
-
     @Post('upload')
     @UseInterceptors(FilesInterceptor('files[]', 20, {
         storage: diskStorage({

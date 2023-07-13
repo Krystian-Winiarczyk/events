@@ -130,7 +130,6 @@ export class UserPet extends BaseEntity {
      * @returns {User} my
      */
     @ManyToOne(() => User, (user) => user.pets, { onDelete: 'CASCADE' })
-    @JoinTable()
     user: User
 
     /**

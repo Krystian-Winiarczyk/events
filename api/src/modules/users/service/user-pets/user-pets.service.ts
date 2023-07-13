@@ -8,21 +8,39 @@ import {File} from "../../../../typeorm/entities/File";
 
 @Injectable()
 export class UserPetsService extends BaseService<UserPet> {
-    constructor(@InjectRepository(UserPet) private petRepository: Repository<UserPet>) {
+    constructor(
+        @InjectRepository(UserPet) private petRepository: Repository<UserPet>,
+        @InjectRepository(File) private fileRepository: Repository<File>
+    ) {
         super(petRepository)
     }
 
     async create(createPetDto: CreateUserPetDto): Promise<UserPet> {
+        const petPayload = createPetDto
+        delete petPayload.images
+
         const newPet: UserPet = this.petRepository.create({
                 ...createPetDto,
                 // images: createPetDto.images?.length ? createPetDto.images : null,
                 user: <any> createPetDto.user ?? null,
             })
 
+        const createdPet: UserPet = await this.petRepository.save(newPet);
+
         if (createPetDto.images?.length) {
-            newPet.images.push(...createPetDto.images.map(id => ({ id } as File)))
+            const filePromises = createPetDto.images.map(async (fileId) => {
+                const file = await this.fileRepository.findOne(fileId);
+                if (file) {
+                    file.pet = createdPet;
+                    return await this.fileRepository.save(file);
+                }
+            });
+
+            const createdFiles = await Promise.all(filePromises);
+
+            createdPet.images = createdFiles.filter((file) => file);
         }
 
-        return await this.petRepository.save(newPet);
+        return createdPet
     }
 }

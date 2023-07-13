@@ -1,6 +1,6 @@
-import { GENDER } from "@/globals/enums/enums";
+import type { GENDER } from '@/globals/enums/enums'
 
-export type User = {
+export interface User {
   email: string
   role: string
   pets: UserPet[]
@@ -10,7 +10,7 @@ export type User = {
   primaryProfile: UserProfile
 }
 
-export type UserProfile = {
+export interface UserProfile {
   name: string
 
   firstName: string
@@ -30,7 +30,7 @@ export type UserProfile = {
   avatar: string
 }
 
-export type UserPet = {
+export interface UserPet {
   name: string
   passportNumber: string
   breed: string
@@ -48,6 +48,6 @@ export type UserPet = {
   instagramUrl: string
   tiktokUrl: string
   twitterUrl: string
-  user: User
+  user?: User
   images: string[]
 }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type {Ref} from 'vue'
+import type { Ref } from 'vue'
 
-import {VCard, VCol, VList, VListItem, VRow} from 'vuetify/components'
+import { VCard, VCol, VList, VListItem, VRow } from 'vuetify/components'
 
-import type {UserPet} from '@/globals/types/types'
-import {GENDER, VIEW_TYPE} from '@/globals/enums/enums'
-import InformationChip from "@/views/InformationChip.vue";
+import type { UserPet } from '@/globals/types/types'
+import { GENDER, VIEW_TYPE } from '@/globals/enums/enums'
+import InformationChip from '@/views/InformationChip.vue'
 
 interface Props {
   pets: UserPet[]
@@ -15,6 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
   pets: () => [],
 })
 
+const emits = defineEmits(['openEdit'])
 const petDetails: Ref<UserPet | null> = ref(null)
 
 const viewType: Ref<VIEW_TYPE> = ref(VIEW_TYPE.CARD)
@@ -39,6 +40,10 @@ const getViewTypeContainerItem = computed(() => {
 const getViewTypeContainerItemContent = computed(() => {
   return viewType.value === VIEW_TYPE.CARD ? VCard : 'div'
 })
+
+const openEditPet = (pet?: UserPet): void => {
+  emits('openEdit', pet)
+}
 </script>
 
 <template>
@@ -46,38 +51,51 @@ const getViewTypeContainerItemContent = computed(() => {
     <VSlideXTransition>
       <div
         v-if="!petDetails"
-        class="d-flex justify-end mb-2"
+        class="d-flex justify-space-between mb-2"
       >
         <VBtn
-          :color="viewType === VIEW_TYPE.CARD ? 'primary' : ''"
+          color="primary"
           size="small"
           class="me-1"
-          @click="viewType = VIEW_TYPE.CARD"
+          @click="openEditPet(null)"
         >
           <VIcon
-            icon="mdi-view-grid"
+            icon="mdi-plus"
             size="20"
           />
         </VBtn>
-        <VBtn
-          :color="viewType === VIEW_TYPE.LIST ? 'primary' : ''"
-          size="small"
-          class="me-1"
-          @click="viewType = VIEW_TYPE.LIST"
-        >
-          <VIcon
-            icon="mdi-view-list"
-            size="20"
-          />
-        </VBtn>
+        <div class="d-flex justify-end">
+          <VBtn
+            :color="viewType === VIEW_TYPE.CARD ? 'primary' : ''"
+            size="small"
+            class="me-1"
+            @click="viewType = VIEW_TYPE.CARD"
+          >
+            <VIcon
+              icon="mdi-view-grid"
+              size="20"
+            />
+          </VBtn>
+          <VBtn
+            :color="viewType === VIEW_TYPE.LIST ? 'primary' : ''"
+            size="small"
+            class="me-1"
+            @click="viewType = VIEW_TYPE.LIST"
+          >
+            <VIcon
+              icon="mdi-view-list"
+              size="20"
+            />
+          </VBtn>
+        </div>
       </div>
     </VSlideXTransition>
     <VDialogTransition mode="out-in">
       <Component
         :is="getViewTypeContainer"
         v-if="!petDetails"
-        rounded
         key="pet-list"
+        rounded
       >
         <Component
           :is="getViewTypeContainerItem"
@@ -88,7 +106,10 @@ const getViewTypeContainerItemContent = computed(() => {
           @click="petDetails = pet"
         >
           <template #prepend>
-            <Avatar :item="pet" :size="50" />
+            <Avatar
+              :item="pet"
+              :size="50"
+            />
           </template>
           <Component
             :is="getViewTypeContainerItemContent"
@@ -97,27 +118,6 @@ const getViewTypeContainerItemContent = computed(() => {
             :image="images[petIndex]"
             height="300"
           >
-            <div
-              v-if="viewType === VIEW_TYPE.CARD"
-              class="position-absolute d-flex gap-1"
-              style="top: 3px; right: 6px"
-            >
-              <!-- Personality -->
-              <InformationChip only-icon v-if="pet.personality" :value="`${pet.personality}`" icon="mdi-checkbook" :tooltip="$t('Personality')" />
-              <!-- Birth -->
-              <InformationChip only-icon v-if="pet.birthDate" :value="`${pet.birthDate}`" icon="mdi-cake" :tooltip="$t('Birthday')" />
-              <!-- Weight -->
-              <InformationChip only-icon v-if="pet.weight" :value="`${pet.weight} KG`" icon="mdi-weight" tooltip="Waga" />
-              <!-- Height -->
-              <InformationChip only-icon v-if="pet.height" :value="`${pet.height} CM`" icon="mdi-ruler" :tooltip="$t('HeightAtTheWithers')" />
-              <!-- Breed -->
-              <InformationChip only-icon v-if="pet.breed" :value="`${pet.breed}`" icon="mdi-tag-heart-outline" :tooltip="$t('Breed')" />
-              <!-- Color -->
-              <InformationChip only-icon v-if="pet.color" :value="`${pet.color}`" icon="mdi-palette" :tooltip="$t('Color')" />
-              <!-- Gender -->
-              <InformationChip only-icon v-if="pet.gender" :value="$t(`PetGenders.${pet.gender}`)" :icon="pet.gender === GENDER.MALE ? 'mdi-gender-male' : 'mdi-gender-female'" :tooltip="$t('Gender')" />
-
-            </div>
             <!--    START::Content    -->
             <div
               class="px-4 py-3 d-flex flex-row align-center justify-space-between gap-2"
@@ -129,7 +129,10 @@ const getViewTypeContainerItemContent = computed(() => {
                   {{ pet.name }}
                 </p>
                 <small>
-                  <VIcon icon="mdi-book" size="16" />
+                  <VIcon
+                    icon="mdi-book"
+                    size="16"
+                  />
                   {{ pet.passportNumber }}
 
                   <VTooltip
@@ -139,12 +142,87 @@ const getViewTypeContainerItemContent = computed(() => {
                     {{ $t('PassportNumber') }}
                   </VTooltip>
                 </small>
+
+                <div
+                  class="d-flex gap-1 flex-wrap"
+                  :class="{ 'position-absolute': viewType === VIEW_TYPE.CARD }"
+                  style="top: 3px; right: 6px"
+                >
+                  <!-- Personality -->
+                  <InformationChip
+                    v-if="pet.personality"
+                    :only-icon="viewType === VIEW_TYPE.CARD"
+                    :size="viewType === VIEW_TYPE.CARD ? 'small' : 'x-small'"
+                    :value="`${pet.personality}`"
+                    icon="mdi-checkbook"
+                    :tooltip="$t('Personality')"
+                  />
+                  <!-- Birth -->
+                  <InformationChip
+                    v-if="pet.birthDate"
+                    :only-icon="viewType === VIEW_TYPE.CARD"
+                    :size="viewType === VIEW_TYPE.CARD ? 'small' : 'x-small'"
+                    :value="`${pet.birthDate}`"
+                    icon="mdi-cake"
+                    :tooltip="$t('Birthday')"
+                  />
+                  <!-- Weight -->
+                  <InformationChip
+                    v-if="pet.weight"
+                    :only-icon="viewType === VIEW_TYPE.CARD"
+                    :size="viewType === VIEW_TYPE.CARD ? 'small' : 'x-small'"
+                    :value="`${pet.weight} KG`"
+                    icon="mdi-weight"
+                    tooltip="Waga"
+                  />
+                  <!-- Height -->
+                  <InformationChip
+                    v-if="pet.height"
+                    :only-icon="viewType === VIEW_TYPE.CARD"
+                    :size="viewType === VIEW_TYPE.CARD ? 'small' : 'x-small'"
+                    :value="`${pet.height} CM`"
+                    icon="mdi-ruler"
+                    :tooltip="$t('HeightAtTheWithers')"
+                  />
+                  <!-- Breed -->
+                  <InformationChip
+                    v-if="pet.breed"
+                    :only-icon="viewType === VIEW_TYPE.CARD"
+                    :size="viewType === VIEW_TYPE.CARD ? 'small' : 'x-small'"
+                    :value="`${pet.breed}`"
+                    icon="mdi-tag-heart-outline"
+                    :tooltip="$t('Breed')"
+                  />
+                  <!-- Color -->
+                  <InformationChip
+                    v-if="pet.color"
+                    :only-icon="viewType === VIEW_TYPE.CARD"
+                    :size="viewType === VIEW_TYPE.CARD ? 'small' : 'x-small'"
+                    :value="`${pet.color}`"
+                    icon="mdi-palette"
+                    :tooltip="$t('Color')"
+                  />
+                  <!-- Gender -->
+                  <InformationChip
+                    v-if="pet.gender"
+                    :only-icon="viewType === VIEW_TYPE.CARD"
+                    :size="viewType === VIEW_TYPE.CARD ? 'small' : 'x-small'"
+                    :value="$t(`PetGenders.${pet.gender}`)"
+                    :icon="pet.gender === GENDER.MALE ? 'mdi-gender-male' : 'mdi-gender-female'"
+                    :tooltip="$t('Gender')"
+                  />
+                </div>
               </div>
               <!--    END::Owner Name & UserPet Name    -->
 
-              <VBtn icon size="small" variant="plain" color="secondary" @click="editPet(pet, petIndex)">
+              <VBtn
+                icon
+                size="small"
+                variant="plain"
+                color="secondary"
+                @click.stop="openEditPet(pet)"
+              >
                 <VIcon
-                  v-if="viewType === VIEW_TYPE.CARD"
                   icon="mdi-edit"
                   size="24"
                 />
@@ -156,7 +234,10 @@ const getViewTypeContainerItemContent = computed(() => {
       </Component>
 
       <!-- -->
-      <VRow v-else key="pet-detials">
+      <VRow
+        v-else
+        key="pet-detials"
+      >
         <VCol cols="12" />
 
         <VCol cols="12">
