@@ -1,4 +1,4 @@
-import {Entity, Column, ManyToOne, JoinTable, OneToOne, AfterLoad, AfterInsert, AfterUpdate} from 'typeorm';
+import {Entity, Column, ManyToOne, JoinTable, OneToOne, AfterLoad, AfterInsert, AfterUpdate, JoinColumn} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import { User } from './User';
 import {File} from "./File";
@@ -111,6 +111,7 @@ export class UserProfile extends BaseEntity {
      * @returns {File} avatar
      */
     @OneToOne(() => File, (file) => file.userProfile, { onDelete: 'CASCADE' })
+    @JoinColumn()
     avatar: File
 
     /**

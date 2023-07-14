@@ -15,17 +15,20 @@ export class UserPetsService extends BaseService<UserPet> {
         super(petRepository)
     }
 
-    async create(createPetDto: CreateUserPetDto): Promise<UserPet> {
-        const newPet: UserPet = this.petRepository.create({
-                ...createPetDto,
-                // images: createPetDto.images?.length ? createPetDto.images : null,
-                user: <any> createPetDto.user ?? null,
-            })
-
-        if (createPetDto.images?.length) {
-            newPet.images = createPetDto.images.map(id => ({id}));
-        }
-
-        return await this.petRepository.save(newPet);
-    }
+    // async create(createPetDto: CreateUserPetDto): Promise<UserPet> {
+    //     const newPet: UserPet = this.petRepository.create({
+    //             ...createPetDto,
+    //             user: <any> createPetDto.user ?? null,
+    //         })
+    //
+    //     if (createPetDto.images?.length) {
+    //         newPet.images = createPetDto.images.map(id => ({id}));
+    //     }
+    //
+    //     if (createPetDto.avatar) {
+    //         newPet.avatar = { id: createPetDto.avatar } as File;
+    //     }
+    //
+    //     return await this.petRepository.save(newPet);
+    // }
 }

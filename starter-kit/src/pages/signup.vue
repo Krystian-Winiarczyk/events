@@ -81,8 +81,9 @@ const onSubmit = async () => {
   const avatarsResponse = avatar ? await upload([avatar], 'Avatars', 'mdi-my', 'AVATAR') : null
   const petImagesResponse = petImage ? await upload([petImage], 'PetImages', 'mdi-paw', 'AVATAR') : null
 
-  formItem.profile.avatar = avatarsResponse?.data?.items[0]?.id ?? null
-  formItem.pet.images = [petImagesResponse?.data?.items[0]?.id].filter(Boolean)
+  formItem.profile.avatar = avatarsResponse?.data?.items[0]?.id || null
+  delete formItem.pet.images
+  formItem.pet.avatar = petImagesResponse?.data?.items[0]?.id || null
 
   // formItem.profile.avatar = 3 ?? null
   // formItem.pet.images = [4].filter(Boolean)

@@ -10,6 +10,7 @@ import {FindOptionsRelationByString, FindOptionsRelations} from "typeorm/find-op
 import {BaseDto} from "./BaseDto";
 import {ServiceInterface} from "../interfaces/Service.interface";
 import {BaseEntity} from "./BaseEntity";
+import {File} from "../typeorm/entities/File";
 export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
     constructor(private repository: Repository<T>) {}
     async findAll(params: {
@@ -69,6 +70,18 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
 
     async create(createDto: any): Promise<T> {
         const item = this.repository.create(createDto);
+
+        if (createDto?.images?.length) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            item.images = createDto.images.map(id => ({id}));
+        }
+
+        if (createDto?.avatar) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            item.avatar = { id: createDto.avatar } as File;
+        }
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return await this.repository.save(item);

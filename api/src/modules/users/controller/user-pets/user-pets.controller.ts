@@ -28,7 +28,11 @@ export class UserPetsController extends BaseController {
         try {
             const pets: UserPet[] = await this.petService.findAll({
                 pagination: this.paginationFragment(limit, page),
-                relations: ['user'],
+                relations: {
+                    user: true,
+                    avatar: true,
+                    images: true
+                },
                 where: this.resolveFilters(q),
             });
 
@@ -47,7 +51,11 @@ export class UserPetsController extends BaseController {
     ) {
         try {
             const pet: UserPet = await this.petService.findOneById(id, {
-                relations: ['user']
+                relations: {
+                    user: true,
+                    avatar: true,
+                    images: true
+                }
             });
 
             this.apiSuccessResponse(res, req, pet);

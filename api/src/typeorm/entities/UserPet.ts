@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinTable, OneToMany, JoinColumn } from 'typeorm';
+import {Entity, Column, ManyToOne, JoinTable, OneToMany, JoinColumn, OneToOne} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import { Gender } from "../../constants/Gender";
 import { User } from './User';
@@ -138,6 +138,14 @@ export class UserPet extends BaseEntity {
      */
     @OneToMany(() => File, file => file.pet, { onDelete: 'CASCADE' })
     images: File[]
+
+    /**
+     *  Dog images
+     * @returns {File} images
+     */
+    @OneToOne(() => File, file => file.pet, { onDelete: 'CASCADE' })
+    @JoinColumn()
+    avatar: File
 
     // @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.my-my-pets)
     // @JoinTable()

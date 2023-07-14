@@ -23,6 +23,7 @@ export class CreateUserPetDto {
     twitterUrl?: string
 
     images?: Array<File | any> | any
+    avatar?: File | any
     user?: User | any
 }
 
@@ -48,5 +49,6 @@ export class UpdateUserPetDto {
     twitterUrl?: string
 
     images?: Array<File | any>
+    avatar?: File | any
     user?: User | any
 }

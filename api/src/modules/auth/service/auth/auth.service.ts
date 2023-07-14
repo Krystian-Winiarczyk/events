@@ -133,7 +133,7 @@ export class AuthService {
         return {
             ...(await this.usersService.findOneById(newUser.id, { relations: {
                 profiles: { avatar: true },
-                pets: { images: true },
+                pets: { images: true, avatar: true },
             } })),
             ...tokens
         };

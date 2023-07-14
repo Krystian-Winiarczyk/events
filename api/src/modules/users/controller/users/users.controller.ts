@@ -57,7 +57,14 @@ export class UsersController
         try {
             const users: User[] = await this.userService.findAll({
                 pagination: this.paginationFragment(limit, page),
-                relations: ['profiles', 'pets'],
+                relations: {
+                    profiles: {
+                      avatar: true
+                    },
+                    pets: {
+                        avatar: true,
+                    },
+                },
                 where: this.resolveFilters(q),
             });
 
@@ -76,7 +83,14 @@ export class UsersController
     ) {
         try {
             const user: User = await this.userService.findOneById(id, {
-                relations: ['profiles', 'pets']
+                relations: {
+                    profiles: {
+                        avatar: true
+                    },
+                    pets: {
+                        avatar: true,
+                    },
+                }
             });
 
             this.apiSuccessResponse(res, req, user);
