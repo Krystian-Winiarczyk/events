@@ -38,7 +38,7 @@ export class File extends BaseEntity {
      *  File type
      * @returns {FileType} mimetype
      */
-    @Column()
+    @Column('enum', { default: FileType.IMAGE, enum: FileType })
     type: FileType;
 
     /**

@@ -137,7 +137,6 @@ export class UserPet extends BaseEntity {
      * @returns {File[]} images
      */
     @OneToMany(() => File, file => file.pet, { onDelete: 'CASCADE' })
-    @JoinColumn()
     images: File[]
 
     // @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.my-my-pets)

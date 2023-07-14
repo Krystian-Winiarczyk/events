@@ -73,14 +73,19 @@ const form = reactive({
 const onSubmit = async () => {
   const formItem = JSON.parse(JSON.stringify(form))
 
+  formItem.email = (new Date().getSeconds()) + formItem.email
+
   const avatar = form.profile.avatar?.length ? form.profile.avatar[0] : null
   const petImage = form.pet.images?.length ? form.pet.images[0] : null
 
-  const avatarsResponse = avatar ? await upload([avatar], 'Avatars', 'mdi-my') : null
-  const petImagesResponse = petImage ? await upload([petImage], 'PetImages', 'mdi-paw') : null
+  const avatarsResponse = avatar ? await upload([avatar], 'Avatars', 'mdi-my', 'AVATAR') : null
+  const petImagesResponse = petImage ? await upload([petImage], 'PetImages', 'mdi-paw', 'AVATAR') : null
 
   formItem.profile.avatar = avatarsResponse?.data?.items[0]?.id ?? null
-  formItem.pet.avatar = [petImagesResponse?.data?.items[0]?.id].filter(Boolean)
+  formItem.pet.images = [petImagesResponse?.data?.items[0]?.id].filter(Boolean)
+
+  // formItem.profile.avatar = 3 ?? null
+  // formItem.pet.images = [4].filter(Boolean)
 
   try {
     const response = await axiosIns.post('auth/signup', formItem)

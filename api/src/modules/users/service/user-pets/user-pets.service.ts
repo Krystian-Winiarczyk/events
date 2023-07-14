@@ -16,31 +16,16 @@ export class UserPetsService extends BaseService<UserPet> {
     }
 
     async create(createPetDto: CreateUserPetDto): Promise<UserPet> {
-        const petPayload = createPetDto
-        delete petPayload.images
-
         const newPet: UserPet = this.petRepository.create({
                 ...createPetDto,
                 // images: createPetDto.images?.length ? createPetDto.images : null,
                 user: <any> createPetDto.user ?? null,
             })
 
-        const createdPet: UserPet = await this.petRepository.save(newPet);
-
         if (createPetDto.images?.length) {
-            const filePromises = createPetDto.images.map(async (fileId) => {
-                const file = await this.fileRepository.findOne(fileId);
-                if (file) {
-                    file.pet = createdPet;
-                    return await this.fileRepository.save(file);
-                }
-            });
-
-            const createdFiles = await Promise.all(filePromises);
-
-            createdPet.images = createdFiles.filter((file) => file);
+            newPet.images = createPetDto.images.map(id => ({id}));
         }
 
-        return createdPet
+        return await this.petRepository.save(newPet);
     }
 }
