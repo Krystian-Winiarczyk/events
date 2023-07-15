@@ -32,39 +32,33 @@
     </VCard>
     <!--    END::Tob Banner    -->
 
-    <VTimeline class="basic-timeline">
+    <VTimeline
+      side="end"
+      align="start"
+      line-inset="8"
+      truncate-line="both"
+      density="compact"
+    >
       <VTimelineItem
-        class="basic-timeline-item"
-        small
-        left
-        inverted
+        v-for="i in 10"
+        :key="i"
+        dot-color="error"
+        size="x-small"
       >
-        <template #default>
-          <h3 class="title">
-            Event Title
-          </h3>
-          <p>Event description</p>
-        </template>
-        <template #opposite>
-          <p>Event date</p>
-        </template>
-      </VTimelineItem>
+        <!-- 👉 Header -->
+        <VImg
+          src="https://cdn.pixabay.com/photo/2018/01/05/19/20/tree-3063715_960_720.jpg"
+          class="w-100 rounded shadow mb-2"
+        />
 
-      <VTimelineItem
-        class="basic-timeline-item"
-        small
-        left
-        inverted
-      >
-        <template #default>
-          <h3 class="title">
-            Another Event
-          </h3>
-          <p>Another event description</p>
-        </template>
-        <template #opposite>
-          <p>Another event date</p>
-        </template>
+        <!-- 👉 Content -->
+        <p class="app-timeline-text mb-1">
+          <span>You have to balance, and receive faith by your failing. Suffering is the only satori, the only guarantee of extend.</span>
+        </p>
+
+        <p class="app-timeline-meta">
+          Jun 15, 2015 6:30 AM
+        </p>
       </VTimelineItem>
     </VTimeline>
   </div>
