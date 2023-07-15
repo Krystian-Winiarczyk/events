@@ -78,6 +78,8 @@ export class AuthController extends BaseController {
                     req.user.refreshToken,
                 );
 
+            console.log(tokens.refreshToken)
+
             this.apiSuccessResponse(res, req, tokens);
         } catch (error) {
             this.apiErrorResponse(res, req, error);

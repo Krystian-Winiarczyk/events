@@ -16,23 +16,7 @@ const props = defineProps<Props>()
     <VCard v-if="props.userData">
       <VCardText class="text-center pt-15">
         <!-- 👉 Avatar -->
-        <VAvatar
-          rounded
-          :size="120"
-          :color="!props.userData.primaryProfile.avatar ? 'primary' : undefined"
-          :variant="!props.userData.primaryProfile.avatar ? 'tonal' : undefined"
-        >
-          <VImg
-            v-if="props.userData.primaryProfile.avatar"
-            :src="props.userData.primaryProfile.avatar"
-          />
-          <span
-            v-else
-            class="text-5xl font-weight-medium mr-1"
-          >
-            {{ avatarText(props.userData.primaryProfile.name) }}
-          </span>
-        </VAvatar>
+        <Avatar :item="props.userData.primaryProfile" :size="130" rounded />
 
         <!-- 👉 User fullName -->
         <h6 class="text-h6 mt-4">

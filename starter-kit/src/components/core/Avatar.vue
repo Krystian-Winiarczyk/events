@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import type { UserPet, UserProfile } from '@/globals/types/types'
+import {imagePath} from "@core/utils/formatters";
 
 interface Props {
   item: UserProfile | UserPet
-  size: number
+  size?: number
+  rounded?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 80,
+  rounded: false,
 })
 
 const avatarNoImageLetters = computed(() => {
@@ -15,14 +18,15 @@ const avatarNoImageLetters = computed(() => {
 
   return `${firstName.slice(0, 1)}${lastName.slice(0, 1)}`.trim()
 })
+
 </script>
 
 <template>
   <div>
     <VAvatar
-      :image="item.avatar"
+      :image="imagePath(item.avatar)"
       variant="tonal"
-      class="cursor-pointer"
+      :rounded="rounded"
       color="primary"
       :size="size"
     >

@@ -26,8 +26,8 @@ export interface UserProfile {
   instagramUrl: string
   tiktokUrl: string
   twitterUrl: string
-  user: User
-  avatar: string
+  user?: User
+  avatar: File | string | any
 }
 
 export interface UserPet {
@@ -49,5 +49,7 @@ export interface UserPet {
   tiktokUrl: string
   twitterUrl: string
   user?: User
-  images: string[]
+  avatar: File | string | any
+  images: File[] | string[] | any[]
 }
+

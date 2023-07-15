@@ -1,4 +1,6 @@
 {
+  "Website": "Strona internetowa",
+  "FirstName": "Imię",
   "About": "O mnie",
   "MyData": "Moje dane",
   "MyProfiles":"Moje profile",
@@ -49,6 +51,8 @@
 
   "Pet": "Pupila | Pupile",
   "Favorite": "Pupil",
+  "Breeding": "Hodowla",
+  "Weight": "Waga",
   "Breed": "Rasa",
   "Color": "Umaszczenie",
   "Age": "Wiek",

@@ -6,6 +6,7 @@ import { VCard, VCol, VList, VListItem, VRow } from 'vuetify/components'
 import type { UserPet } from '@/globals/types/types'
 import { GENDER, VIEW_TYPE } from '@/globals/enums/enums'
 import InformationChip from '@/views/InformationChip.vue'
+import {imagePath} from "@core/utils/formatters";
 
 interface Props {
   pets: UserPet[]
@@ -102,20 +103,20 @@ const openEditPet = (pet?: UserPet): void => {
           v-for="(pet, petIndex) in pets"
           :key="`pet_${pet.name}`"
           sm="12"
-          md="6"
+          md="4"
           @click="petDetails = pet"
         >
           <template #prepend>
             <Avatar
               :item="pet"
-              :size="50"
+              :size="80"
             />
           </template>
           <Component
             :is="getViewTypeContainerItemContent"
-            class="d-flex flex-column justify-end"
+            class="d-flex flex-column justify-end img-thumbnail"
             rounded="lg"
-            :image="images[petIndex]"
+            :image="imagePath(pet.avatar)"
             height="300"
           >
             <!--    START::Content    -->
@@ -173,7 +174,7 @@ const openEditPet = (pet?: UserPet): void => {
                     :size="viewType === VIEW_TYPE.CARD ? 'small' : 'x-small'"
                     :value="`${pet.weight} KG`"
                     icon="mdi-weight"
-                    tooltip="Waga"
+                    :tooltip="$t('Weight')"
                   />
                   <!-- Height -->
                   <InformationChip

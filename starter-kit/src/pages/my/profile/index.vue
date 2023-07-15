@@ -5,6 +5,7 @@ import BioPanel from '@/views/pages/my/profile/BioPanel.vue'
 import PetsTab from '@/views/pages/my/profile/PetsTab.vue'
 import type { UserPet } from '@/globals/types/types'
 import { defaultPet } from '@/globals/defaults'
+import PetForm from '@/views/pages/forms/PetForm.vue'
 
 const { user } = storeToRefs(useAuthStore())
 
@@ -81,25 +82,34 @@ const openEditPet = (pet: UserPet): void => {
     <!-- Pet Modal -->
     <VDialog
       v-model="isEditPetDialogVisible"
-      max-width="600"
+      fullscreen
+      :scrim="false"
+      transition="dialog-bottom-transition"
     >
-      <!-- Dialog Activator -->
-      <template #activator="{ props }">
-        <VBtn v-bind="props">
-          Open Dialog
-        </VBtn>
-      </template>
-
       <!-- Dialog Content -->
-      <VCard title="User Profile">
-        <DialogCloseBtn
-          variant="text"
-          size="small"
-          @click="isEditPetDialogVisible = false"
-        />
+      <VCard>
+        <div>
+          <VToolbar color="primary">
+            <VBtn
+              icon
+              variant="plain"
+              @click="isEditPetDialogVisible = false"
+            >
+              <VIcon
+                color="white"
+                icon="mdi-close"
+              />
+            </VBtn>
 
+            <VToolbarTitle>Settings</VToolbarTitle>
+          </VToolbar>
+        </div>
         <VCardText>
-          {{ editedPet }}
+          <PetForm
+            v-if="isEditPetDialogVisible"
+            :default-pet="editedPet"
+            @close="isEditPetDialogVisible = false"
+          />
         </VCardText>
 
         <VCardActions>

@@ -10,6 +10,14 @@ export const avatarText = (value: string) => {
   return nameArray.map(word => word.charAt(0).toUpperCase()).join('')
 }
 
+export const imagePath = (image: any) => {
+  if (!image)
+    return ''
+
+  if (image?.filename)
+    return `http://localhost:3001/images/${image.filename}`
+}
+
 // TODO: Try to implement this: https://twitter.com/fireship_dev/status/1565424801216311297
 export const kFormatter = (num: number) => {
   const regex = /\B(?=(\d{3})+(?!\d))/g

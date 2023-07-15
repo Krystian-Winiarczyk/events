@@ -27,7 +27,7 @@ export class AuthService {
 
     protected async updateRefreshToken(userId: number, refreshToken: string) {
         const hashedRefreshToken = await this.hashData(refreshToken);
-        await this.usersService.updateOneById(userId, {
+        return await this.usersService.updateOneById(userId, {
             refreshToken: hashedRefreshToken,
         });
     }
@@ -51,7 +51,15 @@ export class AuthService {
     }
 
     async refreshTokens(userId: number, refreshToken: string) {
-        const user: User = await this.usersService.findOneById(userId, { relations: ['profiles', 'pets'] });
+        const user: User = await this.usersService.findOneById(userId, { relations: {
+                profiles: {
+                    avatar: true
+                },
+                pets: {
+                    avatar: true,
+                    images: true,
+                },
+            } });
 
         if (!user || !user.refreshToken)
             throw new ForbiddenException('Access Denied');
@@ -65,14 +73,25 @@ export class AuthService {
 
         const tokens = await this.getTokens({ ...user });
         await this.updateRefreshToken(user.id, tokens.refreshToken);
-        return { ...tokens, ...user };
+
+        delete user.refreshToken
+        const resp = { ...tokens, ...user }
+        return resp;
     }
 
     async signIn(userData: LoginUserDto) {
         // Check if my exists
         const user: User = await this.usersService.findOneBy({
             where: { email: userData.email },
-            relations: ['pets', 'profiles'],
+            relations: {
+                profiles: {
+                    avatar: true
+                },
+                pets: {
+                    avatar: true,
+                    images: true,
+                },
+            },
             select: [
                 'id',
                 'email',
