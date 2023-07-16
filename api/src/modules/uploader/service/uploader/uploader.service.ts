@@ -16,10 +16,11 @@ export class UploaderService {
 
         files.forEach(file => {
             const fileEntity = new File()
+            console.log(file)
 
             fileEntity.type = type
             fileEntity.orginalName = file.originalname
-            fileEntity.path = file.path
+            fileEntity.path = file.path || '-'
             fileEntity.mimetype = file.mimetype
             fileEntity.filename = file.filename
 

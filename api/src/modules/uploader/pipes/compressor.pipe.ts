@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as sharp from 'sharp';
 import {REQUEST} from "@nestjs/core";
 import {FileType} from "../../../constants/FileType";
+import {Request} from "express";
 
 @Injectable({ scope: Scope.REQUEST })
 export class CompressorPipe implements PipeTransform<Express.Multer.File, Promise<string>> {
@@ -11,12 +12,16 @@ export class CompressorPipe implements PipeTransform<Express.Multer.File, Promis
     // @ts-ignore
     async transform(images: Express.Multer.File[]) {
         return Promise.all(images.map(async (image: Express.Multer.File) => {
-            const originalName = path.parse(image.originalname).name;
-            const filename = Date.now() + '-' + originalName + '.webp';
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const originalName = String(path.parse(image.originalname).name).replaceAll(' ', '_');
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const filename = (Date.now() + '-' + originalName + '.webp').replaceAll(' ', '_');
 
             await sharp(image.buffer)
                 .resize({
-                    width: this.request.body['type'] === FileType.AVATAR ? 1000 : 2500,
+                    width: this.request.body['type'] === FileType.AVATAR ? 768 : 2500,
                     fit: 'contain',
                     withoutEnlargement: true
                 })
@@ -27,6 +32,7 @@ export class CompressorPipe implements PipeTransform<Express.Multer.File, Promis
 
             return {
                 ...imageData,
+                path: path.join('uploads', filename),
                 originalName,
                 filename,
             };

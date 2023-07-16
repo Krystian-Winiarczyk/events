@@ -55,14 +55,12 @@ export class UploaderController extends BaseController {
         @UploadedFiles(CompressorPipe) files: any,
         @Body('type') type: FileType,
     ) {
-        console.log(files)
-        return res.status(200).json(files)
-        // try {
-        //     const uploadedFiles: File[] = await this.uploaderService.createFiles(files, type)
-        //     this.apiSuccessResponse(res, req, uploadedFiles)
-        // } catch (err) {
-        //     this.apiErrorResponse(res, req, err)
-        // }
+        try {
+            const uploadedFiles: File[] = await this.uploaderService.createFiles(files, type)
+            this.apiSuccessResponse(res, req, uploadedFiles)
+        } catch (err) {
+            this.apiErrorResponse(res, req, err)
+        }
     }
 
 }
