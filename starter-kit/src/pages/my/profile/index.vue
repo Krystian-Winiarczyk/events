@@ -95,21 +95,6 @@ const openEditPet = (pet: UserPet): void => {
           :default-pet="editedPet"
           @close="isEditPetDialogVisible = false"
         />
-        <VCardActions>
-          <VSpacer />
-          <VBtn
-            color="error"
-            @click="isEditPetDialogVisible = false"
-          >
-            Close
-          </VBtn>
-          <VBtn
-            color="success"
-            @click="petFormRef.onSubmit; isEditPetDialogVisible = false;"
-          >
-            Save
-          </VBtn>
-        </VCardActions>
       </VCard>
     </VDialog>
   </VRow>

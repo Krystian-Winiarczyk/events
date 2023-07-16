@@ -6,7 +6,7 @@ import type { UserPet } from '@/globals/types/types'
 import { imagePath } from '@core/utils/formatters'
 import { GENDER } from '@/globals/enums/enums'
 import { useFilesUploader } from '@core/composable/useFilesUploader'
-import axiosIns from "@axios";
+import axiosIns from '@axios'
 
 interface Props {
   defaultPet?: UserPet
@@ -107,7 +107,7 @@ onMounted(() => {
         </VToolbarItems>
       </VToolbar>
     </div>
-    <VForm class="pet-form d-flex justify-center">
+    <VForm class="pet-form d-flex justify-center mx-10">
       <VRow>
         <!-- Data -->
         <VCol
@@ -371,17 +371,36 @@ onMounted(() => {
               cols="12"
               class="d-flex"
             >
-              <div>
-                <VAvatar
+              <div class="d-flex flex-wrap">
+                <div
                   v-for="(image, index) in pet.images"
                   :key="`pet_image_${index}`"
-                  :image="imagePreviewSrc(image)"
-                  variant="tonal"
-                  class="mr-1 mb-1"
-                  color="primary"
-                  rounded
-                  size="160"
-                />
+                  class="position-relative mr-1 mb-1 hover-next"
+                  @click="pet.images.splice(index, 1)"
+                >
+                  <VAvatar
+                    :image="imagePreviewSrc(image)"
+                    variant="tonal"
+                    color="primary"
+                    rounded
+                    size="160"
+                  />
+
+                  <div
+                    class="display-image position-absolute h-100 w-100 rounded align-center d-flex justify-center cursor-pointer expand-transition"
+                    style="top: 0; left: 0; opacity: 0"
+                  >
+                    <div
+                      class="position-absolute h-100 w-100 bg-primary rounded"
+                      style="top: 0; left: 0; opacity: .7"
+                    />
+                    <VIcon
+                      icon="mdi-trash"
+                      class="text-white"
+                      size="35"
+                    />
+                  </div>
+                </div>
                 <VFileInput
                   ref="petImageUploadRef"
                   class="d-none"
@@ -430,5 +449,15 @@ onMounted(() => {
       padding-top: 0px !important;
       padding-bottom: 0px !important;
     }
+
+  .hover-next {
+    .display-image {
+      transition: all .25s;
+    }
+
+    &:hover .display-image {
+      opacity: 1 !important;
+    }
+  }
 }
 </style>

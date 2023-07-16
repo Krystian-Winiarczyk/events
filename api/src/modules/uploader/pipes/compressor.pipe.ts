@@ -22,7 +22,6 @@ export class CompressorPipe implements PipeTransform<Express.Multer.File, Promis
             await sharp(image.buffer)
                 .resize({
                     width: this.request.body['type'] === FileType.AVATAR ? 768 : 2500,
-                    fit: 'contain',
                     withoutEnlargement: true
                 })
                 .webp({ effort: 3, quality: 70 })
