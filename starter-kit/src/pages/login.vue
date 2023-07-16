@@ -6,6 +6,7 @@ import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 import { requiredValidator } from '@validators'
 import { useAuthStore } from '@/store/auth'
+import { useToastStore } from '@/store/toast'
 
 const authStore = useAuthStore()
 
@@ -19,8 +20,9 @@ const form = ref({
 
 const onSubmit = () => {
   loginFormRef.value?.validate().then(async (valid: { valid: any }) => {
-    if (valid.valid)
+    if (valid.valid) {
       await authStore.login(form.value.email, form.value.password)
+    }
   })
 }
 
@@ -37,7 +39,10 @@ const isPasswordVisible = ref(false)
       <VCardItem class="justify-center">
         <template #prepend>
           <div>
-            <VNodeRenderer :nodes="themeConfig.app.logo" style="max-height: 100px" />
+            <VNodeRenderer
+              :nodes="themeConfig.app.logo"
+              style="max-height: 100px"
+            />
           </div>
         </template>
       </VCardItem>
@@ -83,7 +88,7 @@ const isPasswordVisible = ref(false)
 
               <!-- remember me checkbox -->
               <div class="d-flex align-center justify-space-between flex-wrap mt-1 mb-4">
-                <div></div>
+                <div />
                 <RouterLink
                   class="text-primary ms-2 mb-1"
                   :to="{ name: 'index' }"

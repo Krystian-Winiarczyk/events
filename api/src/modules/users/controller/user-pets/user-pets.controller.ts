@@ -10,7 +10,7 @@ import { CreateUserPetDto, UpdateUserPetDto } from '../../dtos/UserPet.dto';
 
 import { UserPetsService } from '../../service/user-pets/user-pets.service';
 
-@Controller('api/my/pets')
+@Controller('api/users/pets')
 // @UseGuards(JwtAuthGuard)
 export class UserPetsController extends BaseController {
     constructor(private petService: UserPetsService) {

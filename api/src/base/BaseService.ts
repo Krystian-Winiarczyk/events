@@ -62,10 +62,27 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
         });
     }
 
-    async updateOneById(id: number, updateDto: BaseDto): Promise<UpdateResult> {
+    async updateOneById(id: number, updateDto: any): Promise<UpdateResult> {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        return await this.repository.update({ id }, { ...updateDto });
+        const item = await this.repository.findOne({ where: { id } })
+        Object.assign(item, updateDto)
+
+        if (updateDto?.images?.length) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            item.images = updateDto.images.map(id => ({id}));
+        }
+
+        if (updateDto?.avatar) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            item.avatar = { id: updateDto.avatar } as File;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return await this.repository.save(item);
     }
 
     async create(createDto: any): Promise<T> {

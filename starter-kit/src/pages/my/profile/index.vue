@@ -10,6 +10,7 @@ import PetForm from '@/views/pages/forms/PetForm.vue'
 const { user } = storeToRefs(useAuthStore())
 
 const userTab = ref('')
+const petFormRef = ref()
 
 const tabs = [
   { icon: 'mdi-paw', title: 'Pet' },
@@ -88,30 +89,12 @@ const openEditPet = (pet: UserPet): void => {
     >
       <!-- Dialog Content -->
       <VCard>
-        <div>
-          <VToolbar color="primary">
-            <VBtn
-              icon
-              variant="plain"
-              @click="isEditPetDialogVisible = false"
-            >
-              <VIcon
-                color="white"
-                icon="mdi-close"
-              />
-            </VBtn>
-
-            <VToolbarTitle>Settings</VToolbarTitle>
-          </VToolbar>
-        </div>
-        <VCardText>
-          <PetForm
-            v-if="isEditPetDialogVisible"
-            :default-pet="editedPet"
-            @close="isEditPetDialogVisible = false"
-          />
-        </VCardText>
-
+        <PetForm
+          v-if="isEditPetDialogVisible"
+          ref="petFormRef"
+          :default-pet="editedPet"
+          @close="isEditPetDialogVisible = false"
+        />
         <VCardActions>
           <VSpacer />
           <VBtn
@@ -122,7 +105,7 @@ const openEditPet = (pet: UserPet): void => {
           </VBtn>
           <VBtn
             color="success"
-            @click="isEditPetDialogVisible = false"
+            @click="petFormRef.onSubmit; isEditPetDialogVisible = false;"
           >
             Save
           </VBtn>

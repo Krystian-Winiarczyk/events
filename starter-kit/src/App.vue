@@ -4,6 +4,8 @@ import ScrollToTop from '@core/components/ScrollToTop.vue'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { hexToRgb } from '@layouts/utils'
 
+import { useToastStore } from '@/store/toast'
+
 const { syncInitialLoaderTheme, syncVuetifyThemeWithTheme: syncConfigThemeWithVuetifyTheme, isAppRtl, handleSkinChanges } = useThemeConfig()
 
 const { global } = useTheme()
@@ -12,6 +14,8 @@ const { global } = useTheme()
 syncInitialLoaderTheme()
 syncConfigThemeWithVuetifyTheme()
 handleSkinChanges()
+
+const { messages, clearMessage } = useToastStore()
 </script>
 
 <template>
@@ -21,6 +25,13 @@ handleSkinChanges()
       <RouterView />
       <ScrollToTop />
     </VApp>
+
+    <SnackbarQueue
+      :items="messages"
+      top
+      right
+      @remove="clearMessage"
+    />
   </VLocaleProvider>
 </template>
 

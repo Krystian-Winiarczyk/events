@@ -8,9 +8,11 @@ import signup2Ilustration from '@images/pages/ilustracja.png'
 // import PetList from '@/views/pages/auth/signup/PetList.vue'
 import Summary from '@/views/pages/auth/signup/Summary.vue'
 import { useFilesUploader } from '@core/composable/useFilesUploader'
-import axiosIns from '@axios'
+import { useAuthStore } from "@/store/auth";
 import PetListCard from '@/views/pages/auth/signup/PetListCard.vue'
 import ProfileListCard from '@/views/pages/auth/signup/ProfileListCard.vue'
+
+const authStore = useAuthStore()
 
 const { upload } = useFilesUploader()
 
@@ -89,7 +91,7 @@ const onSubmit = async () => {
   // formItem.pet.images = [4].filter(Boolean)
 
   try {
-    const response = await axiosIns.post('auth/signup', formItem)
+    await authStore.signup(formItem)
   } catch (err) {
     console.log(err)
   }
