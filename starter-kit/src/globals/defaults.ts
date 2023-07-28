@@ -1,5 +1,6 @@
-import type { UserPet } from '@/globals/types/types'
+import type {Competition, UserPet, UserProfile} from '@/globals/types/types'
 import { GENDER } from '@/globals/enums/enums'
+import {User} from "@/globals/types/types";
 
 export const defaultPet: UserPet = {
   name: '',
@@ -19,5 +20,30 @@ export const defaultPet: UserPet = {
   instagramUrl: '',
   tiktokUrl: '',
   twitterUrl: '',
+  avatar: '',
   images: [],
+}
+
+export const defaultProfile: UserProfile = {
+  name: '',
+  firstName: '',
+  lastName: '',
+  nickname: '',
+  gender: GENDER.MALE,
+  description: '',
+  birthDate: '',
+  isPrimary: false,
+  websiteUrl: '',
+  youtubeUrl: '',
+  facebookUrl: '',
+  instagramUrl: '',
+  tiktokUrl: '',
+  twitterUrl: '',
+  avatar: '',
+}
+
+export const defaultCompetition: Competition = {
+  name: '',
+  regulationUrl: '',
+  description: '',
 }

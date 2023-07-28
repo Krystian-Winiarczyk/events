@@ -30,7 +30,7 @@ const avatarNoImageLetters = computed(() => {
       color="primary"
       :size="size"
     >
-      <span>{{ avatarNoImageLetters }}</span>
+      <span style="font-size: 1rem">{{ avatarNoImageLetters }}</span>
     </VAvatar>
   </div>
 </template>

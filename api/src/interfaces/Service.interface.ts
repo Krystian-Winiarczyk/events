@@ -17,7 +17,7 @@ export interface ServiceInterface<E extends BaseEntity> {
     relations?: FindOptionsRelations<E> | FindOptionsRelationByString,
     where?: FindOptionsWhere<E>[] | FindOptionsWhere<E>,
     select?: FindOptionsSelect<E> | FindOptionsSelectByString<E>,
-  }): Promise<E[]>;
+  }): Promise<[E[], number]>;
 
 
   findOneBy(params: {

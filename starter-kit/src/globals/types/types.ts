@@ -1,6 +1,7 @@
 import type { GENDER } from '@/globals/enums/enums'
 
 export interface User {
+  id?: number
   email: string
   role: string
   pets: UserPet[]
@@ -11,6 +12,7 @@ export interface User {
 }
 
 export interface UserProfile {
+  id?: number
   name: string
 
   firstName: string
@@ -31,6 +33,7 @@ export interface UserProfile {
 }
 
 export interface UserPet {
+  id?: number
   name: string
   passportNumber: string
   breed: string
@@ -53,3 +56,22 @@ export interface UserPet {
   images: File[] | string[] | any[]
 }
 
+// Competitions
+export interface Competition {
+  id?: number
+  name: string
+  description: string
+  regulationUrl: string
+}
+
+export interface Event {
+  id?: number
+  name: string
+  description: string
+
+  locationCountry: string
+  locationCity: string
+  locationPostalCode: string
+  locationStreet: string
+  locationNumber: string
+}

@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import {UserPet, UserProfile} from "@/globals/types/types";
+import type { UserPet, UserProfile } from '@/globals/types/types'
 
 interface Props {
   item: UserProfile | UserPet
+  size?: number
+  color?: string
+  justify?: string
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  size: 40,
+  color: 'secondary',
+  justify: 'justify-center',
+})
 
 const itemMediaObject = computed(() => {
   const {
@@ -16,8 +23,6 @@ const itemMediaObject = computed(() => {
     tiktokUrl,
     twitterUrl,
   } = props.item
-
-  console.log(props.item)
 
   return {
     websiteUrl,
@@ -50,16 +55,17 @@ const openLink = (url: string) => window.open(url, '_blank')
 </script>
 
 <template>
-  <div class="d-flex justify-center mt-3">
+  <div class="d-flex" :class="[justify]">
     <div
       v-for="key in Object.keys(itemMediaObject)"
       :key="`media_${key}`"
-      class="mr-3 cursor-pointer"
+      class="mr-2 cursor-pointer"
       :class="{ 'd-none': !itemMediaObject[key] }"
     >
       <VAvatar
+        :size="size"
         :icon="styleByMediaType(<string> key)"
-        color="secondary"
+        :color="color"
         rounded="sm"
         variant="tonal"
         class="cursor-pointer"

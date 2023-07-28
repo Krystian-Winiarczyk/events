@@ -10,18 +10,6 @@ import {File} from "../../../../typeorm/entities/File";
 @Injectable()
 export class UserProfilesService extends BaseService<UserProfile>{
     constructor(@InjectRepository(UserProfile) private userProfileRepository: Repository<UserProfile>) {
-        super(userProfileRepository)
-    }
-    async create(profileData: CreateUserProfileDto): Promise<UserProfile> {
-        const newUser: UserProfile = this.userProfileRepository.create({
-            ...profileData,
-            user: <any> profileData?.user ?? null,
-        } as UserProfile)
-
-        if (profileData.avatar) {
-            newUser.avatar = { id: profileData.avatar } as File
-        }
-
-        return await this.userProfileRepository.save(newUser);
+        super(userProfileRepository, { avatar: true })
     }
 }

@@ -27,7 +27,7 @@ export class AuthController extends BaseController {
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            this.apiSuccessResponse(res, req, req?.user);
+            this.apiSuccessResponse({ res, req, data: req?.user });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -43,7 +43,7 @@ export class AuthController extends BaseController {
         try {
             const user: User = await this.authService.signIn(loginUser);
 
-            this.apiSuccessResponse(res, req, user);
+            this.apiSuccessResponse({ res, req, data: user });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -58,7 +58,7 @@ export class AuthController extends BaseController {
         try {
             const user: User = await this.authService.signUp(signupData);
 
-            this.apiSuccessResponse(res, req, user);
+            this.apiSuccessResponse({ res, req, data: user });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -78,9 +78,7 @@ export class AuthController extends BaseController {
                     req.user.refreshToken,
                 );
 
-            console.log(tokens.refreshToken)
-
-            this.apiSuccessResponse(res, req, tokens);
+            this.apiSuccessResponse({ res, req, data: tokens });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }

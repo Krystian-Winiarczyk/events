@@ -6,14 +6,17 @@ import { VCard, VCol, VList, VListItem, VRow } from 'vuetify/components'
 import type { UserPet } from '@/globals/types/types'
 import { GENDER, VIEW_TYPE } from '@/globals/enums/enums'
 import InformationChip from '@/views/InformationChip.vue'
-import {imagePath} from "@core/utils/formatters";
+import { imagePath } from '@core/utils/formatters'
 
 interface Props {
   pets: UserPet[]
+  enableEdit?: boolean
+  selectedItem?: UserPet | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   pets: () => [],
+  enableEdit: true,
 })
 
 const emits = defineEmits(['openEdit'])
@@ -45,6 +48,11 @@ const getViewTypeContainerItemContent = computed(() => {
 const openEditPet = (pet?: UserPet): void => {
   emits('openEdit', pet)
 }
+
+onMounted(() => {
+  if (props.selectedItem)
+    petDetails.value = props.selectedItem
+})
 </script>
 
 <template>
@@ -55,6 +63,7 @@ const openEditPet = (pet?: UserPet): void => {
         class="d-flex justify-space-between mb-2"
       >
         <VBtn
+          v-if="enableEdit"
           color="primary"
           size="small"
           class="me-1"
@@ -65,6 +74,7 @@ const openEditPet = (pet?: UserPet): void => {
             size="20"
           />
         </VBtn>
+        <div v-else />
         <div class="d-flex justify-end">
           <VBtn
             :color="viewType === VIEW_TYPE.CARD ? 'primary' : ''"
@@ -103,7 +113,8 @@ const openEditPet = (pet?: UserPet): void => {
           v-for="(pet, petIndex) in pets"
           :key="`pet_${pet.name}`"
           sm="12"
-          md="4"
+          md="6"
+          lg="4"
           @click="petDetails = pet"
         >
           <template #prepend>
@@ -119,6 +130,26 @@ const openEditPet = (pet?: UserPet): void => {
             :image="imagePath(pet.avatar)"
             height="300"
           >
+            <template #image>
+              <VImg
+                v-if="pet.avatar"
+                :src="imagePath(pet.avatar)"
+                cover
+              />
+              <div
+                v-else
+                class="d-flex flex-grow-1 w-100 align-center justify-center text-primary"
+                style="font-size: 2rem"
+              >
+                <span v-if="pet.name">
+                  {{ pet.name[0] }}
+                </span>
+                <VIcon
+                  v-else
+                  icon="mdi-paw"
+                />
+              </div>
+            </template>
             <!--    START::Content    -->
             <div
               class="px-4 py-3 d-flex flex-row align-center justify-space-between gap-2"
@@ -217,6 +248,7 @@ const openEditPet = (pet?: UserPet): void => {
               <!--    END::Owner Name & UserPet Name    -->
 
               <VBtn
+                v-if="enableEdit"
                 icon
                 size="small"
                 variant="plain"

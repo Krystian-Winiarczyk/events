@@ -50,15 +50,21 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const logout = async () => {
-    await axiosIns.post('/auth/logout')
+    try {
+      await axiosIns.get('/auth/logout')
 
-    stopRefreshTokenTimer()
+      stopRefreshTokenTimer()
 
-    user.value = null
-    userRefreshToken.value = ''
-    loggedIn.value = false
+      await router.push('/login')
 
-    await router.push('/login')
+      user.value = null
+      userRefreshToken.value = ''
+      loggedIn.value = false
+
+      toastStore.showMessage('success', 'Za chwilę zostaniesz przeniesiony do panelu logowania', 'Pomyślnie wylogowano')
+    } catch (err) {
+      toastStore.showMessage('error', 'Napotkano nieznany problem podczas logowania spróbuj ponownie', 'Problem z logowaniem')
+    }
   }
 
   const login = async (email: string, password: string) => {
@@ -90,7 +96,6 @@ export const useAuthStore = defineStore('auth', () => {
       }, 1000)
     }
     catch (err) {
-      console.log(err)
       toastStore.showMessage('error', 'Napotkano nieznany problem podczas logowania spróbuj ponownie', 'Problem z logowaniem')
     }
   }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { avatarText } from '../../../../@core/utils/formatters'
+import {avatarText, formatDate} from '@core/utils/formatters'
 import type { User } from '@/globals/types/types'
 import SocialMediaList from '@/views/SocialMediaList.vue'
 
@@ -108,7 +108,7 @@ const props = defineProps<Props>()
           <VListItem>
             <VListItemTitle class="text-sm">
               <span class="font-weight-medium mr-1">{{ $t('Birthday') }}:</span>
-              <span class="text-body-2">{{ props.userData.primaryProfile.birthDate }}</span>
+              <span class="text-body-2">{{ formatDate(props.userData.primaryProfile.birthDate) }}</span>
             </VListItemTitle>
           </VListItem>
 
@@ -129,23 +129,7 @@ const props = defineProps<Props>()
 
         <VDivider class="mt-4" />
 
-        <SocialMediaList :item="userData.primaryProfile" />
-      </VCardText>
-
-      <!-- 👉 Edit and Suspend button -->
-      <VCardText class="d-flex justify-center">
-        <VBtn
-          variant="elevated"
-          class="me-4"
-        >
-          Edit
-        </VBtn>
-        <VBtn
-          variant="outlined"
-          color="error"
-        >
-          Suspend
-        </VBtn>
+        <SocialMediaList class="mt-3" :item="userData.primaryProfile" />
       </VCardText>
     </VCard>
   </VCol>

@@ -8,12 +8,11 @@ import {Role} from "../../../../constants/Role";
 import {UpdateResult} from "typeorm";
 import {UserProfile} from "../../../../typeorm/entities/UserProfile";
 
-@Controller('api/users/profiles')
+@Controller('api/user/profiles')
 export class UserProfilesController extends BaseController {
     constructor(private userProfileService: UserProfilesService) {
         super();
     }
-
     @Get()
     async getAll(
         @Req() req: Request,
@@ -23,13 +22,18 @@ export class UserProfilesController extends BaseController {
         @Query('q') q,
     ) {
         try {
-            const userProfiles: UserProfile[] = await this.userProfileService.findAll({
+            const [userProfiles, total]: [ UserProfile[], number ] = await this.userProfileService.findAll({
                 pagination: this.paginationFragment(limit, page),
-                relations: ['user'],
+                relations: {
+                    user: {
+                        profiles: { avatar: true },
+                    },
+                    avatar: true
+                },
                 where: this.resolveFilters(q),
             });
 
-            this.apiSuccessResponse(res, req, userProfiles);
+            this.apiSuccessResponse({ res, req, data: userProfiles, total });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -46,7 +50,7 @@ export class UserProfilesController extends BaseController {
                 relations: ['user']
             });
 
-            this.apiSuccessResponse(res, req, userProfile);
+            this.apiSuccessResponse({ res, req, data: userProfile });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -62,7 +66,9 @@ export class UserProfilesController extends BaseController {
         try {
             const userProfile: UserProfile = await this.userProfileService.create(createDto);
 
-            this.apiSuccessResponse(res, req, userProfile);
+            const toReturnObject = await this.userProfileService.findOneById(userProfile.id, {})
+
+            this.apiSuccessResponse({ res, req, data: toReturnObject });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -77,12 +83,14 @@ export class UserProfilesController extends BaseController {
         @Body() updateDto: UpdateUserProfileDto,
     ) {
         try {
-            const updateResult: UpdateResult = await this.userProfileService.updateOneById(
+            await this.userProfileService.updateOneById(
                 id,
                 updateDto,
             );
 
-            this.apiSuccessResponse(res, req, updateResult);
+            const toReturnObject = await this.userProfileService.findOneById(id, {})
+
+            this.apiSuccessResponse({ res, req, data: toReturnObject });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -99,7 +107,7 @@ export class UserProfilesController extends BaseController {
             const deleteResult: UpdateResult =
                 await this.userProfileService.deleteSoftOneById(id);
 
-            this.apiSuccessResponse(res, req, deleteResult);
+            this.apiSuccessResponse({ res, req, data: deleteResult });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }

@@ -9,4 +9,9 @@ enum VIEW_TYPE {
   CARD = 'CARD'
 }
 
-export { GENDER, VIEW_TYPE }
+enum ROLE {
+  USER = 'USER',
+  ADMIN = 'ADMIN'
+}
+
+export { GENDER, VIEW_TYPE, ROLE }

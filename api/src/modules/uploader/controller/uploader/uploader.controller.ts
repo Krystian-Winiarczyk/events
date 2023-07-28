@@ -57,7 +57,7 @@ export class UploaderController extends BaseController {
     ) {
         try {
             const uploadedFiles: File[] = await this.uploaderService.createFiles(files, type)
-            this.apiSuccessResponse(res, req, uploadedFiles)
+            this.apiSuccessResponse({ res, req, data: uploadedFiles })
         } catch (err) {
             this.apiErrorResponse(res, req, err)
         }

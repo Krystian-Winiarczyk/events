@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/store/auth'
+import { imagePath } from '@core/utils/formatters'
+
+const { user } = storeToRefs(useAuthStore())
+
+const authStore = useAuthStore()
 </script>
 
 <template>
@@ -10,116 +16,79 @@
     bordered
     color="success"
   >
-<!--    <VAvatar-->
-<!--      class="cursor-pointer"-->
-<!--      color="primary"-->
-<!--      variant="tonal"-->
-<!--    >-->
-<!--      <VImg :src="my.profiles[0].avatar" />-->
+      <!-- SECTION Menu -->
+      <VMenu
+        activator="parent"
+        width="230"
+        location="bottom end"
+        offset="14px"
+      >
+        <template #activator="{ props }">
+          <Avatar class="cursor-pointer" :size="40" :item="user.primaryProfile" v-bind="props" />
+        </template>
+        <VList>
+          <!-- 👉 User Avatar & Name -->
+          <VListItem @click="$router.push({ path: '/my/profile' })">
+            <template #prepend>
+              <VListItemAction start>
+                <VBadge
+                  dot
+                  location="bottom right"
+                  offset-x="3"
+                  offset-y="3"
+                  color="success"
+                >
+                  <Avatar
+                    :size="35"
+                    color="primary"
+                    variant="tonal"
+                    :item="user.primaryProfile"
+                  >
+                    <VImg :src="imagePath(user.primaryProfile.avatar)" />
+                  </Avatar>
+                </VBadge>
+              </VListItemAction>
+            </template>
 
-<!--      &lt;!&ndash; SECTION Menu &ndash;&gt;-->
-<!--      <VMenu-->
-<!--        activator="parent"-->
-<!--        width="230"-->
-<!--        location="bottom end"-->
-<!--        offset="14px"-->
-<!--      >-->
-<!--        <VList>-->
-<!--          &lt;!&ndash; 👉 User Avatar & Name &ndash;&gt;-->
-<!--          <VListItem @click="$router.push({ path: '/my/my' })">-->
-<!--            <template #prepend>-->
-<!--              <VListItemAction start>-->
-<!--                <VBadge-->
-<!--                  dot-->
-<!--                  location="bottom right"-->
-<!--                  offset-x="3"-->
-<!--                  offset-y="3"-->
-<!--                  color="success"-->
-<!--                >-->
-<!--                  <VAvatar-->
-<!--                    color="primary"-->
-<!--                    variant="tonal"-->
-<!--                  >-->
-<!--                    <VImg :src="my.profiles[0].avatar" />-->
-<!--                  </VAvatar>-->
-<!--                </VBadge>-->
-<!--              </VListItemAction>-->
-<!--            </template>-->
+            <VListItemTitle class="font-weight-semibold">
+              {{ user.name }}
+            </VListItemTitle>
+            <VListItemSubtitle class="text-capitalize">{{ user.role.toLowerCase() }}</VListItemSubtitle>
+          </VListItem>
 
-<!--            <VListItemTitle class="font-weight-semibold">-->
-<!--              John Doe-->
-<!--            </VListItemTitle>-->
-<!--            <VListItemSubtitle>Admin</VListItemSubtitle>-->
-<!--          </VListItem>-->
-
-<!--          <VDivider class="my-2" />-->
-
-<!--          &lt;!&ndash; 👉 Pets &ndash;&gt;-->
+          <!-- 👉 Pets -->
 <!--          <VListItem-->
 <!--            link-->
-<!--            @click="$router.push({ path: '/my/profiles' })"-->
-<!--          >-->
-<!--            <template #prepend>-->
-<!--              <VAvatar-->
-<!--                class="me-2"-->
-<!--                :image="my.profiles[0].avatar"-->
-<!--                size="22"-->
-<!--              />-->
-<!--            </template>-->
-
-<!--            <VListItemTitle>Profiles</VListItemTitle>-->
-<!--          </VListItem>-->
-
-<!--          &lt;!&ndash; 👉 Friends &ndash;&gt;-->
-<!--          <VListItem-->
-<!--            link-->
-<!--            @click="$router.push({ path: '/my/friends' })"-->
+<!--            @click=""-->
 <!--          >-->
 <!--            <template #prepend>-->
 <!--              <VIcon-->
 <!--                class="me-2"-->
-<!--                icon="mdi-users"-->
+<!--                icon="mdi-user"-->
 <!--                size="22"-->
 <!--              />-->
 <!--            </template>-->
 
-<!--            <VListItemTitle>Friends</VListItemTitle>-->
+<!--            <VListItemTitle>{{ $t('Profile', 1) }}</VListItemTitle>-->
 <!--          </VListItem>-->
 
-<!--          &lt;!&ndash; 👉 Pets &ndash;&gt;-->
-<!--          <VListItem-->
-<!--            link-->
-<!--            @click="$router.push({ path: '/pets' })"-->
-<!--          >-->
-<!--            <template #prepend>-->
-<!--              <VIcon-->
-<!--                class="me-2"-->
-<!--                icon="mdi-paw"-->
-<!--                size="22"-->
-<!--              />-->
-<!--            </template>-->
+          <!-- Divider -->
+          <VDivider class="my-2" />
 
-<!--            <VListItemTitle>Pets</VListItemTitle>-->
-<!--          </VListItem>-->
+          <!-- 👉 Logout -->
+          <VListItem @click="authStore.logout()">
+            <template #prepend>
+              <VIcon
+                class="me-2"
+                icon="tabler-logout"
+                size="22"
+              />
+            </template>
 
-<!--          &lt;!&ndash; Divider &ndash;&gt;-->
-<!--          <VDivider class="my-2" />-->
-
-<!--          &lt;!&ndash; 👉 Logout &ndash;&gt;-->
-<!--          <VListItem to="/login">-->
-<!--            <template #prepend>-->
-<!--              <VIcon-->
-<!--                class="me-2"-->
-<!--                icon="tabler-logout"-->
-<!--                size="22"-->
-<!--              />-->
-<!--            </template>-->
-
-<!--            <VListItemTitle>Logout</VListItemTitle>-->
-<!--          </VListItem>-->
-<!--        </VList>-->
-<!--      </VMenu>-->
-<!--      &lt;!&ndash; !SECTION &ndash;&gt;-->
-<!--    </VAvatar>-->
+            <VListItemTitle>{{ $t('Logout') }}</VListItemTitle>
+          </VListItem>
+        </VList>
+      </VMenu>
+      <!-- !SECTION -->
   </VBadge>
 </template>

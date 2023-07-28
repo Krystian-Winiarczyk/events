@@ -10,7 +10,7 @@ import { CreateUserPetDto, UpdateUserPetDto } from '../../dtos/UserPet.dto';
 
 import { UserPetsService } from '../../service/user-pets/user-pets.service';
 
-@Controller('api/users/pets')
+@Controller('api/user/pets')
 // @UseGuards(JwtAuthGuard)
 export class UserPetsController extends BaseController {
     constructor(private petService: UserPetsService) {
@@ -26,21 +26,24 @@ export class UserPetsController extends BaseController {
         @Query('q') q,
     ) {
         try {
-            const pets: UserPet[] = await this.petService.findAll({
+            const [pets, total]: [ UserPet[], number ] = await this.petService.findAll({
                 pagination: this.paginationFragment(limit, page),
                 relations: {
-                    user: true,
+                    user: {
+                        profiles: { avatar: true },
+                    },
                     avatar: true,
                     images: true
                 },
                 where: this.resolveFilters(q),
             });
 
-            this.apiSuccessResponse(res, req, pets);
+            this.apiSuccessResponse({ res, req, data: pets, total });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
     }
+
 
     //
     @Get(':id')
@@ -58,7 +61,7 @@ export class UserPetsController extends BaseController {
                 }
             });
 
-            this.apiSuccessResponse(res, req, pet);
+            this.apiSuccessResponse({ res, req, data: pet });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -74,7 +77,9 @@ export class UserPetsController extends BaseController {
         try {
             const pet: UserPet = await this.petService.create(createDto);
 
-            this.apiSuccessResponse(res, req, pet);
+            const toReturnObject = await this.petService.findOneById(pet.id, {})
+
+            this.apiSuccessResponse({ res, req, data: toReturnObject });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -89,12 +94,14 @@ export class UserPetsController extends BaseController {
         @Body() updateDto: UpdateUserPetDto,
     ) {
         try {
-            const updateResult: UpdateResult = await this.petService.updateOneById(
+            await this.petService.updateOneById(
                 id,
                 updateDto,
             );
 
-            this.apiSuccessResponse(res, req, updateResult);
+            const toReturnObject = await this.petService.findOneById(id, {})
+
+            this.apiSuccessResponse({ res, req, data: toReturnObject });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -111,7 +118,7 @@ export class UserPetsController extends BaseController {
             const deleteResult: UpdateResult =
                 await this.petService.deleteSoftOneById(id);
 
-            this.apiSuccessResponse(res, req, deleteResult);
+            this.apiSuccessResponse({ res, req, data: deleteResult });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }

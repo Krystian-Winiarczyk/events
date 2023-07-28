@@ -55,7 +55,7 @@ export class UsersController
         @Query('q') q,
     ) {
         try {
-            const users: User[] = await this.userService.findAll({
+            const [users, total]: [ User[], number ] = await this.userService.findAll({
                 pagination: this.paginationFragment(limit, page),
                 relations: {
                     profiles: {
@@ -68,7 +68,7 @@ export class UsersController
                 where: this.resolveFilters(q),
             });
 
-            this.apiSuccessResponse(res, req, users);
+            this.apiSuccessResponse({ res, req, data: users, total });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -93,7 +93,7 @@ export class UsersController
                 }
             });
 
-            this.apiSuccessResponse(res, req, user);
+            this.apiSuccessResponse({ res, req, data: user });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -114,7 +114,7 @@ export class UsersController
         try {
             const users: User = await this.userService.create(createDto);
 
-            this.apiSuccessResponse(res, req, users);
+            this.apiSuccessResponse({ res, req, data: users });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -134,7 +134,7 @@ export class UsersController
                 updateDto,
             );
 
-            this.apiSuccessResponse(res, req, updateResult);
+            this.apiSuccessResponse({ res, req, data: updateResult });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -151,7 +151,7 @@ export class UsersController
             const deleteResult: UpdateResult =
                 await this.userService.deleteSoftOneById(id);
 
-            this.apiSuccessResponse(res, req, deleteResult);
+            this.apiSuccessResponse({ res, req, data: deleteResult });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -165,11 +165,11 @@ export class UsersController
         @Param('id', ParseIntPipe) id: number
     ) {
         try {
-            const data: UserProfile[] = await this.userProfileService.findAll({ where: {
+            const [data, total]: [ UserProfile[], number ] = await this.userProfileService.findAll({ where: {
                 user: { id }
             }});
 
-            this.apiSuccessResponse(res, req, data)
+            this.apiSuccessResponse({ res, req, data, total })
         } catch (error) {
             this.apiErrorResponse(res, req, error)
         }
@@ -184,7 +184,7 @@ export class UsersController
         try {
             const data: UserProfile = await this.userProfileService.create({ ...createUserProfileDto, user: id })
 
-            this.apiSuccessResponse(res, req, data)
+            this.apiSuccessResponse({ res, req, data })
         } catch (error) {
             this.apiErrorResponse(res, req, error)
         }
@@ -197,11 +197,11 @@ export class UsersController
         @Param('id', ParseIntPipe) id: number
     ) {
         try {
-            const data: UserPet[] = await this.petService.findAll({ where: {
+            const [data, total]: [ UserPet[], number ] = await this.petService.findAll({ where: {
                 user: { id }
             }});
 
-            this.apiSuccessResponse(res, req, data)
+            this.apiSuccessResponse({ res, req, data, total })
         } catch (error) {
             this.apiErrorResponse(res, req, error)
         }
@@ -216,7 +216,7 @@ export class UsersController
         try {
             const data: UserPet = await this.petService.create({ ...createPetDto, user: id })
 
-            this.apiSuccessResponse(res, req, data)
+            this.apiSuccessResponse({ res, req, data })
         } catch (error) {
             this.apiErrorResponse(res, req, error)
         }

@@ -11,6 +11,7 @@ import {typeOrmAsyncConfig} from "./config/typeorm.config";
 import { UploaderModule } from './modules/uploader/uploader.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { SettingsModule } from './modules/settings/settings.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { join } from 'path';
     AuthModule,
     EventsModule,
     UploaderModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,124 +1,133 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import type { Pet, User } from '@/globals/types/types'
-import avatar from '@images/avatars/avatar-1.png'
+import { VDataTableServer } from 'vuetify/labs/VDataTable'
+import axiosIns from '@axios'
 
-const avatarPet = 'https://cdn.pixabay.com/photo/2018/05/11/08/11/dog-3389729_1280.jpg'
+import { genderIcon } from '@core/utils/icons'
+import SocialMediaList from "@/views/SocialMediaList.vue";
 
-const filters = ref([])
+const pets = ref([])
+const totalItems = ref(0)
+const page = ref(1)
+const perPage = ref(10)
 
-const user: User = {
-  avatar,
-  name: 'Emily Totsu',
-  role: 'Pet Owner',
-  email: 'etotsu@tesuto.eu',
-}
-
-const pets: Ref<Pet[]> = ref([
-  {
-    avatar: avatarPet,
-    name: 'Testo',
-    owner: user,
-  },
-  {
-    avatar: avatarPet,
-    name: 'Testo',
-    owner: user,
-  },
-  {
-    avatar: avatarPet,
-    name: 'Testo',
-    owner: user,
-  },
-  {
-    avatar: avatarPet,
-    name: 'Testo',
-    owner: user,
-  },
-  {
-    avatar: avatarPet,
-    name: 'Testo',
-    owner: user,
-  },
+const petsHeaders = ref([
+  { title: 'ID', key: 'id', sortable: false },
+  { title: 'NAME', key: 'name', sortable: false },
+  { title: 'OWNER', key: 'user', sortable: false },
+  { title: 'SOCIAL MEDIA', key: 'medias', sortable: false },
+  { title: 'WEIGHT', key: 'weight', sortable: false },
+  { title: 'HEIGHT', key: 'height', sortable: false },
+  { title: 'BREED', key: 'breed', sortable: false },
+  { title: 'COLOR', key: 'color', sortable: false },
+  { title: 'GENDER', key: 'gender', sortable: false },
 ])
+
+const loading = ref(false)
+
+const reloadData = async () => {
+  loading.value = true
+
+  const params = {
+    limit: perPage.value,
+    page: page.value,
+  }
+
+  const { data } = await axiosIns.get('/user/pets', { params })
+
+  pets.value = data?.items?.map(pet => ({
+    ...pet,
+  })) || []
+  totalItems.value = data?.totalItems || 0
+
+  loading.value = false
+}
 </script>
 
 <template>
-  <div class="d-flex flex-column gap-5">
-    <!--    START::Tob Banner    -->
-    <VCard
-      style="background: linear-gradient(0deg, #B53D47 0%, #F25260 100%)"
-      rounded="lg"
+  <div>
+    <h4>Pets</h4>
+    <VDataTableServer
+      v-model:items-per-page.async="perPage"
+      v-model:page.async="page"
+      :must-sort="false"
+      :headers="petsHeaders"
+      :items="pets"
+      :items-length="totalItems"
+      :loading="loading"
+      @update:options="reloadData"
     >
-      <VCardItem>
-        <VCardTitle>
-          Save The Animals!
-        </VCardTitle>
-      </VCardItem>
+      <template #item.weight="{ item }">
+        <Text
+          :value="item.raw.weight"
+          prefix="KG"
+        />
+      </template>
+      <template #item.height="{ item }">
+        <Text
+          :value="item.raw.height"
+          prefix="CM"
+        />
+      </template>
+      <template #item.breed="{ item }">
+        <Text :value="item.raw.breed" />
+      </template>
+      <template #item.color="{ item }">
+        <Text :value="item.raw.color" />
+      </template>
+      <template #item.gender="{ item }">
+        <VIcon v-if="item.raw.gender" :icon="genderIcon(item.raw.gender)" />
+        <VIcon
+          v-else
+          icon="mdi-minus"
+        />
+      </template>
+      <template #item.medias="{ item }">
+        <SocialMediaList
+          justify="justify-start"
+          :size="30"
+          color="primary"
+          :item="item.raw"
+        />
+      </template>
 
-      <VCardText class="d-flex flex-column align-start">
-        Many animals require our help! See how you can assist them alongside us.
-
-        <VBtn
-          rounded="pill"
-          class="mt-5"
+      <template #item.user="{ item }">
+        <div
+          v-if="item.raw.user"
+          class="d-flex align-center"
         >
-          Help!
-
-          <VIcon
-            end
-            icon="mdi-heart"
+          <Avatar
+            :item="item.raw.user"
+            class="mr-3"
+            :size="35"
           />
-        </VBtn>
-      </vcardtext>
-    </VCard>
-    <!--    END::Tob Banner    -->
-
-    <!--    START::Filters    -->
-    <div class="d-flex flex-column gap-3">
-      <label>I want to see</label>
-
-      <div class="d-flex flex-row gap-3">
-        <FilterItem
-          v-model="filters"
-          label="My"
-          input-value="my"
-          icon="mdi-user"
+          {{ item.raw.user.name }}
+        </div>
+        <VIcon
+          v-else
+          icon="mdi-minus"
         />
+      </template>
 
-        <FilterItem
-          v-model="filters"
-          label="New"
-          input-value="new"
-          icon="mdi-star"
-        />
-
-        <FilterItem
-          v-model="filters"
-          label="Lovers"
-          input-value="lovers"
-          icon="mdi-heart"
-        />
-      </div>
-    </div>
-    <!--    END::Filters    -->
-
-    <!--    START::UserPet List    -->
-    <VRow>
-      <VCol
-        v-for="(pet, i) in pets"
-        :key="i"
-        cols="12"
-        md="4"
-        lg="3"
-      >
-        <ListItem :pet="pet" />
-      </VCol>
-    </VRow>
-    <!--    END::UserPet List    -->
+      <template #item.name="{ item }">
+        <div class="d-flex align-center py-1">
+          <Avatar
+            :item="item.raw"
+            :size="40"
+            class="mr-3"
+          />
+          <span>
+            <div><Text :value="item.raw.name" :to="`/users/${item.raw.user.id}/pets/${item.raw.id}`" /></div>
+            <small><VIcon
+              icon="mdi-book"
+              size="16"
+            />{{ item.raw.passportNumber }}</small>
+          </span>
+        </div>
+      </template>
+    </VDataTableServer>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

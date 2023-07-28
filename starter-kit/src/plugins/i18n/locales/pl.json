@@ -1,6 +1,16 @@
 {
+  "Settings": "Ustawienia",
+  "CreateNewPet":  "Dodaj nowego pupila",
+  "EditPet": "Edytuj pupila",
+  "Save": "Zapisz",
+  "BasicData": "Dane podstawowe",
+  "AdditionalData": "Dane dodatkowe",
+  "SocialMedias": "Profile społecznościowe",
+  "MainImage": "Zdjęcie główne",
+  "AdditionalImages": "Zdjęcia dodatkowe",
   "Website": "Strona internetowa",
   "FirstName": "Imię",
+  "LastName": "Nazwisko",
   "About": "O mnie",
   "MyData": "Moje dane",
   "MyProfiles":"Moje profile",
@@ -18,10 +28,16 @@
   "Previous": "Poprzedni",
   "Back": "Cofnij",
   "Confirm": "Potwierdź",
+  "DeleteAccount": "Usuń konto",
+  "AcceptDeleteAccount": "Potwierdzam usunięcie konta",
 
   "Email": "Email",
   "UserName": "Nazwa użytkownika",
   "Password": "Hasło",
+  "ChangePassword": "Zmień hasło",
+  "ActualPassword": "Aktualne hasło",
+  "NewPassword": "Nowe hasło",
+  "RepeatNewPassword": "Powtórz nowe hasło",
   "ConfirmPassword": "Potwierdź hasło",
 
   "PassportNumber": "Numer paszportu",
@@ -74,6 +90,14 @@
     "AddOwnPetsToAccount": "Dodaj swojego pupila do konta",
 
     "VerifyYourData": "Zweryfikuj poprawność swoich danych"
+  },
+
+  "snackbar": {
+    "PetChangesSaved": "Pomyślnie zapisano zmiany dotyczące pupila",
+    "ChangesSaved": "Zapisano zmiany",
+
+    "ProblemEncountered": "Napotkano problem",
+    "AnErrorOccurredWhileUpdatingPet": "Wystąpił błąd podczas aktualizacji związanych z pupilem"
   },
 
   "validator": {

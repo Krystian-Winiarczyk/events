@@ -8,6 +8,9 @@ import { GENDER } from '@/globals/enums/enums'
 import { useFilesUploader } from '@core/composable/useFilesUploader'
 import axiosIns from '@axios'
 
+import { useToastStore } from '@/store/toast'
+import { useAuthStore } from '@/store/auth'
+
 interface Props {
   defaultPet?: UserPet
 }
@@ -17,10 +20,13 @@ const props = defineProps<Props>()
 const emits = defineEmits(['close'])
 
 const { upload } = useFilesUploader()
+const { showMessage } = useToastStore()
+const { user } = useAuthStore()
 
 const pet: Ref<UserPet> = ref({ ...defaultPet })
 const petAvatarUploadRef = ref()
 const petImageUploadRef = ref()
+const loading = ref(false)
 
 const genders: Array<any> = [
   { value: GENDER.FEMALE, label: GENDER.FEMALE },
@@ -36,6 +42,8 @@ const imagePreviewSrc = (img: any) => {
   if (image?.filename)
     return imagePath(image)
 
+  console.log(image)
+
   return URL.createObjectURL(image)
 }
 
@@ -44,6 +52,8 @@ const petFirstLetters = computed(() => {
 })
 
 const onSubmit = async () => {
+  loading.value = true
+
   const item = { ...pet.value }
 
   if (item.avatar?.id) { item.avatar = item.avatar.id }
@@ -69,7 +79,29 @@ const onSubmit = async () => {
   }
   else { item.images = [] }
 
-  await axiosIns.patch(`users/pets/${item.id}`, item)
+  setTimeout(async () => {
+    try {
+      let resp = null
+      if (item?.id) {
+        resp = await axiosIns.patch(`user/pets/${item.id}`, item)
+      }
+      else {
+        item.user = user.id
+        resp = await axiosIns.post('user/pets', item)
+      }
+
+      const [updatedItem] = resp?.data?.items
+
+      showMessage('success', 'snackbar.PetChangesSaved', 'snackbar.ChangesSaved')
+
+      emits('close', updatedItem)
+    }
+    catch (err) {
+      showMessage('error', 'snackbar.AnErrorOccurredWhileUpdatingPet', 'snackbar.ProblemEncountered')
+    } finally {
+      loading.value = false
+    }
+  }, 1000)
 }
 
 onMounted(() => {
@@ -93,16 +125,19 @@ onMounted(() => {
           />
         </VBtn>
 
-        <VToolbarTitle>Settings</VToolbarTitle>
+        <VToolbarTitle>
+          {{ $t(pet.id ? 'EditPet' : 'CreateNewPet') }}
+        </VToolbarTitle>
 
         <VSpacer />
 
         <VToolbarItems>
           <VBtn
             variant="text"
+            :loading="loading"
             @click="onSubmit"
           >
-            Save
+            {{ $t('Save') }}
           </VBtn>
         </VToolbarItems>
       </VToolbar>
@@ -115,13 +150,13 @@ onMounted(() => {
           md="6"
         >
           <VCardTitle class="text-primary my-2 mb-3">
-            Dane podstawowe
+            {{ $t('BasicData') }}
           </VCardTitle>
 
           <VRow>
             <VCol cols="12">
               <VTextField
-                :model-value="pet.name"
+                v-model="pet.name"
                 :rules="[requiredValidator]"
                 :label="$t('FirstName')"
                 :placeholder="$t('signup.TypePetName')"
@@ -132,7 +167,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.passportNumber"
+                v-model="pet.passportNumber"
                 :label="$t('PassportNumber')"
                 placeholder="PL5532-123"
               />
@@ -142,7 +177,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.height"
+                v-model="pet.height"
                 :label="$t('HeightAtTheWithers')"
                 placeholder="50"
                 suffix="CM"
@@ -151,7 +186,7 @@ onMounted(() => {
           </VRow>
 
           <VCardTitle class="text-primary my-2 mb-3">
-            Dane dodatkowe
+            {{ $t('AdditionalData') }}
           </VCardTitle>
 
           <VRow>
@@ -160,7 +195,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.breeding"
+                v-model="pet.breeding"
                 :label="$t('Breeding')"
                 placeholder="Border Collie"
               />
@@ -170,7 +205,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.breed"
+                v-model="pet.breed"
                 :label="$t('Breed')"
                 placeholder="Border Collie"
               />
@@ -180,7 +215,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.color"
+                v-model="pet.color"
                 :label="$t('Color')"
                 placeholder="Tricolor"
               />
@@ -190,7 +225,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.weight"
+                v-model="pet.weight"
                 :label="$t('Weight')"
                 placeholder="50"
                 suffix="KG"
@@ -201,7 +236,7 @@ onMounted(() => {
               md="6"
             >
               <AppDateTimePicker
-                :model-value="pet.birthDate"
+                v-model="pet.birthDate"
                 :label="$t('Birthday')"
                 :config="{ altInput: true, altFormat: 'F j, Y', dateFormat: 'Y-m-d' }"
               />
@@ -211,7 +246,7 @@ onMounted(() => {
               md="6"
             >
               <VSelect
-                :model-value="pet.gender"
+                v-model="pet.gender"
                 :items="genders"
                 :label="$t('Gender')"
                 clearable
@@ -229,7 +264,7 @@ onMounted(() => {
               md="6"
             >
               <VTextarea
-                :model-value="pet.personality"
+                v-model="pet.personality"
                 rows="2"
                 :label="$t('Personality')"
               />
@@ -239,7 +274,7 @@ onMounted(() => {
               md="6"
             >
               <VTextarea
-                :model-value="pet.description"
+                v-model="pet.description"
                 rows="2"
                 :label="$t('PetDescription')"
               />
@@ -247,7 +282,7 @@ onMounted(() => {
           </VRow>
 
           <VCardTitle class="text-primary my-2 mb-3">
-            Profile społecznościowe
+            {{ $t('SocialMedias') }}
           </VCardTitle>
 
           <VRow>
@@ -256,7 +291,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.websiteUrl"
+                v-model="pet.websiteUrl"
                 :label="$t('Website')"
                 placeholder="https://www.website.com"
                 prepend-inner-icon="mdi-web"
@@ -267,7 +302,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.youtubeUrl"
+                v-model="pet.youtubeUrl"
                 label="Youtube"
                 placeholder="https://www.youtube.com/example"
                 prepend-inner-icon="mdi-youtube"
@@ -278,7 +313,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.facebookUrl"
+                v-model="pet.facebookUrl"
                 label="Facebook"
                 placeholder="https://www.facebook.com/example"
                 prepend-inner-icon="mdi-facebook"
@@ -289,7 +324,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.instagramUrl"
+                v-model="pet.instagramUrl"
                 label="Instagram"
                 placeholder="https://www.instagram.com/example"
                 prepend-inner-icon="mdi-instagram"
@@ -300,7 +335,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.tiktokUrl"
+                v-model="pet.tiktokUrl"
                 label="Tiktok"
                 placeholder="https://www.tiktok.com/example"
                 prepend-inner-icon="mdi-trash"
@@ -311,7 +346,7 @@ onMounted(() => {
               md="6"
             >
               <VTextField
-                :model-value="pet.twitterUrl"
+                v-model="pet.twitterUrl"
                 label="Twitter"
                 placeholder="https://www.twitter.com/example"
                 prepend-inner-icon="mdi-twitter"
@@ -326,7 +361,7 @@ onMounted(() => {
           sm="12"
         >
           <VCardTitle class="text-primary my-2 mb-3">
-            Zdjęcie główne
+            {{ $t('MainImage') }}
           </VCardTitle>
 
           <VRow>
@@ -337,10 +372,11 @@ onMounted(() => {
               <div>
                 <VFileInput
                   ref="petAvatarUploadRef"
-                  v-model="pet.avatar"
+                  :model-value="pet.avatar"
                   class="d-none"
                   show-size
                   accept="image/png, image/jpeg, image/bmp, image/jpg, image/webp"
+                  @update:model-value="[pet.avatar] = $event"
                 />
                 <VAvatar
                   :image="imagePreviewSrc(pet.avatar)"
@@ -363,7 +399,7 @@ onMounted(() => {
           </VRow>
 
           <VCardTitle class="text-primary my-2 mb-3">
-            Zdjęcia dodatkowe
+            {{ $t('AdditionalImages') }}
           </VCardTitle>
 
           <VRow>

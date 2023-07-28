@@ -72,19 +72,25 @@ export abstract class BaseController {
 
     return {};
   }
-
-  apiSuccessResponse(
-    res: Response,
-    req: Request,
-    data: any,
-    status: HttpStatus = HttpStatus.OK,
-  ) {
+  apiSuccessResponse({
+                       res,
+                       req,
+                       data,
+                       status = HttpStatus.OK,
+                       total,
+}: {
+  res: Response,
+  req: Request,
+  data: any,
+  status?: HttpStatus,
+  total?: number,
+}) {
     const payload: any = this.getBasicDataForResponse(req, status);
 
     if (Array.isArray(data)) payload.items = data.filter(Boolean);
     else payload.items = [data].filter(Boolean);
 
-    res.status(status).json(payload);
+    res.status(status).json({ ...payload, totalItems: total });
   }
 
   apiErrorResponse(

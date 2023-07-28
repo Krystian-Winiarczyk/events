@@ -12,25 +12,31 @@ import {ServiceInterface} from "../interfaces/Service.interface";
 import {BaseEntity} from "./BaseEntity";
 import {File} from "../typeorm/entities/File";
 export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
-    constructor(private repository: Repository<T>) {}
+    constructor(private repository: Repository<T>, private relations?: Array<any> | { [key: string]: boolean | any }) {}
     async findAll(params: {
         pagination?: object | PaginationInterface,
         relations?: FindOptionsRelations<T> | FindOptionsRelationByString,
         where?: FindOptionsWhere<T> | FindOptionsWhere<T>[],
         select?: FindOptionsSelect<T> | FindOptionsSelectByString<T>,
-    }): Promise<T[]> {
+    }): Promise<[T[], number]> {
         const paging = params.pagination ?? {}
-        return await this.repository.find({
+        return [
+            await this.repository.find({
             ...paging,
-            relations: params.relations ?? [],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            relations: params.relations ?? this.relations ?? [],
             where: params.where ?? [],
             select: params.select ?? [],
             withDeleted: false,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             order: { id: 'DESC' },
-        });
+        }),
+        await this.repository.countBy(params.where ?? [])
+        ];
     }
+
 
     async findOneBy(params: {
         where: FindOptionsWhere<T> | FindOptionsWhere<T>[],
@@ -39,7 +45,9 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
     }): Promise<T> {
         return await this.repository.findOne({
             where: params.where ?? [],
-            relations: params.relations ?? [],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            relations: params.relations ?? this.relations ?? [],
             select: params.select ?? [],
             withDeleted: false,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -56,7 +64,9 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             where: { id },
-            relations: params.relations ?? [],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            relations: params.relations ?? this.relations ?? [],
             select: params.select ?? [],
             withDeleted: false,
         });
@@ -65,7 +75,7 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
     async updateOneById(id: number, updateDto: any): Promise<UpdateResult> {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const item = await this.repository.findOne({ where: { id } })
+        const item = await this.repository.findOne({ where: { id }, relations: this.relations ?? [] })
         Object.assign(item, updateDto)
 
         if (updateDto?.images?.length) {

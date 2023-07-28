@@ -59,12 +59,12 @@ export default {
     >
       <div class="d-flex">
         <VAvatar
-          class="mr-5"
+          class="mr-5 text-white"
           variant="elevated"
           :icon="item.color === 'success' ? 'mdi-check' : 'mdi-close'"
         />
         <div>
-          <h3>{{ $t(item.title) }}</h3>
+          <h3 class="text-white">{{ $t(item.title) }}</h3>
           {{ $t(item.message) }}
         </div>
       </div>

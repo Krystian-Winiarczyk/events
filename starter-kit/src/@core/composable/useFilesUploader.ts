@@ -13,7 +13,6 @@ export const useFilesUploader = () => {
 
   const upload = async (files: Array<File>, label = '', icon = '', type = 'IMAGE') => {
     const uploadForm = new FormData()
-
     uploadForm.append('type', type)
 
     files.forEach(file => {
