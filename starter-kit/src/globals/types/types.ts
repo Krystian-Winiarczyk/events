@@ -68,10 +68,29 @@ export interface Event {
   id?: number
   name: string
   description: string
-
   locationCountry: string
   locationCity: string
   locationPostalCode: string
   locationStreet: string
   locationNumber: string
+  locationDescription: string
+  eventStartDate: string
+  eventDaysCount: number
+  freeEntrance: boolean
+  mediaUrl: string
+  regulation: string
+  regulationUrl: string
+  banner: File | string | any
+  images: File[] | string[] | any[]
+  eventCompetitions: Array<EventCompetition>
+}
+
+export interface EventCompetition {
+  id?: number
+  competition?: Competition
+  event?: Event
+  userLimit: number
+  pricePerStart: number
+
+  active?: boolean
 }

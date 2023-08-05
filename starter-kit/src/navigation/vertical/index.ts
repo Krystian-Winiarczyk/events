@@ -21,4 +21,9 @@ export default [
     to: { name: 'pets' },
     icon: { icon: 'mdi-paw' },
   },
+  {
+    title: 'Settings',
+    to: { name: 'settings' },
+    icon: { icon: 'mdi-cog' },
+  },
 ] as VerticalNavItems

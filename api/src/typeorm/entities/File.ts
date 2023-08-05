@@ -2,6 +2,7 @@ import {Entity, Column, ManyToOne, OneToOne, JoinColumn} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import {UserPet} from "./UserPet";
 import {UserProfile} from "./UserProfile";
+import {Event} from "./Event";
 import {FileType} from "../../constants/FileType";
 
 @Entity({ name: 'files' })
@@ -48,6 +49,13 @@ export class File extends BaseEntity {
     @OneToOne(() => UserProfile, (userProfile) => userProfile.avatar, { nullable: true, onDelete: 'CASCADE' })
     @JoinColumn()
     userProfile: UserProfile
+
+    /**
+     *  Assigned file
+     * @returns {Event} event
+     */
+    @ManyToOne(() => Event, (event) => event.images, { nullable: true, onDelete: 'CASCADE' })
+    event: Event
 
     /**
      *  Assigned file my my-my-pets
