@@ -6,6 +6,9 @@
     <VListItem :to="{ name: 'settings-events' }">
       {{ $t('Events') }}
     </VListItem>
+    <VListItem :to="{ name: 'settings-sponsors' }">
+      {{ $t('Sponsors') }}
+    </VListItem>
   </VList>
 </template>
 

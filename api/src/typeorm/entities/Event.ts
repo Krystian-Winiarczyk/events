@@ -47,7 +47,7 @@ export class Event extends BaseEntity {
     @Column({ nullable: true })
     regulationUrl: string
 
-    @OneToMany(() => EventCompetition, eventCompetition =>  eventCompetition.event)
+    @OneToMany(() => EventCompetition, eventCompetition =>  eventCompetition.event, { cascade: true })
     eventCompetitions: EventCompetition[]
 
     /**

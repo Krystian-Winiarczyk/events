@@ -68,7 +68,7 @@ const closeCompetitionModal = (competition: Competition): void => {
 <template>
   <div>
     <h4>
-      {{ $t('Competitions') }}
+      Competitions
       <VBtn
         color="primary"
         size="small"

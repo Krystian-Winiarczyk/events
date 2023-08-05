@@ -4,9 +4,9 @@ import BioPanel from '@/views/pages/profile/BioPanel.vue'
 import PetsTab from '@/views/pages/profile/PetsTab.vue'
 import type { User, UserPet, UserProfile } from '@/globals/types/types'
 import { defaultPet, defaultProfile } from '@/globals/defaults'
-import PetForm from '@/views/pages/forms/PetForm.vue'
+import PetForm from '@/views/forms/PetForm.vue'
 import ProfilesTab from '@/views/pages/profile/ProfilesTab.vue'
-import ProfileForm from '@/views/pages/forms/ProfileForm.vue'
+import ProfileForm from '@/views/forms/ProfileForm.vue'
 import SecurityTab from '@/views/pages/profile/SecurityTab.vue'
 
 interface Props {

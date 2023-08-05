@@ -7,6 +7,8 @@ import axiosIns from '@axios'
 import { useToastStore } from '@/store/toast'
 import { defaultEvent } from '@/globals/defaults'
 import { imagePath } from '@core/utils/formatters'
+import EventFormCompetitionCard from '@/views/forms/components/EventFormCompetitionCard.vue'
+import { useFilesUploader } from '@core/composable/useFilesUploader'
 
 interface Props {
   defaultEvent?: Event
@@ -16,6 +18,7 @@ const props = defineProps<Props>()
 
 const emits = defineEmits(['close'])
 
+const { upload } = useFilesUploader()
 const { showMessage } = useToastStore()
 
 const event: Ref<Event> = ref({ ...defaultEvent })
@@ -33,10 +36,47 @@ const tabs = [
   { icon: 'mdi-users', title: 'Competitions' },
 ]
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const onSubmit = async () => {
   loading.value = true
 
   const item = { ...event.value }
+
+  item.eventCompetitions = item.eventCompetitions.filter(({ active }) => active).map((eventCompetition: EventCompetition) => {
+    const ec: EventCompetition = {
+      competition: eventCompetition.competition || eventCompetition.competition?.id,
+      pricePerStart: Number(eventCompetition.pricePerStart),
+      userLimit: Number(eventCompetition.userLimit),
+    }
+
+    if (eventCompetition.id)
+      ec.id = eventCompetition.id
+
+    return ec
+  })
+
+  if (item.banner?.id) { item.banner = item.banner.id }
+  else if (item.banner) {
+    const bannerResponse = await upload([item.banner], 'Banner', 'mdi-my', 'BANNER')
+
+    item.banner = bannerResponse?.data?.items[0]?.id || null
+  }
+  else { item.banner = null }
+
+  if (item.images.length) {
+    const imagesIds = item.images.filter(image => image?.id).map(image => image.id)
+
+    const toUpload = item.images.filter(image => !image?.id)
+    if (toUpload.length) {
+      const imagesResponse = await upload(item.images, 'AdditionalImages', 'mdi-my', 'IMAGE')
+
+      if (imagesResponse?.data?.items?.length)
+        imagesIds.push(...imagesResponse?.data?.items.map(image => image.id))
+    }
+
+    item.images = imagesIds
+  }
+  else { item.images = [] }
 
   setTimeout(async () => {
     try {
@@ -82,10 +122,13 @@ onMounted(async () => {
     // load competitions
     const { data } = await axiosIns.get('/settings/competitions')
 
-    data?.items?.forEach((competition: Competition) => {
+    data?.items?.forEach((competition: Competition, index: number) => {
       const eventCompetitions = event.value.eventCompetitions
-      if (eventCompetitions.find((eventCompetition: EventCompetition) => eventCompetition.competition?.id === competition?.id))
+      if (eventCompetitions.find((eventCompetition: EventCompetition) => eventCompetition.competition?.id === competition?.id)) {
+        event.value.eventCompetitions[index].active = true
+
         return
+      }
 
       event.value.eventCompetitions.push({
         competition,
@@ -94,7 +137,8 @@ onMounted(async () => {
         active: false,
       })
     })
-  } catch (err) {
+  }
+  catch (err) {
     console.log(err)
   }
 })
@@ -385,42 +429,34 @@ onMounted(async () => {
         <VWindowItem>
           <VRow>
             <VCol
-              v-for="(competition, competitionIndex) in event.eventCompetitions"
-              :key="`competition_${competitionIndex}`"
               cols="6"
-              sm="6"
+              sm="12"
+              md="6"
             >
-              <VSwitch
-                v-model="competition.active"
-                inset
-                class="bg-light-primary pa-2 rounded"
-                color="primary"
-                :label="competition.competition.name"
-              />
-              <VSlideXTransition mode="default">
-                <VCard
-                  :key="`card_${competitionIndex}`"
-                  v-if="competition.active"
-                  class="pa-5"
+              <VRow>
+                <VCol
+                  v-for="(competition, competitionIndex) in event.eventCompetitions.slice(0, Math.ceil(event.eventCompetitions.length / 2))"
+                  :key="`competition_1_${competitionIndex}`"
+                  cols="12"
                 >
-                  <div class="d-flex">
-                    <div class="flex-grow-1 mr-3">
-                      <VTextField
-                        v-model="competition.userLimit"
-                        type="number"
-                        :label="$t('UserLimit')"
-                      />
-                    </div>
-                    <div class="flex-grow-1">
-                      <VTextField
-                        v-model="competition.pricePerStart"
-                        type="number"
-                        :label="$t('PricePerStart')"
-                      />
-                    </div>
-                  </div>
-                </VCard>
-              </VSlideXTransition>
+                  <EventFormCompetitionCard :competition.async="competition" />
+                </VCol>
+              </VRow>
+            </VCol>
+            <VCol
+              cols="6"
+              sm="12"
+              md="6"
+            >
+              <VRow>
+                <VCol
+                  v-for="(competition, competitionIndex) in event.eventCompetitions.slice(Math.ceil(event.eventCompetitions.length / 2))"
+                  :key="`competition_2_${competitionIndex}`"
+                  cols="12"
+                >
+                  <EventFormCompetitionCard :competition.async="competition" />
+                </VCol>
+              </VRow>
             </VCol>
           </VRow>
         </VWindowItem>

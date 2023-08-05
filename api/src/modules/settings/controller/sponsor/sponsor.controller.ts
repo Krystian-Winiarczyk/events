@@ -20,13 +20,13 @@ import { JwtAuthGuard } from 'src/guard/jwt-auth/jwt-auth.guard';
 import { ControllerInterface } from '../../../../interfaces/Controller.interface';
 import { UpdateResult } from 'typeorm';
 import { RoleGuard } from '../../../../guard/role/role.guard';
-import {Event} from "../../../../typeorm/entities/Event";
-import {EventsService} from "../../service/events/events.service";
+import {Sponsor} from "../../../../typeorm/entities/Sponsor";
+import {SponsorService} from "../../service/sponsor/sponsor.service";
 
 @UseGuards(JwtAuthGuard, RoleGuard)
-@Controller('api/events')
-export class EventsController extends BaseController implements ControllerInterface {
-    constructor(private eventsService: EventsService) {
+@Controller('api/settings/sponsors')
+export class SponsorController extends BaseController implements ControllerInterface {
+    constructor(private sponsorService: SponsorService) {
         super()
     }
     @Get()
@@ -39,19 +39,12 @@ export class EventsController extends BaseController implements ControllerInterf
         @Query('q') q,
     ) {
         try {
-            const [events, total]: [ Event[], number ] = await this.eventsService.findAll({
+            const [competitions, total]: [ Sponsor[], number ] = await this.sponsorService.findAll({
                 pagination: this.paginationFragment(limit, page),
                 where: this.resolveFilters(q),
-                relations: {
-                    eventCompetitions: {
-                        competition: true,
-                    },
-                    banner: true,
-                    images: true
-                }
             });
 
-            this.apiSuccessResponse({ res, req, data: events, total });
+            this.apiSuccessResponse({ res, req, data: competitions, total });
         } catch (error) {
             this.apiErrorResponse(res, req, error)
         }
@@ -65,9 +58,9 @@ export class EventsController extends BaseController implements ControllerInterf
         @Param('id', ParseIntPipe) id: number,
     ) {
         try {
-            const event: Event = await this.eventsService.findOneById(id, {})
+            const competition: Sponsor = await this.sponsorService.findOneById(id, {})
 
-            this.apiSuccessResponse({ res, req, data: event })
+            this.apiSuccessResponse({ res, req, data: competition })
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -78,12 +71,18 @@ export class EventsController extends BaseController implements ControllerInterf
     async create(
         @Req() req: Request,
         @Res() res: Response,
-        @Body() createDto: any,
+        @Body() createDto: any | any[],
     ) {
         try {
-            const event: Event = await this.eventsService.create(createDto);
+            let competition: Sponsor | Sponsor[] = null
 
-            this.apiSuccessResponse({ res, req, data: event });
+            if (Array.isArray(createDto) && createDto.length) {
+                competition = await Promise.all(createDto.map(async singleDto => await this.sponsorService.create(singleDto)))
+            } else {
+                competition = await this.sponsorService.create(createDto)
+            }
+
+            this.apiSuccessResponse({ res, req, data: competition });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }
@@ -98,7 +97,7 @@ export class EventsController extends BaseController implements ControllerInterf
         @Body() updateDto: any,
     ) {
         try {
-            const updateResult: UpdateResult = await this.eventsService.updateOneById(
+            const updateResult: UpdateResult = await this.sponsorService.updateOneById(
                 id,
                 updateDto,
             );
@@ -109,6 +108,7 @@ export class EventsController extends BaseController implements ControllerInterf
         }
     }
 
+
     @Delete(':id')
     // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
     async deleteOneById(
@@ -118,7 +118,7 @@ export class EventsController extends BaseController implements ControllerInterf
     ) {
         try {
             const deleteResult: UpdateResult =
-                await this.eventsService.deleteSoftOneById(id);
+                await this.sponsorService.deleteSoftOneById(id);
 
             this.apiSuccessResponse({ res, req, data: deleteResult });
         } catch (error) {

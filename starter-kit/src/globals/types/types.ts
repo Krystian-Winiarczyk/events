@@ -87,7 +87,7 @@ export interface Event {
 
 export interface EventCompetition {
   id?: number
-  competition?: Competition
+  competition?: Competition | string
   event?: Event
   userLimit: number
   pricePerStart: number

@@ -3,10 +3,10 @@ import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import type { Ref } from 'vue/dist/vue'
 import axiosIns from '@axios'
 
-import SettingsCompetitionForm from '@/views/pages/forms/SettingsCompetitionForm.vue'
+import SettingsCompetitionForm from '@/views/forms/SettingsCompetitionForm.vue'
 import type { Event } from '@/globals/types/types'
 import {defaultEvent} from '@/globals/defaults'
-import EventForm from "@/views/pages/forms/EventForm.vue";
+import EventForm from "@/views/forms/EventForm.vue";
 
 const events = ref([])
 const totalItems = ref(0)
@@ -45,7 +45,6 @@ const reloadData = async () => {
 }
 
 const openEditEvent = (event: Event): void => {
-  console.log(defaultEvent)
   if (!event)
     editedEvent.value = { ...defaultEvent }
   else
@@ -122,7 +121,7 @@ const closeEventModal = (event: Event): void => {
           size="sm"
           variant="plain"
           color="warning"
-          @click="editedEvent = item.raw; isEditEventDialogVisible = true"
+          @click="openEditEvent(item.raw)"
         >
           <VIcon icon="mdi-edit" />
         </VBtn>
@@ -149,7 +148,7 @@ const closeEventModal = (event: Event): void => {
       <VCard>
         <EventForm
           v-if="isEditEventDialogVisible"
-          :default-competition="editedEvent"
+          :default-event="editedEvent"
           @close="closeEventModal"
         />
       </VCard>

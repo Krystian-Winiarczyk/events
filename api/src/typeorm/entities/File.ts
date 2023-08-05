@@ -4,6 +4,7 @@ import {UserPet} from "./UserPet";
 import {UserProfile} from "./UserProfile";
 import {Event} from "./Event";
 import {FileType} from "../../constants/FileType";
+import {Sponsor} from "./Sponsor";
 
 @Entity({ name: 'files' })
 export class File extends BaseEntity {
@@ -49,6 +50,14 @@ export class File extends BaseEntity {
     @OneToOne(() => UserProfile, (userProfile) => userProfile.avatar, { nullable: true, onDelete: 'CASCADE' })
     @JoinColumn()
     userProfile: UserProfile
+
+    /**
+     *  Assigned file sponsor
+     * @returns {Sponsor} sponsor
+     */
+    @OneToOne(() => Sponsor, (sponsor) => sponsor.avatar, { nullable: true, onDelete: 'CASCADE' })
+    @JoinColumn()
+    sponsor: Sponsor
 
     /**
      *  Assigned file

@@ -109,6 +109,12 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
             // @ts-ignore
             item.avatar = { id: createDto.avatar } as File;
         }
+
+        if (createDto?.banner) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            item.banner = { id: createDto.banner } as File;
+        }
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return await this.repository.save(item);

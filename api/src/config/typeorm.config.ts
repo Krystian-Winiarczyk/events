@@ -11,6 +11,7 @@ import { Event } from "../typeorm/entities/Event";
 import { Competition } from "../typeorm/entities/Competition";
 import { File } from "../typeorm/entities/File";
 import {EventCompetition} from "../typeorm/entities/EventCompetition";
+import {Sponsor} from "../typeorm/entities/Sponsor";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -25,7 +26,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
-      entities: [Event, Competition, File, User, UserPet, UserProfile, EventCompetition],
+      entities: [Event, Competition, File, User, UserPet, UserProfile, EventCompetition, Sponsor],
       synchronize: configService.get('APP_MODE') === AppMode.DEVELOPMENT,
     };
   },
