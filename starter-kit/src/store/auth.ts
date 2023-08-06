@@ -2,11 +2,12 @@ import { useRouter } from 'vue-router'
 import axiosIns from '@axios'
 import { useToastStore } from '@/store/toast'
 
-const toastStore = useToastStore()
 export const useAuthStore = defineStore('auth', () => {
+  const toastStore = useToastStore()
+
   const user = ref(localStorage.getItem('userDetails') ? JSON.parse(localStorage.getItem('userDetails') ?? '') : null)
   const userRefreshToken = ref(localStorage.getItem('refreshToken') ? localStorage.getItem('refreshToken') : null)
-  const loggedIn = ref(false)
+  const loggedIn = ref(Boolean(localStorage.getItem('userDetails') && localStorage.getItem('refreshToken')))
   const refreshTokenTimeout = ref()
 
   const router = useRouter()
@@ -46,11 +47,15 @@ export const useAuthStore = defineStore('auth', () => {
 
     localStorage.setItem('accessToken', accessToken)
 
+    loggedIn.value = true
+
     startRefreshTokenTimer()
   }
 
   const logout = async () => {
     try {
+      loggedIn.value = false
+
       await axiosIns.get('/auth/logout')
 
       stopRefreshTokenTimer()
@@ -59,10 +64,14 @@ export const useAuthStore = defineStore('auth', () => {
 
       user.value = null
       userRefreshToken.value = ''
-      loggedIn.value = false
+
+      localStorage.removeItem('userDetails')
+      localStorage.removeItem('refreshToken')
+      localStorage.removeItem('accessToken')
 
       toastStore.showMessage('success', 'Za chwilę zostaniesz przeniesiony do panelu logowania', 'Pomyślnie wylogowano')
-    } catch (err) {
+    }
+    catch (err) {
       toastStore.showMessage('error', 'Napotkano nieznany problem podczas logowania spróbuj ponownie', 'Problem z logowaniem')
     }
   }

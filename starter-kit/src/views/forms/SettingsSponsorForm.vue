@@ -6,6 +6,7 @@ import axiosIns from '@axios'
 import { useToastStore } from '@/store/toast'
 import { defaultSponsor } from '@/globals/defaults'
 import SettingsSponsorFormCard from '@/views/forms/components/SettingsSponsorFormCard.vue'
+import { useFilesUploader } from '@core/composable/useFilesUploader'
 
 const props = defineProps<Props>()
 
@@ -16,25 +17,45 @@ interface Props {
 }
 
 const { showMessage } = useToastStore()
+const { upload } = useFilesUploader()
 
 const sponsors: Ref<Sponsor[]> = ref([{ ...defaultSponsor }])
 const loading = ref(false)
 
+const addSponsor = () => {
+  sponsors.value.push({ ...defaultSponsor })
+}
+
 const onSubmit = async () => {
   loading.value = true
 
-  const item = { ...sponsors.value }
+  const items = await Promise.all([...sponsors.value].map(async (sponsor: Sponsor) => {
+    const sponsorCopy = JSON.parse(JSON.stringify(sponsor))
+    if (sponsor.logo?.id) {
+      sponsorCopy.logo = sponsor.logo.id
+    }
+    else if (sponsor.logo) {
+      const logoResponse = await upload([sponsor.logo], 'Logo', 'mdi-my', 'LOGO')
+
+      sponsorCopy.logo = logoResponse?.data?.items[0]?.id || null
+    }
+    else {
+      sponsorCopy.logo = null
+    }
+
+    return sponsorCopy
+  }))
 
   setTimeout(async () => {
     try {
       let resp = null
-      if (item?.id)
-        resp = await axiosIns.patch(`settings/sponsors/${item.id}`, item)
+      if (items[0].id)
+        resp = await axiosIns.patch(`settings/sponsors/${items[0].id}`, items[0])
 
       else
-        resp = await axiosIns.post('settings/sponsors', item)
+        resp = await axiosIns.post('settings/sponsors', items)
 
-      const [updatedItem] = resp?.data?.items
+      const updatedItem = resp?.data?.items
 
       showMessage('success', 'snackbar.SponsorChangesSaved', 'snackbar.ChangesSaved')
 
@@ -47,6 +68,10 @@ const onSubmit = async () => {
       loading.value = false
     }
   }, 1000)
+}
+
+const removeSponsor = (index: number) => {
+  sponsors.value.splice(index, 1)
 }
 
 onMounted(() => {
@@ -88,18 +113,31 @@ onMounted(() => {
       </VToolbar>
     </div>
     <VForm class="pet-form mx-10">
-      <SettingsSponsorFormCard
-        v-for="(sponsor, sponsorIndex) in sponsors"
-        :key="`sponsor_${sponsorIndex}`"
-        :sponsor.async="sponsor"
-      />
+      <VRow>
+        <VCol
+          v-for="(sponsor, sponsorIndex) in sponsors"
+          :key="`sponsor_${sponsorIndex}`"
+          sm="12"
+          md="6"
+        >
+          <SettingsSponsorFormCard
+            :sponsor.async="sponsor"
+            :show-delete="sponsorIndex !== 0"
+            @remove-item="removeSponsor(sponsorIndex)"
+          />
+        </VCol>
+      </VRow>
 
-
-        <VRow v-if="!sponsors[0].id">
-          <VCol sm="12">
-            123
-          </VCol>
-        </VRow>
+      <VRow v-if="!sponsors[0].id">
+        <VCol sm="12">
+          <div class="d-flex align-center justify-center">
+            <VBtn
+              icon="mdi-plus"
+              @click="addSponsor"
+            />
+          </div>
+        </VCol>
+      </VRow>
     </VForm>
   </div>
 </template>

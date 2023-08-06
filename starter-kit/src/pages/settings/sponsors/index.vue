@@ -58,12 +58,7 @@ const closeSponsorModal = (sponsor: Sponsor): void => {
   if (!sponsor)
     return
 
-  const sponsorIndex = sponsors.value.findIndex((item: Sponsor) => item.id === sponsor.id)
-
-  if (sponsorIndex > -1)
-    sponsors.value[sponsorIndex] = sponsor
-  else
-    sponsors.value.push({ ...sponsor })
+  reloadData()
 }
 </script>
 

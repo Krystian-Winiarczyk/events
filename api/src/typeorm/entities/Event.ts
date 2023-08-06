@@ -1,7 +1,8 @@
-import {Entity, Column, OneToMany, JoinColumn, OneToOne} from 'typeorm';
+import {Entity, Column, OneToMany, JoinColumn, OneToOne, JoinTable, ManyToMany} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import {EventCompetition} from "./EventCompetition";
 import {File} from "./File";
+import {Sponsor} from "./Sponsor";
 
 @Entity({ name: 'events' })
 export class Event extends BaseEntity {
@@ -65,6 +66,12 @@ export class Event extends BaseEntity {
     @JoinColumn()
     banner: File
 
-    // sponsoring (name, link, logo, opis)
+    /**
+     *  Event banner image
+     * @returns {File} banner image
+     */
+    @ManyToMany(() => Sponsor, (sponsor) => sponsor.events)
+    @JoinTable()
+    sponsors: Sponsor[]
 
 }

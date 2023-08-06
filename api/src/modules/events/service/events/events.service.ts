@@ -7,6 +7,15 @@ import {Event} from "../../../../typeorm/entities/Event";
 @Injectable()
 export class EventsService extends BaseService<Event>{
     constructor(@InjectRepository(Event) private eventsRepository: Repository<Event>) {
-        super(eventsRepository)
+        super(eventsRepository, {
+            eventCompetitions: {
+                competition: true,
+            },
+            banner: true,
+            images: true,
+            sponsors: {
+                logo: true
+            }
+        })
     }
 }

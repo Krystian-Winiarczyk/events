@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import type { Sponsor } from '@/globals/types/types'
 import { requiredValidator } from '@validators'
-import { imagePath } from "@core/utils/formatters";
+import { imagePath } from '@core/utils/formatters'
 
 interface Props {
   sponsor: Sponsor
+  showDelete: boolean
 }
 
 const props = defineProps<Props>()
+const emits = defineEmits(['removeItem'])
 const sponsorImageUploadRef = ref()
 
 const imagePreviewSrc = (img: any) => {
@@ -24,41 +26,55 @@ const imagePreviewSrc = (img: any) => {
 </script>
 
 <template>
-  <VRow>
+  <div class="d-flex">
     <!-- Data -->
-    <VCol
-      sm="12"
-      md="6"
-    >
+    <div class="flex-grow-1 mr-5">
       <VCardTitle class="text-primary my-2 mb-3">
         {{ $t('BasicData') }}
+        <VBtn
+          v-if="showDelete"
+          size="sm"
+          color="error"
+          variant="plain"
+          @click="emits('removeItem')"
+        >
+          <VIcon
+            icon="mdi-trash"
+            size="25"
+          />
+        </VBtn>
       </VCardTitle>
 
       <VRow>
-        <VCol cols="12">
+        <VCol cols="6">
           <VTextField
-            density="compact"
             v-model="sponsor.name"
+            density="compact"
             :rules="[requiredValidator]"
             :label="$t('Name')"
           />
         </VCol>
+        <VCol cols="6">
+          <VTextField
+            v-model="sponsor.url"
+            density="compact"
+            :rules="[requiredValidator]"
+            :label="$t('WebsiteUrl')"
+          />
+        </VCol>
         <VCol cols="12">
           <VTextarea
-            density="compact"
             v-model="sponsor.description"
+            density="compact"
             rows="3"
             :label="$t('Description')"
           />
         </VCol>
       </VRow>
-    </VCol>
+    </div>
 
     <!-- Images -->
-    <VCol
-      md="6"
-      sm="12"
-    >
+    <div>
       <VCardTitle class="text-primary my-2 mb-3">
         {{ $t('MainImage') }}
       </VCardTitle>
@@ -94,8 +110,10 @@ const imagePreviewSrc = (img: any) => {
           </div>
         </VCol>
       </VRow>
-    </VCol>
-  </VRow>
+    </div>
+
+    <VDivider vertical />
+  </div>
 </template>
 
 <style scoped>

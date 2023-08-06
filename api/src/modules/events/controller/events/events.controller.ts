@@ -42,18 +42,28 @@ export class EventsController extends BaseController implements ControllerInterf
             const [events, total]: [ Event[], number ] = await this.eventsService.findAll({
                 pagination: this.paginationFragment(limit, page),
                 where: this.resolveFilters(q),
-                relations: {
-                    eventCompetitions: {
-                        competition: true,
-                    },
-                    banner: true,
-                    images: true
-                }
             });
 
             this.apiSuccessResponse({ res, req, data: events, total });
         } catch (error) {
             this.apiErrorResponse(res, req, error)
+        }
+    }
+
+    @Get('open-event')
+    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+    async getCurrentlyOpenEvent(
+        @Req() req: Request,
+        @Res() res: Response,
+    ) {
+        try {
+            const [events, total]: [ Event[], number ] = await this.eventsService.findAll({
+                pagination: this.paginationFragment(1, 1),
+            });
+
+            this.apiSuccessResponse({ res, req, data: events[0] })
+        } catch (error) {
+            this.apiErrorResponse(res, req, error);
         }
     }
 

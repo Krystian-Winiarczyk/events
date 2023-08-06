@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { requiredValidator } from '@validators'
-import type { Competition, Event, EventCompetition } from '@/globals/types/types'
+import type { Competition, Event, EventCompetition, Sponsor } from '@/globals/types/types'
 import axiosIns from '@axios'
 
 import { useToastStore } from '@/store/toast'
@@ -34,6 +34,7 @@ const eventTabs = ref(0)
 const tabs = [
   { icon: 'mdi-users', title: 'BasicData' },
   { icon: 'mdi-users', title: 'Competitions' },
+  { icon: 'mdi-users', title: 'Sponsors' },
 ]
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -54,6 +55,8 @@ const onSubmit = async () => {
 
     return ec
   })
+
+  item.sponsors = item.sponsors.filter(({ active, id }) => active && id).map((sponsor: Sponsor) => sponsor.id)
 
   if (item.banner?.id) { item.banner = item.banner.id }
   else if (item.banner) {
@@ -114,29 +117,55 @@ const imagePreviewSrc = (img: any) => {
   return URL.createObjectURL(image)
 }
 
+const loadCompetitions = async () => {
+  // load competitions
+  const { data } = await axiosIns.get('/settings/competitions')
+
+  data?.items?.forEach((competition: Competition, index: number) => {
+    const eventCompetitions = event.value.eventCompetitions
+    const eventCompetitionIndex = eventCompetitions.findIndex((eventCompetition: EventCompetition) => eventCompetition.competition?.id === competition?.id)
+    if (eventCompetitionIndex > -1) {
+      event.value.eventCompetitions[eventCompetitionIndex].active = true
+
+      return
+    }
+
+    event.value.eventCompetitions.push({
+      competition,
+      userLimit: 100,
+      pricePerStart: 25,
+      active: false,
+    })
+  })
+}
+
+const loadSponsors = async () => {
+// load competitions
+  const { data } = await axiosIns.get('/settings/sponsors')
+
+  data?.items?.forEach((sponsor: Sponsor, index: number) => {
+    const eventSponsors = event.value.sponsors
+    const eventSponsorIndex = eventSponsors.findIndex((eventSponsor: Sponsor) => eventSponsor?.id === sponsor?.id)
+    if (eventSponsorIndex > -1) {
+      event.value.sponsors[eventSponsorIndex].active = true
+
+      return
+    }
+
+    event.value.sponsors.push({
+      ...sponsor,
+      active: false,
+    })
+  })
+}
+
 onMounted(async () => {
   if (props.defaultEvent)
     Object.assign(event.value, JSON.parse(JSON.stringify(props.defaultEvent)))
 
   try {
-    // load competitions
-    const { data } = await axiosIns.get('/settings/competitions')
-
-    data?.items?.forEach((competition: Competition, index: number) => {
-      const eventCompetitions = event.value.eventCompetitions
-      if (eventCompetitions.find((eventCompetition: EventCompetition) => eventCompetition.competition?.id === competition?.id)) {
-        event.value.eventCompetitions[index].active = true
-
-        return
-      }
-
-      event.value.eventCompetitions.push({
-        competition,
-        userLimit: 100,
-        pricePerStart: 25,
-        active: false,
-      })
-    })
+    await loadCompetitions()
+    await loadSponsors()
   }
   catch (err) {
     console.log(err)
@@ -287,14 +316,12 @@ onMounted(async () => {
                 <VCol cols="12">
                   <VTextField
                     v-model="event.mediaUrl"
-                    type="number"
                     :label="$t('MediaUrl')"
                   />
                 </VCol>
                 <VCol cols="12">
                   <VTextField
                     v-model="event.regulationUrl"
-                    type="number"
                     :label="$t('RegulationUrl')"
                   />
                 </VCol>
@@ -457,6 +484,36 @@ onMounted(async () => {
                   <EventFormCompetitionCard :competition.async="competition" />
                 </VCol>
               </VRow>
+            </VCol>
+          </VRow>
+        </VWindowItem>
+
+        <!-- Sponsors Tab -->
+        <VWindowItem>
+          <VRow>
+            <VCol
+              v-for="(sponsor, sponsorIndex) in event.sponsors"
+              :key="`sponsor_1_${sponsorIndex}`"
+              cols="12"
+              sm="12"
+              md="6"
+              lg="4"
+            >
+              <div class="bg-light-primary pa-2 rounded d-flex justify-space-between align-center">
+                <VSwitch
+                  v-model="sponsor.active"
+                  inset
+                  class="flex-grow-1"
+                  color="primary"
+                  :label="sponsor.name"
+                />
+
+                <img
+                  class="rounded"
+                  :src="imagePath(sponsor.logo)"
+                  style="height: 100px;"
+                >
+              </div>
             </VCol>
           </VRow>
         </VWindowItem>

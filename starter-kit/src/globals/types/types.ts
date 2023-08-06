@@ -83,6 +83,7 @@ export interface Event {
   banner: File | string | any
   images: File[] | string[] | any[]
   eventCompetitions: Array<EventCompetition>
+  sponsors: Array<Sponsor>
 }
 
 export interface EventCompetition {
@@ -100,4 +101,6 @@ export interface Sponsor {
   name: string
   description?: string
   logo?: File | string | any
+
+  active?: boolean
 }

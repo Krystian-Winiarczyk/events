@@ -1,6 +1,7 @@
-import {Entity, Column, JoinColumn, OneToOne} from 'typeorm';
+import {Entity, Column, JoinColumn, OneToOne, ManyToMany} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import { File } from "./File";
+import { Event } from "./Event";
 
 @Entity({ name: 'sponsors' })
 export class Sponsor extends BaseEntity {
@@ -32,4 +33,11 @@ export class Sponsor extends BaseEntity {
     @OneToOne(() => File, file => file.sponsor, { onDelete: 'CASCADE' })
     @JoinColumn()
     logo: File
+
+    /**
+     *  Sponsor events
+     * @returns {Event[]} sponsor event
+     */
+    @ManyToMany(() => Event, (event) => event.sponsors)
+    events: Event[]
 }

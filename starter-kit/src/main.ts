@@ -30,6 +30,7 @@ const app = createApp(App)
 
 // Use plugins
 app.use(createPinia())
+
 app.use(layoutsPlugin)
 app.use(vuetify)
 app.use(router)

@@ -16,79 +16,86 @@ const authStore = useAuthStore()
     bordered
     color="success"
   >
-      <!-- SECTION Menu -->
-      <VMenu
-        activator="parent"
-        width="230"
-        location="bottom end"
-        offset="14px"
-      >
-        <template #activator="{ props }">
-          <Avatar class="cursor-pointer" :size="40" :item="user.primaryProfile" v-bind="props" />
-        </template>
-        <VList>
-          <!-- 👉 User Avatar & Name -->
-          <VListItem @click="$router.push({ path: '/my/profile' })">
-            <template #prepend>
-              <VListItemAction start>
-                <VBadge
-                  dot
-                  location="bottom right"
-                  offset-x="3"
-                  offset-y="3"
-                  color="success"
+    <!-- SECTION Menu -->
+    <VMenu
+      activator="parent"
+      width="230"
+      location="bottom end"
+      offset="14px"
+    >
+      <template #activator="{ props }">
+        <Avatar
+          class="cursor-pointer"
+          :size="40"
+          :item="user.primaryProfile"
+          v-bind="props"
+        />
+      </template>
+      <VList>
+        <!-- 👉 User Avatar & Name -->
+        <VListItem @click="$router.push({ path: '/my/profile' })">
+          <template #prepend>
+            <VListItemAction start>
+              <VBadge
+                dot
+                location="bottom right"
+                offset-x="3"
+                offset-y="3"
+                color="success"
+              >
+                <Avatar
+                  :size="35"
+                  color="primary"
+                  variant="tonal"
+                  :item="user.primaryProfile"
                 >
-                  <Avatar
-                    :size="35"
-                    color="primary"
-                    variant="tonal"
-                    :item="user.primaryProfile"
-                  >
-                    <VImg :src="imagePath(user.primaryProfile.avatar)" />
-                  </Avatar>
-                </VBadge>
-              </VListItemAction>
-            </template>
+                  <VImg :src="imagePath(user.primaryProfile.avatar)" />
+                </Avatar>
+              </VBadge>
+            </VListItemAction>
+          </template>
 
-            <VListItemTitle class="font-weight-semibold">
-              {{ user.name }}
-            </VListItemTitle>
-            <VListItemSubtitle class="text-capitalize">{{ user.role.toLowerCase() }}</VListItemSubtitle>
-          </VListItem>
+          <VListItemTitle class="font-weight-semibold">
+            {{ user.name }}
+          </VListItemTitle>
+          <VListItemSubtitle class="text-capitalize">
+            {{ user.role.toLowerCase() }}
+          </VListItemSubtitle>
+        </VListItem>
 
-          <!-- 👉 Pets -->
-<!--          <VListItem-->
-<!--            link-->
-<!--            @click=""-->
-<!--          >-->
-<!--            <template #prepend>-->
-<!--              <VIcon-->
-<!--                class="me-2"-->
-<!--                icon="mdi-user"-->
-<!--                size="22"-->
-<!--              />-->
-<!--            </template>-->
+        <!-- 👉 Pets -->
+        <!--          <VListItem -->
+        <!--            link -->
+        <!--            @click="" -->
+        <!--          > -->
+        <!--            <template #prepend> -->
+        <!--              <VIcon -->
+        <!--                class="me-2" -->
+        <!--                icon="mdi-user" -->
+        <!--                size="22" -->
+        <!--              /> -->
+        <!--            </template> -->
 
-<!--            <VListItemTitle>{{ $t('Profile', 1) }}</VListItemTitle>-->
-<!--          </VListItem>-->
+        <!--            <VListItemTitle>{{ $t('Profile', 1) }}</VListItemTitle> -->
+        <!--          </VListItem> -->
 
-          <!-- Divider -->
-          <VDivider class="my-2" />
+        <!-- Divider -->
+        <VDivider class="my-2" />
 
-          <!-- 👉 Logout -->
-          <VListItem @click="authStore.logout()">
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-logout"
-                size="22"
-              />
-            </template>
+        <!-- 👉 Logout -->
+        <VListItem @click="authStore.logout()">
+          <template #prepend>
+            <VIcon
+              class="me-2"
+              icon="tabler-logout"
+              size="22"
+            />
+          </template>
 
-            <VListItemTitle>{{ $t('Logout') }}</VListItemTitle>
-          </VListItem>
-        </VList>
-      </VMenu>
-      <!-- !SECTION -->
+          <VListItemTitle>{{ $t('Logout') }}</VListItemTitle>
+        </VListItem>
+      </VList>
+    </VMenu>
+    <!-- !SECTION -->
   </VBadge>
 </template>

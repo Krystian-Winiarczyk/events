@@ -24,7 +24,7 @@ const avatarNoImageLetters = computed(() => {
 <template>
   <div>
     <VAvatar
-      :image="imagePath(item.avatar)"
+      :image="imagePath(item?.avatar || item?.logo)"
       variant="tonal"
       :rounded="rounded"
       color="primary"

@@ -136,4 +136,5 @@ const isPasswordVisible = ref(false)
 <route lang="yaml">
 meta:
   layout: blank
+  authRequired: false
 </route>

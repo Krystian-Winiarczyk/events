@@ -396,5 +396,5 @@ const nextStep = () => {
 <route lang="yaml">
 meta:
   layout: blank
-  public: true
+  authRequired: false
 </route>

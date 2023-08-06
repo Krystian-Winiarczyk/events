@@ -72,4 +72,5 @@ export const defaultEvent: Event = {
   images: [],
   regulationUrl: '',
   eventCompetitions: [],
+  sponsors: [],
 }

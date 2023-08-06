@@ -76,11 +76,11 @@ export class SponsorController extends BaseController implements ControllerInter
         try {
             let competition: Sponsor | Sponsor[] = null
 
-            if (Array.isArray(createDto) && createDto.length) {
+            if (Array.isArray(createDto) && createDto.length)
                 competition = await Promise.all(createDto.map(async singleDto => await this.sponsorService.create(singleDto)))
-            } else {
+            else
                 competition = await this.sponsorService.create(createDto)
-            }
+
 
             this.apiSuccessResponse({ res, req, data: competition });
         } catch (error) {

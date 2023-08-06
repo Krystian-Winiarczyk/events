@@ -1,25 +1,59 @@
+<script setup lang="ts">
+import type { Ref } from 'vue'
+
+import axiosIns from '@axios'
+import type { Event } from '@/globals/types/types'
+import { imagePath } from '@core/utils/formatters'
+import OpenEventNavbar from '@/views/components/OpenEventNavbar.vue'
+
+const loading = ref(false)
+const { y } = useWindowScroll()
+
+const openEvent: Ref<Event> = ref(null)
+
+onMounted(async () => {
+  loading.value = true
+
+  const { data } = await axiosIns.get('/events/open-event')
+
+  openEvent.value = data.items[0]
+
+  loading.value = false
+})
+</script>
+
 <template>
   <div>
-    <VCard
-      class="mb-6"
-      title="Kick start your project 🚀"
+    <VAppBar
+      class="py-2 bg-shades-transparent"
+      scroll-behavior="hide inverted"
+      scroll-threshold="25"
     >
-      <VCardText>All the best for your new project.</VCardText>
-      <VCardText>
-        Please make sure to read our <a
-          href="https://demos.pixinvent.com/materialize-vuejs-admin-template/documentation/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-decoration-none"
-        >
-          Template Documentation
-        </a> to understand where to go from here and how to use our template.
-      </VCardText>
-    </VCard>
+      <VContainer>
+        <OpenEventNavbar />
+      </VContainer>
+    </VAppBar>
 
-    <VCard title="Want to integrate JWT? 🔒">
-      <VCardText>We carefully crafted JWT flow so you can implement JWT with ease and with minimum efforts.</VCardText>
-      <VCardText>Please read our  JWT Documentation to get more out of JWT authentication.</VCardText>
-    </VCard>
+    <VContainer class="py-2">
+      <OpenEventNavbar />
+    </VContainer>
+
+    <div v-if="openEvent">
+      <VImg
+        style="max-height: 65vh"
+        cover
+        :src="imagePath(openEvent.banner)"
+      />
+
+      <VContainer>
+        {{ openEvent }}
+      </VContainer>
+    </div>
   </div>
 </template>
+
+<route lang="yaml">
+meta:
+  layout: blank
+  authRequired: false
+</route>
