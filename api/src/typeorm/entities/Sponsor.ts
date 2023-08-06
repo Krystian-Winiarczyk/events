@@ -31,5 +31,5 @@ export class Sponsor extends BaseEntity {
      */
     @OneToOne(() => File, file => file.sponsor, { onDelete: 'CASCADE' })
     @JoinColumn()
-    avatar: File
+    logo: File
 }

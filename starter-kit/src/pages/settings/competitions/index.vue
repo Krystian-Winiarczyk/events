@@ -21,8 +21,8 @@ const competitionHeaders = ref([
 
 const loading = ref(false)
 
-const isEditEventDialogVisible: Ref<boolean> = ref(false)
-const editedEvent: Ref<Competition> = ref({ ...defaultCompetition })
+const isEditCompetitionDialogVisible: Ref<boolean> = ref(false)
+const editedCompetition: Ref<Competition> = ref({ ...defaultCompetition })
 
 const reloadData = async () => {
   loading.value = true
@@ -44,15 +44,15 @@ const reloadData = async () => {
 
 const openEditCompetition = (competition: Competition): void => {
   if (!competition)
-    editedEvent.value = { ...defaultCompetition }
+    editedCompetition.value = { ...defaultCompetition }
   else
-    editedEvent.value = { ...competition }
+    editedCompetition.value = { ...competition }
 
-  isEditEventDialogVisible.value = true
+  isEditCompetitionDialogVisible.value = true
 }
 
 const closeCompetitionModal = (competition: Competition): void => {
-  isEditEventDialogVisible.value = false
+  isEditCompetitionDialogVisible.value = false
   if (!competition)
     return
 
@@ -100,7 +100,7 @@ const closeCompetitionModal = (competition: Competition): void => {
           size="sm"
           variant="plain"
           color="warning"
-          @click="editedEvent = item.raw; isEditEventDialogVisible = true"
+          @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
         >
           <VIcon icon="mdi-edit" />
         </VBtn>
@@ -109,7 +109,7 @@ const closeCompetitionModal = (competition: Competition): void => {
           class="ml-5"
           variant="plain"
           color="error"
-          @click="editedEvent = item.raw; isEditEventDialogVisible = true"
+          @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
         >
           <VIcon icon="mdi-trash" />
         </VBtn>
@@ -117,7 +117,7 @@ const closeCompetitionModal = (competition: Competition): void => {
     </VDataTableServer>
 
     <VDialog
-      v-model="isEditEventDialogVisible"
+      v-model="isEditCompetitionDialogVisible"
       fullscreen
       :scrim="false"
       transition="dialog-bottom-transition"
@@ -125,9 +125,9 @@ const closeCompetitionModal = (competition: Competition): void => {
       <!-- Dialog Content -->
       <VCard>
         <SettingsCompetitionForm
-          v-if="isEditEventDialogVisible"
+          v-if="isEditCompetitionDialogVisible"
           ref="competitionFormRef"
-          :default-competition="editedEvent"
+          :default-competition="editedCompetition"
           @close="closeCompetitionModal"
         />
       </VCard>

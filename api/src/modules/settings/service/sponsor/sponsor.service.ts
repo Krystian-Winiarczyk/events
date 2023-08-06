@@ -7,6 +7,6 @@ import { Repository } from "typeorm";
 @Injectable()
 export class SponsorService extends BaseService<Sponsor> {
     constructor(@InjectRepository(Sponsor) private sponsorRepository: Repository<Sponsor>) {
-        super(sponsorRepository);
+        super(sponsorRepository, { logo: true });
     }
 }

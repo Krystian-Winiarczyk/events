@@ -4,16 +4,18 @@ import type { Ref } from 'vue/dist/vue'
 import axiosIns from '@axios'
 
 import SettingsCompetitionForm from '@/views/forms/SettingsCompetitionForm.vue'
-import type { Competition } from '@/globals/types/types'
-import { defaultCompetition } from '@/globals/defaults'
+import type { Sponsor } from '@/globals/types/types'
+import { defaultSponsor } from '@/globals/defaults'
+import SettingsSponsorForm from "@/views/forms/SettingsSponsorForm.vue";
 
-const competitions = ref([])
+const sponsors = ref([])
 const totalItems = ref(0)
 const page = ref(1)
 const perPage = ref(10)
 
-const competitionHeaders = ref([
+const sponsorHeaders = ref([
   { title: 'ID', key: 'id', sortable: false },
+  { title: 'LOGO', key: 'logo', sortable: false },
   { title: 'NAME', key: 'name', sortable: false },
   { title: 'DESCRIPTION', key: 'description', sortable: false },
   { title: 'ACTION', key: 'action', sortable: false },
@@ -21,8 +23,8 @@ const competitionHeaders = ref([
 
 const loading = ref(false)
 
-const isEditEventDialogVisible: Ref<boolean> = ref(false)
-const editedEvent: Ref<Competition> = ref({ ...defaultCompetition })
+const isEditSponsorDialogVisible: Ref<boolean> = ref(false)
+const editedSponsor: Ref<Sponsor> = ref({ ...defaultSponsor })
 
 const reloadData = async () => {
   loading.value = true
@@ -32,48 +34,48 @@ const reloadData = async () => {
     page: page.value,
   }
 
-  const { data } = await axiosIns.get('/settings/competitions', { params })
+  const { data } = await axiosIns.get('/settings/sponsors', { params })
 
-  competitions.value = data?.items?.map(competition => ({
-    ...competition,
+  sponsors.value = data?.items?.map((sponsor: Sponsor) => ({
+    ...sponsor,
   })) || []
   totalItems.value = data?.totalItems || 0
 
   loading.value = false
 }
 
-const openEditCompetition = (competition: Competition): void => {
-  if (!competition)
-    editedEvent.value = { ...defaultCompetition }
+const openEditSponsor = (sponsor: Sponsor): void => {
+  if (!sponsor)
+    editedSponsor.value = { ...defaultSponsor }
   else
-    editedEvent.value = { ...competition }
+    editedSponsor.value = { ...sponsor }
 
-  isEditEventDialogVisible.value = true
+  isEditSponsorDialogVisible.value = true
 }
 
-const closeCompetitionModal = (competition: Competition): void => {
-  isEditEventDialogVisible.value = false
-  if (!competition)
+const closeSponsorModal = (sponsor: Sponsor): void => {
+  isEditSponsorDialogVisible.value = false
+  if (!sponsor)
     return
 
-  const competitionIndex = competitions.value.findIndex((item: Competition) => item.id === competition.id)
+  const sponsorIndex = sponsors.value.findIndex((item: Sponsor) => item.id === sponsor.id)
 
-  if (competitionIndex > -1)
-    competitions.value[competitionIndex] = competition
+  if (sponsorIndex > -1)
+    sponsors.value[sponsorIndex] = sponsor
   else
-    competitions.value.push({ ...competition })
+    sponsors.value.push({ ...sponsor })
 }
 </script>
 
 <template>
   <div>
     <h4>
-      Competitions
+      Sponsors
       <VBtn
         color="primary"
         size="small"
         class="me-1"
-        @click="openEditCompetition(null)"
+        @click="openEditSponsor(null)"
       >
         <VIcon
           icon="mdi-plus"
@@ -85,8 +87,8 @@ const closeCompetitionModal = (competition: Competition): void => {
       v-model:items-per-page.async="perPage"
       v-model:page.async="page"
       :must-sort="false"
-      :headers="competitionHeaders"
-      :items="competitions"
+      :headers="sponsorHeaders"
+      :items="sponsors"
       :items-length="totalItems"
       :loading="loading"
       @update:options="reloadData"
@@ -100,7 +102,7 @@ const closeCompetitionModal = (competition: Competition): void => {
           size="sm"
           variant="plain"
           color="warning"
-          @click="editedEvent = item.raw; isEditEventDialogVisible = true"
+          @click="editedSponsor = item.raw; isEditSponsorDialogVisible = true"
         >
           <VIcon icon="mdi-edit" />
         </VBtn>
@@ -109,7 +111,7 @@ const closeCompetitionModal = (competition: Competition): void => {
           class="ml-5"
           variant="plain"
           color="error"
-          @click="editedEvent = item.raw; isEditEventDialogVisible = true"
+          @click="editedSponsor = item.raw; isEditSponsorDialogVisible = true"
         >
           <VIcon icon="mdi-trash" />
         </VBtn>
@@ -117,18 +119,18 @@ const closeCompetitionModal = (competition: Competition): void => {
     </VDataTableServer>
 
     <VDialog
-      v-model="isEditEventDialogVisible"
+      v-model="isEditSponsorDialogVisible"
       fullscreen
       :scrim="false"
       transition="dialog-bottom-transition"
     >
       <!-- Dialog Content -->
       <VCard>
-        <SettingsCompetitionForm
-          v-if="isEditEventDialogVisible"
-          ref="competitionFormRef"
-          :default-competition="editedEvent"
-          @close="closeCompetitionModal"
+        <SettingsSponsorForm
+          v-if="isEditSponsorDialogVisible"
+          ref="sponsorFormRef"
+          :default-sponsor="editedSponsor"
+          @close="closeSponsorModal"
         />
       </VCard>
     </VDialog>

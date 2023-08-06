@@ -55,7 +55,7 @@ export class File extends BaseEntity {
      *  Assigned file sponsor
      * @returns {Sponsor} sponsor
      */
-    @OneToOne(() => Sponsor, (sponsor) => sponsor.avatar, { nullable: true, onDelete: 'CASCADE' })
+    @OneToOne(() => Sponsor, (sponsor) => sponsor.logo, { nullable: true, onDelete: 'CASCADE' })
     @JoinColumn()
     sponsor: Sponsor
 
