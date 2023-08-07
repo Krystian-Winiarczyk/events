@@ -22,6 +22,7 @@ const authStore = useAuthStore()
       width="230"
       location="bottom end"
       offset="14px"
+      v-if="user"
     >
       <template #activator="{ props }">
         <Avatar
@@ -59,7 +60,7 @@ const authStore = useAuthStore()
             {{ user.name }}
           </VListItemTitle>
           <VListItemSubtitle class="text-capitalize">
-            {{ user.role.toLowerCase() }}
+            {{ user.role }}
           </VListItemSubtitle>
         </VListItem>
 

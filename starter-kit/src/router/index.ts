@@ -10,32 +10,37 @@ const router = createRouter({
   ],
 })
 
+/* Logged in:
+    access: [*, !login, !signup]
+      login, signup -> my/profile
+
+   Logged out:
+     access: [/, login, signup]
+     * ->
+*/
 router.beforeEach((route, from, next) => {
   const { loggedIn } = useAuthStore()
   const authRequired = route.meta?.authRequired ?? true
 
   if (loggedIn && (route.name === 'login' || route.name === 'signup')) {
+    console.log('1')
     return next('/my/profile')
   }
 
-  if (!authRequired) return next()
-  if (authRequired && !loggedIn && (route.name !== 'login' && route.name !== 'signup')) {
+  if (!loggedIn && authRequired && (route.name !== 'login' && route.name !== 'signup')) {
+    // eslint-disable-next-line sonarjs/no-gratuitous-expressions
+    console.log('2', '!loggedIn && authRequired && (route.name !== \'login\' && route.name !== \'signup\')', !loggedIn && authRequired && (route.name !== 'login' && route.name !== 'signup'))
     return next('/login')
   }
 
+  console.log('3', 'authRequired && loggedIn', authRequired && loggedIn)
   if (authRequired && loggedIn) return next()
 
-  // Redirect to login if not authorized
-  // if (!loggedIn && authRequired && route.name !== 'login')
-  //   next({ name: 'login' })
+  console.log('4', '!authRequired)', !authRequired)
+  if (!authRequired) return next()
 
-  // Logged user try to redirect to login/signup pages
-  // else if (loggedIn && !authRequired && (route.name !== 'login' || route.name !== 'signup'))
-  //   next(from)
-
+  console.log('5')
   return next()
-
-  console.log(route, loggedIn)
 })
 
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
