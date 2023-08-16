@@ -23,23 +23,18 @@ router.beforeEach((route, from, next) => {
   const authRequired = route.meta?.authRequired ?? true
 
   if (loggedIn && (route.name === 'login' || route.name === 'signup')) {
-    console.log('1')
     return next('/my/profile')
   }
 
   if (!loggedIn && authRequired && (route.name !== 'login' && route.name !== 'signup')) {
     // eslint-disable-next-line sonarjs/no-gratuitous-expressions
-    console.log('2', '!loggedIn && authRequired && (route.name !== \'login\' && route.name !== \'signup\')', !loggedIn && authRequired && (route.name !== 'login' && route.name !== 'signup'))
     return next('/login')
   }
 
-  console.log('3', 'authRequired && loggedIn', authRequired && loggedIn)
   if (authRequired && loggedIn) return next()
 
-  console.log('4', '!authRequired)', !authRequired)
   if (!authRequired) return next()
 
-  console.log('5')
   return next()
 })
 

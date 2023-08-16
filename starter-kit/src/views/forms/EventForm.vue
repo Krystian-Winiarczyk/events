@@ -249,6 +249,14 @@ onMounted(async () => {
                     :label="$t('Name')"
                   />
                 </VCol>
+                <VCol cols="12">
+                  <VTextarea
+                    v-model="event.description"
+                    rows="3"
+                    :label="$t('Description')"
+                  />
+                </VCol>
+
                 <VCol cols="6">
                   <VTextField
                     v-model="event.locationCity"

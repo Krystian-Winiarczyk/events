@@ -101,6 +101,7 @@ export interface Sponsor {
   name: string
   description?: string
   logo?: File | string | any
+  url?: string
 
   active?: boolean
 }
