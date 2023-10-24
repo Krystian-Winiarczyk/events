@@ -62,6 +62,7 @@ export interface Competition {
   name: string
   description: string
   regulationUrl: string
+  group?: Group | string | any
 }
 
 export interface Group {

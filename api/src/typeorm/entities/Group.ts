@@ -1,6 +1,5 @@
 import {Entity, Column, OneToMany} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
-import {EventCompetition} from "./EventCompetition";
 import {Competition} from "./Competition";
 
 @Entity({ name: 'groups' })

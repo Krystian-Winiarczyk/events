@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { requiredValidator } from '@validators'
-import type { Competition } from '@/globals/types/types'
+import type {Competition, Group} from '@/globals/types/types'
 import axiosIns from '@axios'
 
 import { useToastStore } from '@/store/toast'
@@ -9,6 +9,7 @@ import { defaultCompetition } from '@/globals/defaults'
 
 interface Props {
   defaultCompetition?: Competition
+  groups?: Array<Group>
 }
 
 const props = defineProps<Props>()
@@ -30,8 +31,7 @@ const onSubmit = async () => {
       let resp = null
       if (item?.id) {
         resp = await axiosIns.patch(`settings/competitions/${item.id}`, item)
-      }
-      else {
+      } else {
         resp = await axiosIns.post('settings/competitions', item)
       }
 
@@ -106,6 +106,20 @@ onMounted(() => {
                 :rules="[requiredValidator]"
                 :label="$t('Name')"
               />
+            </VCol>
+            <VCol cols="12">
+              <VSelect
+                :model-value="competition.group"
+                :items="groups"
+                :label="$t('Group')"
+                clearable
+                clear-icon="mdi-close"
+              >
+                <template #selection="data">
+                  <!-- HTML that describe how select should render items when the select is open -->
+                  {{ $t(`PetGenders.${data.item.value}`) }}
+                </template>
+              </VSelect>
             </VCol>
             <VCol cols="12">
               <VTextField

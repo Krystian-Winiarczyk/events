@@ -75,7 +75,7 @@ const form = reactive({
 const onSubmit = async () => {
   const formItem = JSON.parse(JSON.stringify(form))
 
-  formItem.email = (new Date().getSeconds()) + formItem.email
+  formItem.email = formItem.email
 
   const avatar = form.profile.avatar?.length ? form.profile.avatar[0] : null
   const petImage = form.pet.images?.length ? form.pet.images[0] : null

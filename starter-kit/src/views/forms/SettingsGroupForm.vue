@@ -60,6 +60,7 @@ const removeGroup = (index: number) => {
 }
 
 onMounted(() => {
+  console.log(props.defaultGroup)
   if (props.defaultGroup)
     Object.assign(groups.value[0], JSON.parse(JSON.stringify(props.defaultGroup)))
 })

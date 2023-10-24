@@ -4,7 +4,7 @@ import type { Ref } from 'vue/dist/vue'
 import axiosIns from '@axios'
 
 import SettingsCompetitionForm from '@/views/forms/SettingsCompetitionForm.vue'
-import SettingsGroupForm from '@/views/forms/SettingsGroupForm.vue';
+import SettingsGroupForm from '@/views/forms/SettingsGroupForm.vue'
 import type { Competition, Group } from '@/globals/types/types'
 import { defaultCompetition, defaultGroup } from '@/globals/defaults'
 
@@ -17,6 +17,7 @@ const perPage = ref(10)
 
 const competitionHeaders = ref([
   { title: 'ID', key: 'id', sortable: false },
+  { title: 'GROUP', key: 'group', sortable: false },
   { title: 'NAME', key: 'name', sortable: false },
   { title: 'DESCRIPTION', key: 'description', sortable: false },
   { title: 'ACTION', key: 'action', sortable: false },
@@ -39,7 +40,7 @@ const reloadData = async () => {
   }
 
   const { data: competitionData } = await axiosIns.get('/settings/competitions', { params })
-  const { data: groupData } = await axiosIns.get('/settings/competitions', { params })
+  const { data: groupData } = await axiosIns.get('/settings/groups', { params })
 
   competitions.value = competitionData?.items?.map((competition: Competition) => ({ ...competition })) || []
   groups.value = groupData?.items?.map((group: Group) => ({ ...group, menu: false })) || []
@@ -72,25 +73,20 @@ const closeCompetitionModal = (competition: Competition): void => {
   if (!competition)
     return
 
-  const competitionIndex = competitions.value.findIndex((item: Competition) => item.id === competition.id)
-
-  if (competitionIndex > -1)
-    competitions.value[competitionIndex] = competition
-  else
-    competitions.value.push({ ...competition })
+  reloadData()
 }
 
 const closeGroupModal = (group: Group): void => {
   isEditGroupDialogVisible.value = false
+
   if (!group)
     return
 
-  const groupIndex = groups.value.findIndex((item: Group) => item.id === group.id)
+  reloadData()
+}
 
-  if (groupIndex > -1)
-    groups.value[groupIndex] = group
-  else
-    groups.value.push({ ...group })
+const deleteGroup = (group: Group, index: number): void => {
+  const { id } = group
 }
 </script>
 
@@ -114,14 +110,19 @@ const closeGroupModal = (group: Group): void => {
 
       <VCard class="mt-2 pa-2">
         <VMenu
-          v-for="group in groups" :key="`group_${group.id}`"
+          v-for="(group, groupIndex) in groups"
+          :key="`group_${group.id}`"
           v-model="group.menu"
           :close-on-content-click="false"
           location="right center"
           open-on-hover
         >
-          <template v-slot:activator="{ props }">
-            <VChip v-bind="props" color="primary">
+          <template #activator="{ props }">
+            <VChip
+              v-bind="props"
+              color="primary"
+              class="mr-1"
+            >
               {{ group.name }}
             </VChip>
           </template>
@@ -133,6 +134,7 @@ const closeGroupModal = (group: Group): void => {
               color="secondary"
               variant="text"
               class="mr-2"
+              @click="deleteGroup(group, groupIndex)"
             >
               <VIcon icon="mdi-trash" />
             </VBtn>
@@ -141,6 +143,7 @@ const closeGroupModal = (group: Group): void => {
               size="small"
               color="secondary"
               variant="text"
+              @click="openEditGroup(group)"
             >
               <VIcon icon="mdi-edit" />
             </VBtn>
@@ -227,7 +230,7 @@ const closeGroupModal = (group: Group): void => {
         <SettingsGroupForm
           v-if="isEditGroupDialogVisible"
           ref="groupFormRef"
-          :default-competition="editedGroup"
+          :default-group="editedGroup"
           @close="closeGroupModal"
         />
       </VCard>

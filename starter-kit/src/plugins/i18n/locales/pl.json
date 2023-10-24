@@ -1,4 +1,5 @@
 {
+  "Groups": "Grupy",
   "SponsorsSettingsDescription": "W tym miejscu zdefiniujesz sponsorów przypisywanych w późniejszym etapie do wydarzenia",
   "CompetitionsSettingsDescription": "W tym miejscu zdefiniujesz konkurencje przypisywane w późniejszym etapie do wydarzenia",
   "EventsSettingsDescription": "W tym miejscu zdefiniujesz Swoje wydarzenie, aktualne wydarzenie wyświetlane jest szczegółowo na stronie głównej aplikacji",
@@ -17,7 +18,7 @@
   "HowLong": "Jak długo",
   "Day": "Dzień | Dni",
   "Hour": "Godzina | Godzin",
-  "Minute": "Minutea | Minut",
+  "Minute": "Minuta | Minut",
   "Second": "Sekunda | Sekund",
   "Settings": "Ustawienia",
   "CreateNewPet":  "Dodaj nowego pupila",
@@ -117,6 +118,12 @@
   "Personality": "Osobowość",
   "PetDescription": "Opis pupila",
   "Description": "Opis",
+  "EditGroup":  "Edytuj grupę",
+  "CreateNewGroups": "Utwórz nowe grupy",
+  "WebsiteUrl": "Adres strony WWW",
+  "CreateNewSponsors": "Utwórz nowych sponsorów",
+  "EditSponsor": "Edytuj sponsora",
+  "Owner": "Właściciel",
 
   "signup": {
     "TypePassword": "Wprowadz hasło",
@@ -135,8 +142,10 @@
   },
 
   "snackbar": {
+    "AnErrorOccurredWhileUpdatingGroup": "",
+
     "PetChangesSaved": "Pomyślnie zapisano zmiany dotyczące pupila",
-    "ChangesSaved": "Zapisano zmiany",
+    "ChangesSaved": "Pomyślnie zapisano zmiany",
 
     "ProblemEncountered": "Napotkano problem",
     "AnErrorOccurredWhileUpdatingPet": "Wystąpił błąd podczas aktualizacji związanych z pupilem"

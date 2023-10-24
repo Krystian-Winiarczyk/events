@@ -6,6 +6,6 @@ import {Competition} from "../../../../typeorm/entities/Competition";
 @Injectable()
 export class CompetitionService extends BaseService<Competition>{
     constructor(@InjectRepository(Competition) private competitionRepository: Repository<Competition>) {
-        super(competitionRepository, {  })
+        super(competitionRepository, { group: true })
     }
 }
