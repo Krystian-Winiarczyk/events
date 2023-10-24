@@ -2,16 +2,20 @@
 import type { Ref } from 'vue'
 
 import moment from 'moment'
-import { useElementVisibility } from '@vueuse/core'
 import axiosIns from '@axios'
 import type { Event } from '@/globals/types/types'
 import { formatDate, imagePath } from '@core/utils/formatters'
 import OpenEventNavbar from '@/views/components/OpenEventNavbar.vue'
 
 const sectionHeader = ref()
-const isVisibleSectionHeader = useElementVisibility(sectionHeader)
+const openEvent: Ref<Event | null> = ref(null)
 
-const openEvent: Ref<Event> = ref(null)
+import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
+
+const openMapZoom: Ref<number> = ref(8)
+const openMapModal: Ref<boolean> = ref(false)
+const openMapLocation: Ref<{ lat: number | string; long: number | string } | null> = ref(null)
+
 const loading = ref(false)
 
 const { y } = useWindowScroll()
@@ -203,20 +207,25 @@ onMounted(async () => {
                 </div>
 
                 <VBtn
+                  v-if="openEvent.locationLat && openEvent.locationLong"
                   class="d-block w-100 my-2"
                   variant="outlined"
                   size="small"
+                  target="_blank"
+                  :href="`http://maps.google.com/?q=${openEvent.locationLat.replaceAll(',', '.')},${openEvent.locationLong.replaceAll('.', ',')}`"
                 >
                   <VIcon
                     icon="mdi-navigation"
                     class="mr-2"
                   />
-                  Nawiguj
+                  {{ $t('Navigate') }}
                 </VBtn>
                 <VBtn
+                  v-if="openEvent.locationLat && openEvent.locationLong"
                   class="d-block w-100 my-2"
                   variant="outlined"
                   size="small"
+                  @click="openMapModal = true; openMapLocation = { lat: openEvent.locationLat, long: openEvent.locationLong }"
                 >
                   <VIcon
                     icon="mdi-map-marker"
@@ -268,7 +277,10 @@ onMounted(async () => {
         </VRow>
       </VContainer>
 
-      <VRow style="background-color: rgba(var(--v-theme-surface), .5);">
+      <VRow
+        class="pt-10 pb-15"
+        style="background-color: rgba(var(--v-theme-surface), .5);"
+      >
         <VCol
           offset-lg="2"
           offset-md="1"
@@ -322,12 +334,122 @@ onMounted(async () => {
           </VRow>
         </VCol>
       </VRow>
-      {{ openEvent }}
+
+      <!-- Competitions -->
+      <VRow class="pt-10 pb-15">
+        <VCol
+          offset-lg="2"
+          offset-md="1"
+          sm="12"
+          md="10"
+          lg="8"
+        >
+          <div class="my-5 text-center">
+            <span class="text-primary text-h4 border-center">
+              {{ $t('StartWithUs') }}
+            </span>
+          </div>
+          <VRow class="mt-10">
+            <VCol
+              v-for="(eventCompetition, competitionIndex) in openEvent.eventCompetitions"
+              :key="`meet_competitions_card_${competitionIndex}`"
+              sm="12"
+              md="6"
+            >
+              <VCard>
+                <VCardTitle>
+                  <div class="d-flex justify-space-between">
+                    <div>{{ eventCompetition.competition.name }}</div>
+                    <VBtn
+                      v-if="eventCompetition.competition.regulationUrl"
+                      variant="plain"
+                      size="small"
+                      color="primary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      :href="eventCompetition.competition.regulationUrl"
+                    >
+                      {{ $t('CompetitionRegulation') }}
+                    </VBtn>
+                  </div>
+                </VCardTitle>
+
+                <VCardText>
+                  <div>
+                    {{ $filters.truncate(eventCompetition.competition.description, 200) }}
+                  </div>
+
+                  <div class="d-flex mt-5">
+                    <div class="flex-grow-1 d-flex flex-column align-center justify-center">
+                      <div class="text-primary font-weight-bold">
+                        <VIcon icon="mdi-dollar" />
+                        {{ $t('StartPrice') }}
+                      </div>
+                      <div class="text-center">
+                        {{ eventCompetition.pricePerStart || 0 }} PLN
+                      </div>
+                    </div>
+                    <VDivider vertical />
+                    <div class="flex-grow-1 d-flex flex-column align-center justify-center">
+                      <div class="text-primary font-weight-bold">
+                        <VIcon icon="mdi-users" />
+                        {{ $t('AssignedUsers') }}
+                      </div>
+                      <div class="text-center">
+                        {{ Math.round(Math.random() * 100) }}/{{ eventCompetition.userLimit || 0 }}
+                      </div>
+                    </div>
+                  </div>
+                </VCardText>
+              </VCard>
+            </VCol>
+          </VRow>
+        </VCol>
+      </VRow>
     </div>
+
+    <VDialog
+      v-model="openMapModal"
+      fullscreen
+      :scrim="false"
+      transition="dialog-bottom-transition"
+    >
+      <VToolbar color="primary">
+        <VBtn
+          icon
+          variant="plain"
+          @click="openMapModal = false"
+        >
+          <VIcon
+            color="white"
+            icon="mdi-close"
+          />
+        </VBtn>
+
+        <VToolbarTitle>
+          Mapa
+        </VToolbarTitle>
+      </VToolbar>
+      <!-- Dialog Content -->
+      <VCard v-if="openMapLocation">
+        <LMap :use-global-leaflet="false" ref="map" v-model:zoom="openMapZoom" :center="[openMapLocation.lat, openMapLocation.long]">
+          <LTileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            layer-type="base"
+            name="OpenStreetMap"
+          >
+            <LMarker :lat-lng="[openMapLocation.lat, openMapLocation.long]" ></LMarker>
+
+          </LTileLayer>
+        </LMap>
+      </VCard>
+    </VDialog>
   </div>
 </template>
 
 <style lang="scss">
+@import "leaflet/dist/leaflet.css";
+
 .border-start {
   position: relative !important;
   &::before {

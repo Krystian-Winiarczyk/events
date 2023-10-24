@@ -70,7 +70,7 @@ const closeEventModal = (event: Event): void => {
 <template>
   <div>
     <h4>
-      Events
+      {{ $t('Events') }}
       <VBtn
         color="primary"
         size="small"
@@ -83,59 +83,61 @@ const closeEventModal = (event: Event): void => {
         />
       </VBtn>
     </h4>
-    <VDataTableServer
-      v-model:items-per-page.async="perPage"
-      v-model:page.async="page"
-      :must-sort="false"
-      :headers="eventHeaders"
-      :items="events"
-      :items-length="totalItems"
-      :loading="loading"
-      @update:options="reloadData"
-    >
-      <template #item.description="{ item }">
-        {{ $filters.truncate(item.raw.description, 60) }}
-      </template>
+    <VCard>
+      <VDataTableServer
+        v-model:items-per-page.async="perPage"
+        v-model:page.async="page"
+        :must-sort="false"
+        :headers="eventHeaders"
+        :items="events"
+        :items-length="totalItems"
+        :loading="loading"
+        @update:options="reloadData"
+      >
+        <template #item.description="{ item }">
+          {{ $filters.truncate(item.raw.description, 60) }}
+        </template>
 
-      <template #item.regulationUrl="{ item }">
-        <div v-if="item.raw.regulationUrl">
+        <template #item.regulationUrl="{ item }">
+          <div v-if="item.raw.regulationUrl">
+            <VBtn
+              variant="plain"
+              target="_blank"
+              :href="item.raw.regulationUrl"
+            >
+              <VIcon icon="mdi-link" />
+            </VBtn>
+            <VTooltip activator="parent">
+              {{ item.raw.regulationUrl }}
+            </VTooltip>
+          </div>
+          <VIcon
+            v-else
+            icon="mdi-minus"
+          />
+        </template>
+
+        <template #item.action="{ item }">
           <VBtn
+            size="sm"
             variant="plain"
-            target="_blank"
-            :href="item.raw.regulationUrl"
+            color="warning"
+            @click="openEditEvent(item.raw)"
           >
-            <VIcon icon="mdi-link" />
+            <VIcon icon="mdi-edit" />
           </VBtn>
-          <VTooltip activator="parent">
-            {{ item.raw.regulationUrl }}
-          </VTooltip>
-        </div>
-        <VIcon
-          v-else
-          icon="mdi-minus"
-        />
-      </template>
-
-      <template #item.action="{ item }">
-        <VBtn
-          size="sm"
-          variant="plain"
-          color="warning"
-          @click="openEditEvent(item.raw)"
-        >
-          <VIcon icon="mdi-edit" />
-        </VBtn>
-        <VBtn
-          size="sm"
-          class="ml-5"
-          variant="plain"
-          color="error"
-          @click="editedEvent = item.raw; isEditEventDialogVisible = true"
-        >
-          <VIcon icon="mdi-trash" />
-        </VBtn>
-      </template>
-    </VDataTableServer>
+          <VBtn
+            size="sm"
+            class="ml-5"
+            variant="plain"
+            color="error"
+            @click="editedEvent = item.raw; isEditEventDialogVisible = true"
+          >
+            <VIcon icon="mdi-trash" />
+          </VBtn>
+        </template>
+      </VDataTableServer>
+    </VCard>
 
     <VDialog
       v-model="isEditEventDialogVisible"

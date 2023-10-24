@@ -78,40 +78,42 @@ const closeSponsorModal = (sponsor: Sponsor): void => {
         />
       </VBtn>
     </h4>
-    <VDataTableServer
-      v-model:items-per-page.async="perPage"
-      v-model:page.async="page"
-      :must-sort="false"
-      :headers="sponsorHeaders"
-      :items="sponsors"
-      :items-length="totalItems"
-      :loading="loading"
-      @update:options="reloadData"
-    >
-      <template #item.description="{ item }">
-        {{ $filters.truncate(item.raw.description, 60) }}
-      </template>
+    <VCard>
+      <VDataTableServer
+        v-model:items-per-page.async="perPage"
+        v-model:page.async="page"
+        :must-sort="false"
+        :headers="sponsorHeaders"
+        :items="sponsors"
+        :items-length="totalItems"
+        :loading="loading"
+        @update:options="reloadData"
+      >
+        <template #item.description="{ item }">
+          {{ $filters.truncate(item.raw.description, 60) }}
+        </template>
 
-      <template #item.action="{ item }">
-        <VBtn
-          size="sm"
-          variant="plain"
-          color="warning"
-          @click="editedSponsor = item.raw; isEditSponsorDialogVisible = true"
-        >
-          <VIcon icon="mdi-edit" />
-        </VBtn>
-        <VBtn
-          size="sm"
-          class="ml-5"
-          variant="plain"
-          color="error"
-          @click="editedSponsor = item.raw; isEditSponsorDialogVisible = true"
-        >
-          <VIcon icon="mdi-trash" />
-        </VBtn>
-      </template>
-    </VDataTableServer>
+        <template #item.action="{ item }">
+          <VBtn
+            size="sm"
+            variant="plain"
+            color="warning"
+            @click="editedSponsor = item.raw; isEditSponsorDialogVisible = true"
+          >
+            <VIcon icon="mdi-edit" />
+          </VBtn>
+          <VBtn
+            size="sm"
+            class="ml-5"
+            variant="plain"
+            color="error"
+            @click="editedSponsor = item.raw; isEditSponsorDialogVisible = true"
+          >
+            <VIcon icon="mdi-trash" />
+          </VBtn>
+        </template>
+      </VDataTableServer>
+    </VCard>
 
     <VDialog
       v-model="isEditSponsorDialogVisible"

@@ -1,4 +1,4 @@
-import type {Competition, Event, Sponsor, UserPet, UserProfile} from '@/globals/types/types'
+import type {Competition, Event, Group, Sponsor, UserPet, UserProfile} from '@/globals/types/types'
 import { GENDER } from '@/globals/enums/enums'
 import {User} from "@/globals/types/types";
 
@@ -47,6 +47,9 @@ export const defaultCompetition: Competition = {
   regulationUrl: '',
   description: '',
 }
+export const defaultGroup: Group = {
+  name: '',
+}
 
 export const defaultSponsor: Sponsor = {
   description: '',
@@ -63,6 +66,8 @@ export const defaultEvent: Event = {
   locationStreet: '',
   locationNumber: '',
   locationDescription: '',
+  locationLong: '',
+  locationLat: '',
   eventStartDate: '',
   eventDaysCount: 2,
   freeEntrance: true,

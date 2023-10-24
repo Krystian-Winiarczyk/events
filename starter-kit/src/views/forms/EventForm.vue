@@ -285,6 +285,20 @@ onMounted(async () => {
                     :label="$t('LocationNumber')"
                   />
                 </VCol>
+                <VCol cols="6">
+                  <VTextField
+                    v-model="event.locationLat"
+                    :rules="[requiredValidator]"
+                    :label="$t('Latitude')"
+                  />
+                </VCol>
+                <VCol cols="6">
+                  <VTextField
+                    v-model="event.locationLong"
+                    :rules="[requiredValidator]"
+                    :label="$t('Longitiude')"
+                  />
+                </VCol>
                 <VCol cols="12">
                   <VCheckbox
                     v-model="enabledLocationDescription"

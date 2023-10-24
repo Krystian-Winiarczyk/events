@@ -64,6 +64,11 @@ export interface Competition {
   regulationUrl: string
 }
 
+export interface Group {
+  id?: number
+  name: string
+}
+
 export interface Event {
   id?: number
   name: string
@@ -73,6 +78,8 @@ export interface Event {
   locationPostalCode: string
   locationStreet: string
   locationNumber: string
+  locationLat: string
+  locationLong: string
   locationDescription: string
   eventStartDate: string
   eventDaysCount: number

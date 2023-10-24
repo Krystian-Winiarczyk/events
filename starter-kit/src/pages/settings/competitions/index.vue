@@ -4,10 +4,13 @@ import type { Ref } from 'vue/dist/vue'
 import axiosIns from '@axios'
 
 import SettingsCompetitionForm from '@/views/forms/SettingsCompetitionForm.vue'
-import type { Competition } from '@/globals/types/types'
-import { defaultCompetition } from '@/globals/defaults'
+import SettingsGroupForm from '@/views/forms/SettingsGroupForm.vue';
+import type { Competition, Group } from '@/globals/types/types'
+import { defaultCompetition, defaultGroup } from '@/globals/defaults'
 
-const competitions = ref([])
+const competitions: Ref<Array<Competition>> = ref([])
+const groups: Ref<Array<Group>> = ref([])
+
 const totalItems = ref(0)
 const page = ref(1)
 const perPage = ref(10)
@@ -21,7 +24,10 @@ const competitionHeaders = ref([
 
 const loading = ref(false)
 
+const isEditGroupDialogVisible: Ref<boolean> = ref(false)
 const isEditCompetitionDialogVisible: Ref<boolean> = ref(false)
+
+const editedGroup: Ref<Group> = ref({ ...defaultGroup })
 const editedCompetition: Ref<Competition> = ref({ ...defaultCompetition })
 
 const reloadData = async () => {
@@ -32,12 +38,13 @@ const reloadData = async () => {
     page: page.value,
   }
 
-  const { data } = await axiosIns.get('/settings/competitions', { params })
+  const { data: competitionData } = await axiosIns.get('/settings/competitions', { params })
+  const { data: groupData } = await axiosIns.get('/settings/competitions', { params })
 
-  competitions.value = data?.items?.map(competition => ({
-    ...competition,
-  })) || []
-  totalItems.value = data?.totalItems || 0
+  competitions.value = competitionData?.items?.map((competition: Competition) => ({ ...competition })) || []
+  groups.value = groupData?.items?.map((group: Group) => ({ ...group, menu: false })) || []
+
+  totalItems.value = competitionData?.totalItems || 0
 
   loading.value = false
 }
@@ -49,6 +56,15 @@ const openEditCompetition = (competition: Competition): void => {
     editedCompetition.value = { ...competition }
 
   isEditCompetitionDialogVisible.value = true
+}
+
+const openEditGroup = (group: Group): void => {
+  if (!group)
+    editedGroup.value = { ...defaultGroup }
+  else
+    editedGroup.value = { ...group }
+
+  isEditGroupDialogVisible.value = true
 }
 
 const closeCompetitionModal = (competition: Competition): void => {
@@ -63,10 +79,75 @@ const closeCompetitionModal = (competition: Competition): void => {
   else
     competitions.value.push({ ...competition })
 }
+
+const closeGroupModal = (group: Group): void => {
+  isEditGroupDialogVisible.value = false
+  if (!group)
+    return
+
+  const groupIndex = groups.value.findIndex((item: Group) => item.id === group.id)
+
+  if (groupIndex > -1)
+    groups.value[groupIndex] = group
+  else
+    groups.value.push({ ...group })
+}
 </script>
 
 <template>
   <div>
+    <div class="mb-6">
+      <h4>
+        {{ $t('Groups') }}
+        <VBtn
+          color="primary"
+          size="small"
+          class="me-1"
+          @click="openEditGroup(null)"
+        >
+          <VIcon
+            icon="mdi-plus"
+            size="20"
+          />
+        </VBtn>
+      </h4>
+
+      <VCard class="mt-2 pa-2">
+        <VMenu
+          v-for="group in groups" :key="`group_${group.id}`"
+          v-model="group.menu"
+          :close-on-content-click="false"
+          location="right center"
+          open-on-hover
+        >
+          <template v-slot:activator="{ props }">
+            <VChip v-bind="props" color="primary">
+              {{ group.name }}
+            </VChip>
+          </template>
+
+          <VCard class="pa-2 ma-1">
+            <VBtn
+              icon
+              size="small"
+              color="secondary"
+              variant="text"
+              class="mr-2"
+            >
+              <VIcon icon="mdi-trash" />
+            </VBtn>
+            <VBtn
+              icon
+              size="small"
+              color="secondary"
+              variant="text"
+            >
+              <VIcon icon="mdi-edit" />
+            </VBtn>
+          </VCard>
+        </VMenu>
+      </VCard>
+    </div>
     <h4>
       {{ $t('Competitions') }}
       <VBtn
@@ -81,40 +162,42 @@ const closeCompetitionModal = (competition: Competition): void => {
         />
       </VBtn>
     </h4>
-    <VDataTableServer
-      v-model:items-per-page.async="perPage"
-      v-model:page.async="page"
-      :must-sort="false"
-      :headers="competitionHeaders"
-      :items="competitions"
-      :items-length="totalItems"
-      :loading="loading"
-      @update:options="reloadData"
-    >
-      <template #item.description="{ item }">
-        {{ $filters.truncate(item.raw.description, 60) }}
-      </template>
+    <VCard>
+      <VDataTableServer
+        v-model:items-per-page.async="perPage"
+        v-model:page.async="page"
+        :must-sort="false"
+        :headers="competitionHeaders"
+        :items="competitions"
+        :items-length="totalItems"
+        :loading="loading"
+        @update:options="reloadData"
+      >
+        <template #item.description="{ item }">
+          {{ $filters.truncate(item.raw.description, 60) }}
+        </template>
 
-      <template #item.action="{ item }">
-        <VBtn
-          size="sm"
-          variant="plain"
-          color="warning"
-          @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
-        >
-          <VIcon icon="mdi-edit" />
-        </VBtn>
-        <VBtn
-          size="sm"
-          class="ml-5"
-          variant="plain"
-          color="error"
-          @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
-        >
-          <VIcon icon="mdi-trash" />
-        </VBtn>
-      </template>
-    </VDataTableServer>
+        <template #item.action="{ item }">
+          <VBtn
+            size="sm"
+            variant="plain"
+            color="warning"
+            @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
+          >
+            <VIcon icon="mdi-edit" />
+          </VBtn>
+          <VBtn
+            size="sm"
+            class="ml-5"
+            variant="plain"
+            color="error"
+            @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
+          >
+            <VIcon icon="mdi-trash" />
+          </VBtn>
+        </template>
+      </VDataTableServer>
+    </VCard>
 
     <VDialog
       v-model="isEditCompetitionDialogVisible"
@@ -129,6 +212,23 @@ const closeCompetitionModal = (competition: Competition): void => {
           ref="competitionFormRef"
           :default-competition="editedCompetition"
           @close="closeCompetitionModal"
+        />
+      </VCard>
+    </VDialog>
+
+    <!-- Group Dialog -->
+    <VDialog
+      v-model="isEditGroupDialogVisible"
+      transition="dialog-bottom-transition"
+      width="500"
+    >
+      <!-- Dialog Content -->
+      <VCard>
+        <SettingsGroupForm
+          v-if="isEditGroupDialogVisible"
+          ref="groupFormRef"
+          :default-competition="editedGroup"
+          @close="closeGroupModal"
         />
       </VCard>
     </VDialog>

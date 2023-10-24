@@ -27,6 +27,12 @@ export class Event extends BaseEntity {
     @Column({ nullable: true })
     locationNumber: string
 
+    @Column({ nullable: true })
+    locationLat: string
+
+    @Column({ nullable: true })
+    locationLong: string
+
     @Column({ type: 'text', nullable: true })
     locationDescription: string
 
