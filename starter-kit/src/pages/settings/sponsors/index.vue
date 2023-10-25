@@ -117,12 +117,13 @@ const closeSponsorModal = (sponsor: Sponsor): void => {
 
     <VDialog
       v-model="isEditSponsorDialogVisible"
-      fullscreen
+      :fullscreen="!editedSponsor?.id"
       :scrim="false"
+      :width="!editedSponsor?.id ? '' : '800'"
       transition="dialog-bottom-transition"
     >
       <!-- Dialog Content -->
-      <VCard>
+      <VCard  :height="!editedSponsor?.id ? '' : '300'">
         <SettingsSponsorForm
           v-if="isEditSponsorDialogVisible"
           ref="sponsorFormRef"

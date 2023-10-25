@@ -85,6 +85,7 @@ export interface Event {
   eventStartDate: string
   eventDaysCount: number
   freeEntrance: boolean
+  active: boolean
   mediaUrl: string
   regulation: string
   regulationUrl: string

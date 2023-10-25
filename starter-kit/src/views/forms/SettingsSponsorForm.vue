@@ -118,7 +118,7 @@ onMounted(() => {
           v-for="(sponsor, sponsorIndex) in sponsors"
           :key="`sponsor_${sponsorIndex}`"
           sm="12"
-          md="6"
+          :md="sponsors[0].id ? '12' : '6'"
         >
           <SettingsSponsorFormCard
             :sponsor.async="sponsor"

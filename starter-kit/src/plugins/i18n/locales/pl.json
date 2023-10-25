@@ -1,5 +1,6 @@
 {
   "Groups": "Grupy",
+  "Group": "Grupa",
   "SponsorsSettingsDescription": "W tym miejscu zdefiniujesz sponsorów przypisywanych w późniejszym etapie do wydarzenia",
   "CompetitionsSettingsDescription": "W tym miejscu zdefiniujesz konkurencje przypisywane w późniejszym etapie do wydarzenia",
   "EventsSettingsDescription": "W tym miejscu zdefiniujesz Swoje wydarzenie, aktualne wydarzenie wyświetlane jest szczegółowo na stronie głównej aplikacji",
@@ -124,6 +125,8 @@
   "CreateNewSponsors": "Utwórz nowych sponsorów",
   "EditSponsor": "Edytuj sponsora",
   "Owner": "Właściciel",
+  "CreateNewCompetition": "Utwórz nową konkurencję",
+  "EditCompetition": "Edytuj konkurencję",
 
   "signup": {
     "TypePassword": "Wprowadz hasło",

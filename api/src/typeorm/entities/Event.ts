@@ -45,6 +45,9 @@ export class Event extends BaseEntity {
     @Column({ nullable: true, default: true })
     freeEntrance: boolean
 
+    @Column({ nullable: true, default: true })
+    active: boolean
+
     @Column({ nullable: true })
     mediaUrl: string
 

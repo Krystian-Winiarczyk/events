@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { requiredValidator } from '@validators'
-import type {Competition, Group} from '@/globals/types/types'
+import type { Competition, Group } from '@/globals/types/types'
 import axiosIns from '@axios'
 
 import { useToastStore } from '@/store/toast'
@@ -26,14 +26,16 @@ const onSubmit = async () => {
 
   const item = { ...competition.value }
 
+  if (item.group)
+    item.group = item.group?.id || item.group
+
   setTimeout(async () => {
     try {
       let resp = null
-      if (item?.id) {
+      if (item?.id)
         resp = await axiosIns.patch(`settings/competitions/${item.id}`, item)
-      } else {
+      else
         resp = await axiosIns.post('settings/competitions', item)
-      }
 
       const [updatedItem] = resp?.data?.items
 
@@ -109,23 +111,20 @@ onMounted(() => {
             </VCol>
             <VCol cols="12">
               <VSelect
-                :model-value="competition.group"
+                v-model="competition.group"
                 :items="groups"
                 :label="$t('Group')"
-                clearable
+                item-title="name"
                 clear-icon="mdi-close"
-              >
-                <template #selection="data">
-                  <!-- HTML that describe how select should render items when the select is open -->
-                  {{ $t(`PetGenders.${data.item.value}`) }}
-                </template>
-              </VSelect>
+                clearable
+                return-object
+              />
             </VCol>
             <VCol cols="12">
               <VTextField
                 v-model="competition.regulationUrl"
                 :rules="[requiredValidator]"
-                :label="$t('RegulationUrl')"
+                :label="$t('CompetitionRegulation')"
               />
             </VCol>
             <VCol cols="12">

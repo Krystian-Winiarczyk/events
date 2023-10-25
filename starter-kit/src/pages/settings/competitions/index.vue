@@ -180,6 +180,19 @@ const deleteGroup = (group: Group, index: number): void => {
           {{ $filters.truncate(item.raw.description, 60) }}
         </template>
 
+        <template #item.group="{ item }">
+          <VChip
+            v-if="item.raw.group"
+            color="primary"
+          >
+            {{ item.raw.group.name }}
+          </VChip>
+          <VIcon
+            v-else
+            icon="mdi-minus"
+          />
+        </template>
+
         <template #item.action="{ item }">
           <VBtn
             size="sm"
@@ -214,6 +227,7 @@ const deleteGroup = (group: Group, index: number): void => {
           v-if="isEditCompetitionDialogVisible"
           ref="competitionFormRef"
           :default-competition="editedCompetition"
+          :groups="groups"
           @close="closeCompetitionModal"
         />
       </VCard>

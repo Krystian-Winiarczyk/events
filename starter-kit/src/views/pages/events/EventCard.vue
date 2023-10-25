@@ -1,22 +1,27 @@
 <script lang="ts" setup>
-import pages3 from '@images/pages/3.png'
+import type { Event } from '@/globals/types/types'
+import { imagePath } from '@core/utils/formatters'
 
 interface Props {
   size?: number
-  event: any
+  event: Event
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 6,
-  event: {
+})
 
-  },
+const getLocation = computed(() => {
+  const { event } = props
+
+  return `${event.locationPostalCode} ${event.locationCity}, ul. ${event.locationStreet} ${event.locationNumber}`
 })
 </script>
 
 <template>
   <VCol
-    :md="props.size"
+    v-if="event"
+    :md="event.active ? 12 : props.size"
     cols="12"
   >
     <VCard>
@@ -29,66 +34,72 @@ const props = withDefaults(defineProps<Props>(), {
           order-lg="1"
         >
           <VCardItem>
-            <VCardTitle>Lifetime Membership</VCardTitle>
+            <VCardTitle>{{ event.name }}</VCardTitle>
             <VCardSubtitle>
               <VIcon
                 color="primary"
                 icon="mdi-location"
               />
-              43-410 Kończyce Małe, ul Szkolna 2
+              {{ getLocation }}
             </VCardSubtitle>
           </VCardItem>
 
           <VCardText>
-            Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola, body muscles and holding ones own breath. Though, most of these notes are not fundamentally necessary, they are such that you can use them for a good laugh, at a drinks party or for picking up women or men.
+            {{ $filters.truncate(event.description, event.active ? 1000 : 400) }}
           </VCardText>
 
           <VCardText>
             <VDivider />
           </VCardText>
 
-          <VCardText class="d-flex justify-center">
-            <div class="me-auto pe-4">
-              <p class="d-flex align-center mb-6">
-                <VIcon
-                  color="primary"
-                  icon="mdi-lock-open-outline"
-                />
-                <span class="ms-3">Full Access</span>
-              </p>
+          <VCardText>
+            <VChip
+              v-for="competition in event.eventCompetitions"
+              class="mr-1 mb-1"
+              color="primary"
+            >
+              {{ competition.competition.name }}
+            </VChip>
+          </VCardText>
 
-              <p class="d-flex align-center mb-0">
-                <VIcon
-                  color="primary"
-                  icon="mdi-account-outline"
-                />
-                <span class="ms-3">15 Members</span>
-              </p>
-            </div>
+          <VCardText class="d-flex justify-space-between flex-wrap">
+            <p class="d-flex align-center mr-5">
+              <VIcon
+                color="primary"
+                icon="mdi-calendar-outline"
+              />
+              <span class="ms-1">Wydarzenie za 8 dni</span>
+            </p>
 
-            <VDivider
-              v-if="$vuetify.display.smAndUp"
-              vertical
-              inset
-            />
+            <p class="d-flex align-center mr-5">
+              <VIcon
+                color="primary"
+                icon="mdi-clock-outline"
+              />
+              <span class="ms-1">Wydarzenie trwa 2 dni</span>
+            </p>
 
-            <div class="ms-auto ps-4">
-              <p class="d-flex align-center mb-6">
-                <VIcon
-                  color="primary"
-                  icon="mdi-star-outline"
-                />
-                <span class="ms-3">Access all Features</span>
-              </p>
+            <p class="d-flex align-center mr-5">
+              <VIcon
+                color="primary"
+                icon="mdi-lock-open-outline"
+              />
+              <span class="ms-1">Wstęp wolny</span>
+            </p>
 
-              <p class="d-flex align-center mb-0">
-                <VIcon
-                  color="primary"
-                  icon="mdi-trending-up"
-                />
-                <span class="ms-3">Lifetime Free Update</span>
-              </p>
-            </div>
+            <p class="d-flex align-center">
+              <VIcon
+                color="primary"
+                icon="mdi-account-outline"
+              />
+              <span class="ms-1">10 sponsorów</span>
+            </p>
+          </VCardText>
+
+          <VCardText v-if="event.active">
+            <VBtn class="w-100">
+              Apply
+            </VBtn>
           </VCardText>
         </VCol>
 
@@ -103,15 +114,9 @@ const props = withDefaults(defineProps<Props>(), {
           <div class="d-flex flex-column h-100">
             <VImg
               width="100%"
-              :src="pages3"
+              :src="imagePath(event.banner)"
               cover
-            >
-              <div class="d-flex h-100 align-end justify-center pb-5">
-                <VBtn>
-                  Apply Now
-                </VBtn>
-              </div>
-            </VImg>
+            />
           </div>
         </VCol>
       </VRow>
