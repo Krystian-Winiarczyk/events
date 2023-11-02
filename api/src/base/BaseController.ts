@@ -1,115 +1,104 @@
-import { HttpStatus } from '@nestjs/common';
+import { Body, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
-import {
-  Between,
-  Equal,
-  IsNull,
-  LessThan,
-  LessThanOrEqual,
-  Like,
-  MoreThan,
-  MoreThanOrEqual,
-  Not,
-} from 'typeorm';
-import * as process from 'process';
-import { AppMode } from '../constants/AppMode';
+import { UpdateResult,} from 'typeorm';
+import { BaseService } from "./BaseService";
+import { BaseEntity } from "./BaseEntity";
+import { BaseControllerUtils } from "./BaseControllerUtils";
 
-export abstract class BaseController {
-
-  protected getBasicDataForResponse(req: Request, status: HttpStatus): BasicResponseInterface {
-    return {
-      method: req.method,
-      url: req.baseUrl,
-      ip: req.ip,
-      status,
-    };
-  }
-  protected resolveFilterType(type = 'eq', value) {
-    const types = {
-      ['eq' || 'neq']: Equal(value),
-      ['like' || 'nlike']: Like(value.replaceAll(':', '%')),
-      ['between' || 'nbetween']: Between(
-        value.split('_')[0],
-        value.split('_')[1],
-      ),
-      ['gt' || 'ngt']: MoreThan(value),
-      ['gte' || 'ngte']: MoreThanOrEqual(value),
-      ['lt' || 'nlt']: LessThan(value),
-      ['lte' || 'nlte']: LessThanOrEqual(value),
-      ['isNull' || 'nisNull']: IsNull(),
-    };
-
-    return type.startsWith('n') ? Not(types[type]) : types[type];
+export abstract class BaseController<T extends BaseEntity> extends BaseControllerUtils{
+  constructor(private service?: BaseService<T>) {
+    super()
   }
 
-  resolveFilters(filters: { [key: string]: any }) {
-    if (!filters) return {};
-
-    const _filters = {};
-    for (const filter of Object.entries(filters)) {
-      const [key, value] = filter;
-      if (typeof value === 'object' && Object.keys(value).length === 1) {
-        _filters[key] = this.resolveFilters(value);
-      } else {
-        return this.resolveFilterType(key, value);
-      }
-    }
-
-    return _filters;
-  }
-
-  paginationFragment(
-    limit: number | string = null,
-    page: number | string = null,
-  ): PaginationInterface | object {
-    if (limit !== null && page !== null) {
-      const start = (+page - 1) * +limit;
-      return {
-        skip: start,
-        take: limit,
-      };
-    }
-
-    return {};
-  }
-  apiSuccessResponse({
-                       res,
-                       req,
-                       data,
-                       status = HttpStatus.OK,
-                       total,
-}: {
-  res: Response,
-  req: Request,
-  data: any,
-  status?: HttpStatus,
-  total?: number,
-}) {
-    const payload: any = this.getBasicDataForResponse(req, status);
-
-    if (Array.isArray(data)) payload.items = data.filter(Boolean);
-    else payload.items = [data].filter(Boolean);
-
-    res.status(status).json({ ...payload, totalItems: total });
-  }
-
-  apiErrorResponse(
-    res: Response,
-    req: Request,
-    error: any,
-    status: HttpStatus = HttpStatus.BAD_REQUEST,
+  @Get()
+  async getAll(
+      @Req() req: Request,
+      @Res() res: Response,
+      @Query('limit') limit = 25,
+      @Query('page') page = 1,
+      @Query('q') q,
   ) {
-    const payload: any = this.getBasicDataForResponse(req, status);
+    try {
+      const [items, total]: [ T[], number ] = await this.service.findAll({
+        pagination: this.paginationFragment(limit, page),
+        where: this.resolveFilters(q),
+      });
 
-    payload.error =
-      error?.detail ||
-      error?.message ||
-      (typeof error === 'string' ? error : null);
-
-    if (process.env.APP_MODE === AppMode.DEVELOPMENT) {
-      payload.dev = error;
+      this.apiSuccessResponse({ res, req, data: items, total });
+    } catch (error) {
+      this.apiErrorResponse(res, req, error);
     }
+  }
+  //
+  @Get(':id')
+  async getOneById(
+      @Req() req: Request,
+      @Res() res: Response,
+      @Param('id', ParseIntPipe) id: number,
+  ) {
+    try {
+      const item: T = await this.service.findOneById(id, {});
 
-    res.status(status).json(payload);
+      this.apiSuccessResponse({ res, req, data: item });
+    } catch (error) {
+      this.apiErrorResponse(res, req, error);
+    }
+  }
+
+  @Post()
+  // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+  async create(
+      @Req() req: Request,
+      @Res() res: Response,
+      @Body() createDto,
+  ) {
+    try {
+      const item: T = await this.service.create(createDto);
+
+      const toReturnObject = await this.service.findOneById(item.id, {})
+
+      this.apiSuccessResponse({ res, req, data: toReturnObject });
+    } catch (error) {
+      this.apiErrorResponse(res, req, error);
+    }
+  }
+
+  @Patch(':id')
+  // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+  async updateOneById(
+      @Req() req: Request,
+      @Res() res: Response,
+      @Param('id', ParseIntPipe) id: number,
+      @Body() updateDto,
+  ) {
+    try {
+      await this.service.updateOneById(
+          id,
+          updateDto,
+      );
+
+      const toReturnObject = await this.service.findOneById(id, {})
+
+      this.apiSuccessResponse({ res, req, data: toReturnObject });
+    } catch (error) {
+      this.apiErrorResponse(res, req, error);
+    }
+  }
+
+  @Delete(':id')
+  // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+  async deleteOneById(
+      @Req() req: Request,
+      @Res() res: Response,
+      @Param('id', ParseIntPipe) id: number,
+  ) {
+    try {
+      const deleteResult: UpdateResult =
+          await this.service.deleteSoftOneById(id);
+
+      this.apiSuccessResponse({ res, req, data: deleteResult });
+    } catch (error) {
+      this.apiErrorResponse(res, req, error);
+    }
   }
 }

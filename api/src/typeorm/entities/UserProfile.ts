@@ -1,9 +1,21 @@
-import {Entity, Column, ManyToOne, JoinTable, OneToOne, AfterLoad, AfterInsert, AfterUpdate, JoinColumn} from 'typeorm';
+import {
+    Entity,
+    Column,
+    ManyToOne,
+    JoinTable,
+    OneToOne,
+    AfterLoad,
+    AfterInsert,
+    AfterUpdate,
+    JoinColumn,
+    OneToMany
+} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import { User } from './User';
 import {File} from "./File";
 import {Gender} from "../../constants/Gender";
 import {IsOptional} from "class-validator";
+import {UserEventCompetition} from "./UserEventCompetition";
 
 @Entity({ name: 'user_profiles' })
 export class UserProfile extends BaseEntity {
@@ -113,6 +125,14 @@ export class UserProfile extends BaseEntity {
     @OneToOne(() => File, (file) => file.userProfile, { onDelete: 'CASCADE' })
     @JoinColumn()
     avatar: File
+
+    /**
+     *  User event competitions
+     * @returns {UserEventCompetition[]} profiles
+     */
+    @OneToMany(() => UserEventCompetition, (userEventCompetition) => userEventCompetition.userProfile, { onDelete: 'CASCADE' })
+    @JoinTable()
+    userEventCompetitions: UserEventCompetition[]
 
     /**
      *  User profile full name

@@ -1,5 +1,11 @@
 {
+  "PricePerStart": "Kwota za start",
+  "SignIntoEvent": "Zapisz się na wydarzenie",
+  "SelectCompetitions": "Wybierz konkurencje",
+  "NoTeamsSelected": "Brak dodanych zespołów",
+  "AddTeam": "Zapisz zespół",
   "Groups": "Grupy",
+  "StartsWith": "Wystartuje z",
   "Group": "Grupa",
   "SponsorsSettingsDescription": "W tym miejscu zdefiniujesz sponsorów przypisywanych w późniejszym etapie do wydarzenia",
   "CompetitionsSettingsDescription": "W tym miejscu zdefiniujesz konkurencje przypisywane w późniejszym etapie do wydarzenia",

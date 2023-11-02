@@ -15,7 +15,14 @@ export class UsersService extends BaseService<User>{
         private userProfileService: UserProfilesService,
         private userPetsService: UserPetsService,
     ) {
-        super(userRepository)
+        super(userRepository, {
+            profiles: {
+                avatar: true
+            },
+            pets: {
+                avatar: true,
+            },
+        })
     }
 
     async create(createDto: CreateUserDto): Promise<User> {

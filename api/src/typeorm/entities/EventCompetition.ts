@@ -1,7 +1,8 @@
-import {Column, Entity, ManyToOne} from 'typeorm';
+import {Column, Entity, JoinTable, ManyToOne, OneToMany} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import {Competition} from "./Competition";
 import {Event} from "./Event";
+import {UserEventCompetition} from "./UserEventCompetition";
 
 @Entity({ name: 'event_competitions' })
 export class EventCompetition extends BaseEntity {
@@ -16,4 +17,12 @@ export class EventCompetition extends BaseEntity {
 
     @Column({ nullable: false, default: 0 })
     pricePerStart: number
+
+    /**
+     *  User event competitions
+     * @returns {UserEventCompetition[]} profiles
+     */
+    @OneToMany(() => UserEventCompetition, (userEventCompetition) => userEventCompetition.eventCompetition, { onDelete: 'CASCADE' })
+    @JoinTable()
+    userEventCompetitions: UserEventCompetition[]
 }

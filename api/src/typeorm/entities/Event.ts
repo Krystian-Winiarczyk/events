@@ -3,6 +3,7 @@ import { BaseEntity } from '../../base/BaseEntity';
 import {EventCompetition} from "./EventCompetition";
 import {File} from "./File";
 import {Sponsor} from "./Sponsor";
+import {UserEventCompetition} from "./UserEventCompetition";
 
 @Entity({ name: 'events' })
 export class Event extends BaseEntity {
@@ -59,6 +60,14 @@ export class Event extends BaseEntity {
 
     @OneToMany(() => EventCompetition, eventCompetition =>  eventCompetition.event, { cascade: true })
     eventCompetitions: EventCompetition[]
+
+    /**
+     *  User event competitions
+     * @returns {UserEventCompetition[]} profiles
+     */
+    @OneToMany(() => UserEventCompetition, (userEventCompetition) => userEventCompetition.event, { onDelete: 'CASCADE' })
+    @JoinTable()
+    userEventCompetitions: UserEventCompetition[]
 
     /**
      *  Event images

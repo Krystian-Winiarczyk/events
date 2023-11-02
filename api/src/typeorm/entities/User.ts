@@ -6,6 +6,7 @@ import {Exclude} from "class-transformer";
 import {Role} from "../../constants/Role";
 import {IsOptional} from "class-validator";
 import {ApiProperty} from "@nestjs/swagger";
+import {UserEventCompetition} from "./UserEventCompetition";
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -47,6 +48,14 @@ export class User extends BaseEntity {
     profiles: UserProfile[]
 
     /**
+     *  User event competitions
+     * @returns {UserEventCompetition[]} profiles
+     */
+    @OneToMany(() => UserEventCompetition, (userEventCompetition) => userEventCompetition.user, { onDelete: 'CASCADE' })
+    @JoinTable()
+    userEventCompetitions: UserEventCompetition[]
+
+    /**
      *  Refresh authorization token
      * @returns {string} refreshToken
      */
@@ -82,6 +91,5 @@ export class User extends BaseEntity {
     getPrimaryProfile?(): void {
         this.primaryProfile = this.profiles?.find((profile: UserProfile) => profile.isPrimary) || null;
     }
-
 
 }

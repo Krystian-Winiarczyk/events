@@ -1,115 +1,11 @@
 import { BaseController } from '../../../../base/BaseController';
-import {Controller, Param, ParseIntPipe, Body, Patch, Delete, Get, Req, Res, Query, Post} from "@nestjs/common";
-import {CreateUserProfileDto, UpdateUserProfileDto} from "../../dtos/UserProfile.dto";
+import { Controller } from "@nestjs/common";
 import { UserProfilesService } from "../../service/user-profiles/user-profiles.service";
-import { Request, Response } from 'express';
-import {Roles} from "../../../../decorators/roles.decorator";
-import {Role} from "../../../../constants/Role";
-import {UpdateResult} from "typeorm";
-import {UserProfile} from "../../../../typeorm/entities/UserProfile";
+import { UserProfile } from "../../../../typeorm/entities/UserProfile";
 
 @Controller('api/user/profiles')
-export class UserProfilesController extends BaseController {
+export class UserProfilesController extends BaseController<UserProfile> {
     constructor(private userProfileService: UserProfilesService) {
-        super();
-    }
-    @Get()
-    async getAll(
-        @Req() req: Request,
-        @Res() res: Response,
-        @Query('limit') limit = 25,
-        @Query('page') page = 1,
-        @Query('q') q,
-    ) {
-        try {
-            const [userProfiles, total]: [ UserProfile[], number ] = await this.userProfileService.findAll({
-                pagination: this.paginationFragment(limit, page),
-                relations: {
-                    user: {
-                        profiles: { avatar: true },
-                    },
-                    avatar: true
-                },
-                where: this.resolveFilters(q),
-            });
-
-            this.apiSuccessResponse({ res, req, data: userProfiles, total });
-        } catch (error) {
-            this.apiErrorResponse(res, req, error);
-        }
-    }
-
-    @Get(':id')
-    async getOneById(
-        @Req() req: Request,
-        @Res() res: Response,
-        @Param('id', ParseIntPipe) id: number,
-    ) {
-        try {
-            const userProfile: UserProfile = await this.userProfileService.findOneById(id, {
-                relations: ['user']
-            });
-
-            this.apiSuccessResponse({ res, req, data: userProfile });
-        } catch (error) {
-            this.apiErrorResponse(res, req, error);
-        }
-    }
-
-    @Post()
-    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
-    async create(
-        @Req() req: Request,
-        @Res() res: Response,
-        @Body() createDto: CreateUserProfileDto,
-    ) {
-        try {
-            const userProfile: UserProfile = await this.userProfileService.create(createDto);
-
-            const toReturnObject = await this.userProfileService.findOneById(userProfile.id, {})
-
-            this.apiSuccessResponse({ res, req, data: toReturnObject });
-        } catch (error) {
-            this.apiErrorResponse(res, req, error);
-        }
-    }
-
-    @Patch(':id')
-    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
-    async updateOneById(
-        @Req() req: Request,
-        @Res() res: Response,
-        @Param('id', ParseIntPipe) id: number,
-        @Body() updateDto: UpdateUserProfileDto,
-    ) {
-        try {
-            await this.userProfileService.updateOneById(
-                id,
-                updateDto,
-            );
-
-            const toReturnObject = await this.userProfileService.findOneById(id, {})
-
-            this.apiSuccessResponse({ res, req, data: toReturnObject });
-        } catch (error) {
-            this.apiErrorResponse(res, req, error);
-        }
-    }
-
-    @Delete(':id')
-    // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
-    async deleteOneById(
-        @Req() req: Request,
-        @Res() res: Response,
-        @Param('id', ParseIntPipe) id: number,
-    ) {
-        try {
-            const deleteResult: UpdateResult =
-                await this.userProfileService.deleteSoftOneById(id);
-
-            this.apiSuccessResponse({ res, req, data: deleteResult });
-        } catch (error) {
-            this.apiErrorResponse(res, req, error);
-        }
+        super(userProfileService);
     }
 }

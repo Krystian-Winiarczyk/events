@@ -9,7 +9,9 @@ export class EventsService extends BaseService<Event>{
     constructor(@InjectRepository(Event) private eventsRepository: Repository<Event>) {
         super(eventsRepository, {
             eventCompetitions: {
-                competition: true,
+                competition: {
+                    group: true,
+                },
             },
             banner: true,
             images: true,

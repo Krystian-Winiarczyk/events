@@ -10,11 +10,14 @@ import { UserProfilesController } from './controller/user-profiles/user-profiles
 import { UserPetsController } from './controller/user-pets/user-pets.controller';
 import { UserPetsService } from './service/user-pets/user-pets.service';
 import {File} from "../../typeorm/entities/File";
+import { UserEventCompetitionsController } from './controller/user-event-competitions/user-event-competitions.controller';
+import { UserEventCompetitionsService } from './service/user-event-competitions/user-event-competitions.service';
+import {UserEventCompetition} from "../../typeorm/entities/UserEventCompetition";
 
 @Module({
   exports: [UsersService, UserProfilesService, UserPetsService],
-  imports: [TypeOrmModule.forFeature([User, UserPet, UserProfile, File])],
-  controllers: [UsersController, UserProfilesController, UserPetsController],
-  providers: [UsersService, UserProfilesService, UserPetsService]
+  imports: [TypeOrmModule.forFeature([User, UserPet, UserProfile, File, UserEventCompetition])],
+  controllers: [UsersController, UserProfilesController, UserPetsController, UserEventCompetitionsController],
+  providers: [UsersService, UserProfilesService, UserPetsService, UserEventCompetitionsService]
 })
 export class UsersModule { }

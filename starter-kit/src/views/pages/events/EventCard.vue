@@ -7,6 +7,9 @@ interface Props {
   event: Event
 }
 
+const router = useRouter()
+const route = useRoute()
+
 const props = withDefaults(defineProps<Props>(), {
   size: 6,
 })
@@ -16,6 +19,10 @@ const getLocation = computed(() => {
 
   return `${event.locationPostalCode} ${event.locationCity}, ul. ${event.locationStreet} ${event.locationNumber}`
 })
+
+const routeTo = () => {
+  router.push({ name: 'events-apply-id' ,  params: { id: props.event.id }})
+}
 </script>
 
 <template>
@@ -96,7 +103,7 @@ const getLocation = computed(() => {
             </p>
           </VCardText>
 
-          <VCardText v-if="event.active">
+          <VCardText v-if="event.active && route.name !== 'events-apply-id'" @click="routeTo">
             <VBtn class="w-100">
               Apply
             </VBtn>

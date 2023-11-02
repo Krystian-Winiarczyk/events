@@ -3,6 +3,7 @@ import { BaseEntity } from '../../base/BaseEntity';
 import { Gender } from "../../constants/Gender";
 import { User } from './User';
 import { File } from "./File";
+import {UserEventCompetition} from "./UserEventCompetition";
 
 @Entity({ name: 'user_pets' })
 export class UserPet extends BaseEntity {
@@ -146,6 +147,14 @@ export class UserPet extends BaseEntity {
     @OneToOne(() => File, file => file.pet, { onDelete: 'CASCADE' })
     @JoinColumn()
     avatar: File
+
+    /**
+     *  User event competitions
+     * @returns {UserEventCompetition[]} profiles
+     */
+    @OneToMany(() => UserEventCompetition, (userEventCompetition) => userEventCompetition.userPet, { onDelete: 'CASCADE' })
+    @JoinTable()
+    userEventCompetitions: UserEventCompetition[]
 
     // @OneToMany(() => EventRegistration, (eventRegistration) => eventRegistration.my-my-pets)
     // @JoinTable()

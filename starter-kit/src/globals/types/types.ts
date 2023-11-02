@@ -103,6 +103,8 @@ export interface EventCompetition {
   pricePerStart: number
 
   active?: boolean
+
+  signedTeams?: Array<any>
 }
 
 export interface Sponsor {

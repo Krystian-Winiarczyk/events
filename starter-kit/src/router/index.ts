@@ -18,7 +18,7 @@ const router = createRouter({
      access: [/, login, signup]
      * ->
 */
-router.beforeEach((route, from, next) => {
+router.beforeEach((route, from , next) => {
   const { loggedIn } = useAuthStore()
   const authRequired = route.meta?.authRequired ?? true
 

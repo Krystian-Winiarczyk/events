@@ -5,6 +5,12 @@ export default {
   install(app: App<Element>): void {
     /*    START::Filters    */
     app.config.globalProperties.$filters = {
+      priceFormat(value: string | number): string {
+        const formater = new Intl.NumberFormat('pl-pl', { style: 'currency', currency: 'PLN' })
+
+        return formater.format(Number(value))
+      },
+
       truncate(value: string, max = 50, clamp = '…'): string {
         if (!value)
           return ''

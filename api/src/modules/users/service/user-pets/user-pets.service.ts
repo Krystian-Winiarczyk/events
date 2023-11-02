@@ -12,7 +12,13 @@ export class UserPetsService extends BaseService<UserPet> {
         @InjectRepository(UserPet) private petRepository: Repository<UserPet>,
         @InjectRepository(File) private fileRepository: Repository<File>
     ) {
-        super(petRepository, { avatar: true, images: true })
+        super(petRepository, {
+            user: {
+                profiles: { avatar: true },
+            },
+            avatar: true,
+            images: true
+        })
     }
 
     // async create(createPetDto: CreateUserPetDto): Promise<UserPet> {

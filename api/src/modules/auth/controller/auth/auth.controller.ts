@@ -1,5 +1,4 @@
-import { BaseController } from '../../../../base/BaseController';
-import {Get, Res, UnauthorizedException} from '@nestjs/common';
+import {Get, Res} from '@nestjs/common';
 import { LoginUserDto } from './../../dtos/LoginUser.dto';
 import { LocalAuthGuard } from '../../../../guard/local-auth/local-auth.guard';
 import { Controller, Post, Req, UseGuards, Body } from '@nestjs/common';
@@ -9,9 +8,10 @@ import { Request, Response } from 'express';
 import {JwtRefreshAuthGuard} from "../../../../guard/jwt-refresh-auth/jwt-refresh-auth.guard";
 import {User} from "../../../../typeorm/entities/User";
 import {SignupDto} from "../../dtos/Signup.dto";
+import {BaseControllerUtils} from "../../../../base/BaseControllerUtils";
 
 @Controller('api/auth')
-export class AuthController extends BaseController {
+export class AuthController extends BaseControllerUtils {
 
     constructor(private authService: AuthService) {
         super();
