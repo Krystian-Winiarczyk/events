@@ -9,7 +9,7 @@ import { EventsService } from "../../service/events/events.service";
 
 @UseGuards(JwtAuthGuard, RoleGuard)
 @Controller('api/events')
-export class EventsController extends BaseController<Event> implements ControllerInterface {
+export class EventsController extends BaseController<Event> {
     constructor(private eventsService: EventsService) {
         super(eventsService)
     }

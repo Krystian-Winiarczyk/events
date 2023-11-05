@@ -33,7 +33,7 @@ export interface ServiceInterface<E extends BaseEntity> {
 
   updateOneById(id: number, updateDto: BaseDto): Promise<UpdateResult>;
 
-  create(createDto: BaseDto): Promise<E>;
+  create(createDto: BaseDto | BaseDto[]): Promise<E | E[]>;
 
   deleteOneById(id: number): Promise<DeleteResult>;
   deleteSoftOneById(id: number): Promise<UpdateResult>;

@@ -143,7 +143,7 @@ const closeEventModal = (event: Event): void => {
       v-model="isEditEventDialogVisible"
       fullscreen
       :scrim="false"
-      :persistent="true"
+      persistent
       transition="dialog-bottom-transition"
     >
       <!-- Dialog Content -->

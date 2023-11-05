@@ -2,7 +2,13 @@
 import type { Ref } from 'vue'
 import EventCard from '@/views/pages/events/EventCard.vue'
 
-import type { Event, EventCompetition, UserPet, UserProfile } from '@/globals/types/types'
+import type {
+  Event,
+  EventCompetition,
+  UserEventCompetition,
+  UserPet,
+  UserProfile,
+} from '@/globals/types/types'
 
 import axiosIns from '@axios'
 import { useAuthStore } from '@/store/auth'
@@ -132,9 +138,28 @@ const onSignTeams = () => {
   signTeamModal.value.show = false
 }
 
-const onSaveApply = () => {
+const onSaveApply = async () => {
   console.log('competitionSigned', competitionSigned.value)
   console.log('event', event.value)
+
+  const payload: Array<UserEventCompetition> = competitionSigned.value.map(eventCompetition => {
+    return eventCompetition.signedTeams?.map(({ pet, profile }: { pet: UserPet; profile: UserProfile }) => ({
+      event: event.value?.id,
+      eventCompetition: eventCompetition.id,
+      user: authStore.user?.id,
+      userPet: pet.id,
+      userProfile: profile.id,
+    }))
+  }).flat()
+
+  try {
+    const { data } = await axiosIns.post('/user/event/competitions', payload)
+
+    console.log(data)
+  }
+  catch (err) {
+    console.log(err)
+  }
 }
 
 onMounted(() => {
@@ -222,13 +247,15 @@ onMounted(() => {
               </div>
             </VCardText>
 
-            <div v-if="competition.signedTeams?.length" class="bg-light-primary py-1 px-5 d-flex justify-space-between">
+            <div
+              v-if="competition.signedTeams?.length"
+              class="bg-light-primary py-1 px-5 d-flex justify-space-between"
+            >
               <div>{{ $t('PricePerStart') }}</div>
               <div>
                 <strong>{{ $filters.priceFormat(competition.pricePerStart * competition.signedTeams.length) }}</strong>
               </div>
             </div>
-
           </VCard>
         </VCol>
 

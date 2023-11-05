@@ -138,59 +138,87 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
         // @ts-ignore
         return await this.repository.save(item);
     }
+    async create(createDto: any | any[]): Promise<T | T[]> {
+        if (Array.isArray(createDto)) {
+            const items = createDto.map(dto => this.repository.create(dto)).flat();
 
-    async create(createDto: any): Promise<T> {
-        const item = this.repository.create(createDto);
+            return this.repository.save(items);
+        } else {
+            const item = this.repository.create(createDto);
 
-        this.arrayRelations.forEach(relationName => {
-            if (createDto[relationName] && createDto[relationName]?.length) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                item[relationName] = createDto[relationName].map(id => ({id}));
-            }
-        })
+            this.arrayRelations.forEach(relationName => {
+                if (createDto[relationName] && createDto[relationName]?.length) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    item[relationName] = createDto[relationName].map(id => ({ id }));
+                }
+            });
 
-        this.objectRelations.forEach(relationName => {
-            if (createDto[relationName] && createDto[relationName]?.length) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                item[relationName] = { id: createDto[relationName] };
-            }
-        })
+            this.objectRelations.forEach(relationName => {
+                if (createDto[relationName] && createDto[relationName]?.length) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    item[relationName] = { id: createDto[relationName] };
+                }
+            });
 
-        // if (createDto?.images?.length) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.images = createDto.images.map(id => ({id}));
-        // }
-        //
-        // if (createDto?.sponsors?.length) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.sponsors = createDto.sponsors.map(id => ({id}));
-        // }
-        //
-        // if (createDto?.avatar) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.avatar = { id: createDto.avatar } as File;
-        // }
-        //
-        // if (createDto?.banner) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.banner = { id: createDto.banner } as File;
-        // }
-        //
-        // if (createDto?.logo) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.logo = { id: createDto.logo } as File;
-        // }
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return await this.repository.save(item);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            return await this.repository.save(item);
+        }
     }
+    // async create(createDto: any): Promise<T> {
+    //     const item = this.repository.create(createDto);
+    //
+    //     this.arrayRelations.forEach(relationName => {
+    //         if (createDto[relationName] && createDto[relationName]?.length) {
+    //             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //             // @ts-ignore
+    //             item[relationName] = createDto[relationName].map(id => ({id}));
+    //         }
+    //     })
+    //
+    //     this.objectRelations.forEach(relationName => {
+    //         if (createDto[relationName] && createDto[relationName]?.length) {
+    //             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //             // @ts-ignore
+    //             item[relationName] = { id: createDto[relationName] };
+    //         }
+    //     })
+    //
+    //     // if (createDto?.images?.length) {
+    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //     //     // @ts-ignore
+    //     //     item.images = createDto.images.map(id => ({id}));
+    //     // }
+    //     //
+    //     // if (createDto?.sponsors?.length) {
+    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //     //     // @ts-ignore
+    //     //     item.sponsors = createDto.sponsors.map(id => ({id}));
+    //     // }
+    //     //
+    //     // if (createDto?.avatar) {
+    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //     //     // @ts-ignore
+    //     //     item.avatar = { id: createDto.avatar } as File;
+    //     // }
+    //     //
+    //     // if (createDto?.banner) {
+    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //     //     // @ts-ignore
+    //     //     item.banner = { id: createDto.banner } as File;
+    //     // }
+    //     //
+    //     // if (createDto?.logo) {
+    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //     //     // @ts-ignore
+    //     //     item.logo = { id: createDto.logo } as File;
+    //     // }
+    //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //     // @ts-ignore
+    //     return await this.repository.save(item);
+    // }
 
     async deleteSoftOneById(id: number): Promise<UpdateResult> {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment

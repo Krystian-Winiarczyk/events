@@ -116,3 +116,13 @@ export interface Sponsor {
 
   active?: boolean
 }
+
+export interface UserEventCompetition {
+  id?: number
+
+  eventCompetition: EventCompetition | string | any
+  event: Event | string | any
+  userPet: UserPet | string | any
+  userProfile: UserProfile | string | any
+  user: User | string | any
+}

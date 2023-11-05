@@ -7,12 +7,14 @@ interface Props {
   event: Event
 }
 
-const router = useRouter()
-const route = useRoute()
-
 const props = withDefaults(defineProps<Props>(), {
   size: 6,
 })
+
+const emits = defineEmits(['open-edit-modal'])
+
+const router = useRouter()
+const route = useRoute()
 
 const getLocation = computed(() => {
   const { event } = props
@@ -20,8 +22,8 @@ const getLocation = computed(() => {
   return `${event.locationPostalCode} ${event.locationCity}, ul. ${event.locationStreet} ${event.locationNumber}`
 })
 
-const routeTo = () => {
-  router.push({ name: 'events-apply-id' ,  params: { id: props.event.id }})
+const redirectToPage = page => {
+  router.push(page)
 }
 </script>
 
@@ -41,14 +43,51 @@ const routeTo = () => {
           order-lg="1"
         >
           <VCardItem>
-            <VCardTitle>{{ event.name }}</VCardTitle>
-            <VCardSubtitle>
-              <VIcon
-                color="primary"
-                icon="mdi-location"
-              />
-              {{ getLocation }}
-            </VCardSubtitle>
+            <div class="d-flex justify-space-between flex-wrap">
+              <div>
+                <VCardTitle>{{ event.name }}</VCardTitle>
+                <VCardSubtitle>
+                  <VIcon
+                    color="primary"
+                    icon="mdi-location"
+                  />
+                  {{ getLocation }}
+                </VCardSubtitle>
+              </div>
+
+              <div class="gap-2 d-flex">
+                <VBtn icon @click="redirectToPage({ name: 'events-applications-id', params: { id: event.id } })">
+                  <VIcon icon="mdi-users" />
+                  <VTooltip
+                    activator="parent"
+                    location="top"
+                  >
+                    Users
+                  </VTooltip>
+                </VBtn>
+                <VBtn icon>
+                  <VIcon icon="mdi-file-excel" />
+                  <VTooltip
+                    activator="parent"
+                    location="top"
+                  >
+                    Excel
+                  </VTooltip>
+                </VBtn>
+                <VBtn
+                  icon
+                  @click="$emit('open-edit-modal')"
+                >
+                  <VIcon icon="mdi-cog" />
+                  <VTooltip
+                    activator="parent"
+                    location="top"
+                  >
+                    {{ $t('EditEvent') }}
+                  </VTooltip>
+                </VBtn>
+              </div>
+            </div>
           </VCardItem>
 
           <VCardText>
@@ -103,7 +142,10 @@ const routeTo = () => {
             </p>
           </VCardText>
 
-          <VCardText v-if="event.active && route.name !== 'events-apply-id'" @click="routeTo">
+          <VCardText
+            v-if="event.active && route.name !== 'events-apply-id'"
+            @click="redirectToPage({ name: 'events-apply-id', params: { id: props.event.id } })"
+          >
             <VBtn class="w-100">
               Apply
             </VBtn>
