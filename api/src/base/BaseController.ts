@@ -1,6 +1,6 @@
-import { Body, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, Res } from '@nestjs/common';
+import {Body, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, Req, Res} from '@nestjs/common';
 import { Request, Response } from 'express';
-import { UpdateResult,} from 'typeorm';
+import {FindOptionsUtils, In, UpdateResult,} from 'typeorm';
 import { BaseService } from "./BaseService";
 import { BaseEntity } from "./BaseEntity";
 import { BaseControllerUtils } from "./BaseControllerUtils";
@@ -53,9 +53,13 @@ export abstract class BaseController<T extends BaseEntity> extends BaseControlle
       @Body() createDto,
   ) {
     try {
-      const item: T = await this.service.create(createDto);
+      const item: T | T[] = await this.service.create(createDto);
 
-      const toReturnObject = await this.service.findOneById(item.id, {})
+      const toReturnObject = Array.isArray(item) ?
+          await this.service.findAll({
+            where: this.resolveFilters({ id: { in: item.map(i => i.id) } })
+          })
+          : await this.service.findOneById(item.id, {})
 
       this.apiSuccessResponse({ res, req, data: toReturnObject });
     } catch (error) {
@@ -80,6 +84,24 @@ export abstract class BaseController<T extends BaseEntity> extends BaseControlle
       const toReturnObject = await this.service.findOneById(id, {})
 
       this.apiSuccessResponse({ res, req, data: toReturnObject });
+    } catch (error) {
+      this.apiErrorResponse(res, req, error);
+    }
+  }
+
+  @Put('')
+  // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
+  async updateOrCreate(
+      @Req() req: Request,
+      @Res() res: Response,
+      @Body() updateDto,
+  ) {
+    try {
+      await this.service.updateOrCreate(updateDto);
+
+      // const toReturnObject = await this.service.findOneById(id, {})
+
+      this.apiSuccessResponse({ res, req, data: [] });
     } catch (error) {
       this.apiErrorResponse(res, req, error);
     }

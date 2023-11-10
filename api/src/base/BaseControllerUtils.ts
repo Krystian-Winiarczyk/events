@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
 import {
     Between,
-    Equal,
+    Equal, In,
     IsNull,
     LessThan,
     LessThanOrEqual,
@@ -36,6 +36,7 @@ export abstract class BaseControllerUtils {
             ['lt' || 'nlt']: LessThan(value),
             ['lte' || 'nlte']: LessThanOrEqual(value),
             ['isNull' || 'nisNull']: IsNull(),
+            ['in' || 'nin']: In(value),
         };
 
         return type.startsWith('n') ? Not(types[type]) : types[type];

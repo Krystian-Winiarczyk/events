@@ -3,10 +3,20 @@ enum GENDER {
   MALE = 'MALE',
   OTHER = 'OTHER',
 }
-
 enum VIEW_TYPE {
   LIST = 'LIST',
   CARD = 'CARD'
+}
+
+enum VIEW_DENSITY {
+  COMPACT = 'COMPACT',
+  DEFAULT = 'DEFAULT'
+}
+
+enum VIEW_ALIGN {
+  END = 'END',
+  CENTER = 'CENTER',
+  START = 'START'
 }
 
 enum ROLE {
@@ -14,4 +24,11 @@ enum ROLE {
   ADMIN = 'ADMIN'
 }
 
-export { GENDER, VIEW_TYPE, ROLE }
+enum EXCEL_FIELD_TYPE {
+  VALUE = 'VALUE',
+  SUM = 'SUM',
+  GREATER = 'GREATER',
+  LOWER = 'LOWER',
+}
+
+export { GENDER, VIEW_TYPE, ROLE, VIEW_DENSITY, VIEW_ALIGN, EXCEL_FIELD_TYPE }

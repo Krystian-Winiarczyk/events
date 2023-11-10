@@ -1,4 +1,5 @@
 import type { GENDER } from '@/globals/enums/enums'
+import {EXCEL_FIELD_TYPE} from "@/globals/enums/enums";
 
 export interface User {
   id?: number
@@ -125,4 +126,12 @@ export interface UserEventCompetition {
   userPet: UserPet | string | any
   userProfile: UserProfile | string | any
   user: User | string | any
+}
+
+export interface CompetitionExcelField {
+  id?: number
+  name: string
+  type: EXCEL_FIELD_TYPE
+
+  competition: Competition | string | any
 }

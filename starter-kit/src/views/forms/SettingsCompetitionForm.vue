@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { requiredValidator } from '@validators'
-import type { Competition, Group } from '@/globals/types/types'
+import type {Ref} from 'vue'
+import {requiredValidator} from '@validators'
+import type {Competition, CompetitionExcelField, Group} from '@/globals/types/types'
 import axiosIns from '@axios'
 
-import { useToastStore } from '@/store/toast'
-import { defaultCompetition } from '@/globals/defaults'
+import {useToastStore} from '@/store/toast'
+import {defaultCompetition} from '@/globals/defaults'
+import {EXCEL_FIELD_TYPE} from '@/globals/enums/enums'
 
 interface Props {
   defaultCompetition?: Competition
@@ -19,7 +20,20 @@ const emits = defineEmits(['close'])
 const { showMessage } = useToastStore()
 
 const competition: Ref<Competition> = ref({ ...defaultCompetition })
-const loading = ref(false)
+const loading: Ref<boolean> = ref(false)
+
+const competitionExcelFields: Ref<CompetitionExcelField[]> = ref([
+  {
+    id: 0,
+    name: 'Zawodnik',
+    type: EXCEL_FIELD_TYPE.VALUE,
+  },
+  {
+    id: 0,
+    name: 'Pupil',
+    type: EXCEL_FIELD_TYPE.VALUE,
+  },
+])
 
 const onSubmit = async () => {
   loading.value = true
@@ -52,9 +66,41 @@ const onSubmit = async () => {
   }, 1000)
 }
 
+const loadCompetitionEventFields = async () => {
+  try {
+    const resp = await axiosIns.get('settings/competition-excel-fields', {
+      params: {
+        'q[competition][id][eq]': String(props.defaultCompetition?.id || 0),
+      },
+    })
+
+    const excelFields = resp?.data?.items
+  }
+  catch (err) {
+    showMessage('error', 'snackbar.AnErrorOccurredWhileUpdatingPet', 'snackbar.ProblemEncountered')
+  }
+}
+
+const getExcelFieldTypeIcon = (type: EXCEL_FIELD_TYPE) => {
+  if (type === EXCEL_FIELD_TYPE.VALUE)
+    return 'mdi-circle-edit-outline'
+  if (type === EXCEL_FIELD_TYPE.SUM)
+    return 'mdi-equal'
+  if (type === EXCEL_FIELD_TYPE.GREATER)
+    return 'mdi-greater-than'
+  if (type === EXCEL_FIELD_TYPE.LOWER)
+    return 'mdi-less-than'
+
+  return 'mdi-chevron-bottom'
+}
+
 onMounted(() => {
-  if (props.defaultCompetition)
+  if (props.defaultCompetition) {
     Object.assign(competition.value, JSON.parse(JSON.stringify(props.defaultCompetition)))
+
+    if (props.defaultCompetition?.id)
+      loadCompetitionEventFields()
+  }
 })
 </script>
 
@@ -145,6 +191,48 @@ onMounted(() => {
           <VCardTitle class="text-primary my-2 mb-3">
             {{ $t('Excel') }}
           </VCardTitle>
+
+          <div class="d-flex justify-start justify-content-start flex-wrap">
+            <VTextField
+              v-for="(excelField, excelFieldIndex) in competitionExcelFields"
+              :key="`excel_field_${excelFieldIndex}`"
+              v-model="excelField.name"
+              class="mr-3 mb-3"
+              density="compact"
+              :disabled="excelField.id === 0"
+              style="min-width: 150px; max-width: 250px"
+            >
+              <template #append-inner>
+                <VIcon :icon="getExcelFieldTypeIcon(excelField.type)" />
+              </template>
+
+              <VMenu activator="parent">
+                <VList select-strategy="classic">
+                  <VListItem
+                    v-for="(item, index) in Object.keys(EXCEL_FIELD_TYPE)"
+                    :key="`excel_field_${excelFieldIndex}_${index}`"
+                    :value="item"
+                    :active="excelField.type === item"
+                    @click="excelField.type = item"
+                  >
+                    <template #prepend="{ isActive }">
+                      <VListItemAction start>
+                        <VCheckboxBtn :model-value="isActive" />
+                      </VListItemAction>
+                    </template>
+                    <VListItemTitle>{{ $t(item.firstToUpper()) }}</VListItemTitle>
+                  </VListItem>
+                </VList>
+              </VMenu>
+            </VTextField>
+
+            <VBtn @click="competitionExcelFields.push({
+              name: 'Field',
+              type: EXCEL_FIELD_TYPE.VALUE,
+            })">
+              <VIcon icon="mdi-plus" />
+            </VBtn>
+          </div>
         </VCol>
       </VRow>
     </VForm>

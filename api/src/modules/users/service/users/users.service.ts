@@ -7,6 +7,8 @@ import { CreateUserDto } from '../../dtos/User.dto';
 import {BaseService} from "../../../../base/BaseService";
 import {UserProfilesService} from "../user-profiles/user-profiles.service";
 import {UserPetsService} from "../user-pets/user-pets.service";
+import {UserProfile} from "../../../../typeorm/entities/UserProfile";
+import {UserPet} from "../../../../typeorm/entities/UserPet";
 
 @Injectable()
 export class UsersService extends BaseService<User>{
@@ -36,11 +38,15 @@ export class UsersService extends BaseService<User>{
         newUser.password = await argon2.hash(userDetails.password);
 
         if (userDetails.profile) {
-            newUser.profiles.push(await this.userProfileService.create({ ...userDetails.profile, isPrimary: true, user: newUser.id }))
+            newUser.profiles.push(<UserProfile>await this.userProfileService.create({
+                ...userDetails.profile,
+                isPrimary: true,
+                user: newUser.id
+            }))
         }
 
         if (userDetails.pet) {
-            newUser.pets.push(await this.userPetsService.create({ ...userDetails.pet, user: newUser.id }))
+            newUser.pets.push(<UserPet>await this.userPetsService.create({...userDetails.pet, user: newUser.id}))
         }
 
         return await this.userRepository.save(newUser);

@@ -20,6 +20,7 @@ import defaults from './utils/defaults'
 
 /*    START::Mixins    */
 import breakpointsMixin from '@/mixins/breakpoints'
+import './prototypes.js'
 
 /*    END::Mixins    */
 

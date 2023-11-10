@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
+import type {Ref} from 'vue'
 
-import type {
-  Event,
-  EventCompetition,
-} from '@/globals/types/types'
+import type {Event, EventCompetition, UserEventCompetition,} from '@/globals/types/types'
 
 import axiosIns from '@axios'
-import { useAuthStore } from '@/store/auth'
+import {useAuthStore} from '@/store/auth'
+import {VIEW_ALIGN, VIEW_DENSITY} from '@/globals/enums/enums'
+import ViewDensitySwitch from "@/views/components/ViewDensitySwitch.vue";
 
 const event: Ref<Event | null> = ref(null)
 const competitions: Ref<Array<any>> = ref([])
 const loading = ref(false)
 const selectedCompetition = ref(0)
+
+const viewDensity = ref(VIEW_DENSITY.DEFAULT)
 
 const route = useRoute()
 const router = useRouter()
@@ -29,6 +30,24 @@ const groupedCompetitions = computed(() => {
     return result
   }, {})
 })
+
+const groupedUserEventCompetitionByUserProfiles = (users: Array<any>) => {
+  const res = users.reduce((result: { [key: string]: any }, userEventCompetition: UserEventCompetition) => {
+    const profileId = String(userEventCompetition.userProfile.id)
+
+    if (result && !result[profileId]) {
+      result[profileId] = {
+        ...userEventCompetition,
+        userPets: [],
+      }
+    }
+    result[profileId].userPets.push(userEventCompetition.userPet)
+
+    return result
+  }, {})
+
+  return Object.values(res)
+}
 
 const loadEventCompetitionUsers = async (competitionId: string | number = 0) => {
   if (!competitionId)
@@ -93,6 +112,7 @@ onMounted(() => {
       >
         <VCard>
           <VCardItem>
+            <ViewDensitySwitch :justify="VIEW_ALIGN.START" v-model="viewDensity" />
             <div
               v-for="competitionGroup in Object.keys(groupedCompetitions).reverse()"
               :key="`competition_group_${competitionGroup}`"
@@ -133,14 +153,75 @@ onMounted(() => {
         >
           <div
             v-for="competitionGroup in Object.keys(groupedCompetitions).reverse()"
-            :key="`competition_group_window_${competitionGroup}`"
+            :key="`event_competition_group_${competitionGroup}_window`"
           >
             <VWindowItem
               v-for="(competition, competitionIndex) in groupedCompetitions[competitionGroup]"
-              :key="`event_competition_window_${competitionIndex}`"
+              :key="`event_competition_group_${competitionGroup}_window_${competitionIndex}`"
               :value="competition.id"
             >
-              {{ competition.users }}
+              <VRow>
+                <VCol
+                  v-for="({ user, userPets, userProfile }, userIndex) in groupedUserEventCompetitionByUserProfiles(competition.users)"
+                  :key="`event_competition_group_${competitionGroup}_window_${competitionIndex}_user_${userIndex}`"
+                  sm="12"
+                  md="6"
+                  lg="4"
+                >
+                  <VCard>
+                    <VCardTitle>
+                      <Avatar
+                        :size="viewDensity === VIEW_DENSITY.DEFAULT ? 40 : 30"
+                        :item="userProfile"
+                      />
+                      {{ userProfile.name }}
+                    </VCardTitle>
+
+                    <VFabTransition>
+                      <VCardItem :key="VIEW_DENSITY.DEFAULT" v-if="viewDensity === VIEW_DENSITY.DEFAULT">
+                        <VList
+                          border
+                          rounded
+                          density="compact"
+                        >
+                          <div>
+                            <VListItem
+                              v-for="(pet, petIndex) in userPets"
+                              :key="`event_competition_group_${competitionGroup}_window_${competitionIndex}_user_${userIndex}_pets_${petIndex}`"
+                            >
+                              <template #prepend>
+                                <Avatar
+                                  size="35"
+                                  :item="pet"
+                                />
+                              </template>
+                              <VListItemTitle>
+                                {{ pet.name }}
+                              </VListItemTitle>
+                              <VListItemSubtitle>
+                                {{ pet.breed }}
+                              </VListItemSubtitle>
+                            </VListItem>
+                          </div>
+                        </VList>
+                      </VCardItem>
+                      <VCardText :key="VIEW_DENSITY.COMPACT" class="mt-1" v-else-if="viewDensity === VIEW_DENSITY.COMPACT">
+                        <VChip
+                          v-for="(pet, petIndex) in userPets"
+                          :key="`event_competition_group_${competitionGroup}_window_${competitionIndex}_user_${userIndex}_pets_${petIndex}`"
+                        >
+                          <Avatar
+                            size="25"
+                            start
+                            :item="pet"
+                          />
+                          <span>{{ pet.name }}</span>
+                        </VChip>
+                      </VCardText>
+                    </VFabTransition>
+                  </VCard>
+                </VCol>
+              </VRow>
             </VWindowItem>
           </div>
         </VWindow>

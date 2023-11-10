@@ -2,6 +2,7 @@ import {Entity, Column, OneToMany, ManyToOne} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import {EventCompetition} from "./EventCompetition";
 import {Group} from "./Group";
+import {CompetitionExcelField} from "./CompetitionExcelField";
 
 @Entity({ name: 'competitions' })
 export class Competition extends BaseEntity {
@@ -32,6 +33,13 @@ export class Competition extends BaseEntity {
      */
     @OneToMany(() => EventCompetition, eventCompetition =>  eventCompetition.competition)
     eventCompetitions: EventCompetition[]
+
+    /**
+     *  Competition competitionExcelFields
+     * @returns {CompetitionExcelField[]} competitionExcelFields
+     */
+    @OneToMany(() => CompetitionExcelField, competitionExcelField =>  competitionExcelField.competition)
+    competitionExcelFields: CompetitionExcelField[]
 
     /**
      *  Competition group

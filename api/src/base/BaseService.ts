@@ -103,37 +103,6 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
                 item[relationName] = { id: updateDto[relationName] };
             }
         })
-
-        // if (updateDto?.images?.length) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.images = updateDto.images.map(id => ({id}));
-        // }
-        //
-        // if (updateDto?.sponsors?.length) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.sponsors = updateDto.sponsors.map(id => ({id}));
-        // }
-
-        // if (updateDto?.avatar) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.avatar = { id: updateDto.avatar } as File;
-        // }
-        //
-        // if (updateDto?.banner) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.banner = { id: updateDto.banner } as File;
-        // }
-        //
-        // if (updateDto?.logo) {
-        //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //     // @ts-ignore
-        //     item.logo = { id: updateDto.logo } as File;
-        // }
-
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return await this.repository.save(item);
@@ -167,59 +136,24 @@ export class BaseService<T extends BaseEntity> implements ServiceInterface<T> {
             return await this.repository.save(item);
         }
     }
-    // async create(createDto: any): Promise<T> {
-    //     const item = this.repository.create(createDto);
-    //
-    //     this.arrayRelations.forEach(relationName => {
-    //         if (createDto[relationName] && createDto[relationName]?.length) {
-    //             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //             // @ts-ignore
-    //             item[relationName] = createDto[relationName].map(id => ({id}));
-    //         }
-    //     })
-    //
-    //     this.objectRelations.forEach(relationName => {
-    //         if (createDto[relationName] && createDto[relationName]?.length) {
-    //             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //             // @ts-ignore
-    //             item[relationName] = { id: createDto[relationName] };
-    //         }
-    //     })
-    //
-    //     // if (createDto?.images?.length) {
-    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //     //     // @ts-ignore
-    //     //     item.images = createDto.images.map(id => ({id}));
-    //     // }
-    //     //
-    //     // if (createDto?.sponsors?.length) {
-    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //     //     // @ts-ignore
-    //     //     item.sponsors = createDto.sponsors.map(id => ({id}));
-    //     // }
-    //     //
-    //     // if (createDto?.avatar) {
-    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //     //     // @ts-ignore
-    //     //     item.avatar = { id: createDto.avatar } as File;
-    //     // }
-    //     //
-    //     // if (createDto?.banner) {
-    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //     //     // @ts-ignore
-    //     //     item.banner = { id: createDto.banner } as File;
-    //     // }
-    //     //
-    //     // if (createDto?.logo) {
-    //     //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //     //     // @ts-ignore
-    //     //     item.logo = { id: createDto.logo } as File;
-    //     // }
-    //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //     // @ts-ignore
-    //     return await this.repository.save(item);
-    // }
 
+    async updateOrCreate(createDto: any[]): Promise<any> {
+        const toUpdate = createDto.filter(dtoItem => dtoItem.id)
+        const toCreate = createDto.filter(dtoItem => !dtoItem.id)
+
+        if (toUpdate.length) {
+            const updated = await Promise.all(toUpdate.map(toUpdateDto => {
+                const {id, ...updateItem} = toUpdateDto
+                return this.updateOneById(id, updateItem)
+            }))
+        }
+
+        if (toCreate.length) {
+            const created = await this.create(toCreate)
+        }
+
+        return true
+    }
     async deleteSoftOneById(id: number): Promise<UpdateResult> {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore

@@ -60,7 +60,7 @@ export class UsersController extends BaseController<User>
         @Body() createUserProfileDto: CreateUserProfileDto
     ) {
         try {
-            const data: UserProfile = await this.userProfileService.create({ ...createUserProfileDto, user: id })
+            const data: UserProfile[] | UserProfile = await this.userProfileService.create({ ...createUserProfileDto, user: id })
 
             this.apiSuccessResponse({ res, req, data })
         } catch (error) {
@@ -92,7 +92,7 @@ export class UsersController extends BaseController<User>
         @Body() createPetDto: CreateUserPetDto
     ) {
         try {
-            const data: UserPet = await this.petService.create({ ...createPetDto, user: id })
+            const data: UserPet[] | UserPet = await this.petService.create({ ...createPetDto, user: id })
 
             this.apiSuccessResponse({ res, req, data })
         } catch (error) {
