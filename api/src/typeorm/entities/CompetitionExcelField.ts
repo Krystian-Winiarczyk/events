@@ -1,8 +1,10 @@
-import {Entity, Column, ManyToOne} from 'typeorm';
+import {Entity, Column, ManyToOne, OneToMany, JoinTable} from 'typeorm';
 import { BaseEntity } from '../../base/BaseEntity';
 import {Group} from "./Group";
 import {ExcelFieldType} from "../../constants/ExcelFieldType";
 import {Competition} from "./Competition";
+import {EventCompetitionExcelFieldDraft} from "./EventCompetitionExcelFieldDraft";
+import {UserPet} from "./UserPet";
 
 @Entity({ name: 'competition_excel_fields' })
 export class CompetitionExcelField extends BaseEntity {
@@ -26,4 +28,12 @@ export class CompetitionExcelField extends BaseEntity {
      */
     @ManyToOne(() => Competition, competition => competition.competitionExcelFields)
     competition: Competition
+
+    /**
+     *  List of all assigned event competition excel field draft
+     * @returns {EventCompetitionExcelFieldDraft[]} pets
+     */
+    @OneToMany(() => EventCompetitionExcelFieldDraft, (eventCompetitionExcelFieldDraft) => eventCompetitionExcelFieldDraft.competitionExcelField, { onDelete: 'CASCADE' })
+    @JoinTable()
+    eventCompetitionExcelFieldDrafts: EventCompetitionExcelFieldDraft[]
 }

@@ -4,6 +4,7 @@ import {EventCompetition} from "./EventCompetition";
 import {File} from "./File";
 import {Sponsor} from "./Sponsor";
 import {UserEventCompetition} from "./UserEventCompetition";
+import {EventCompetitionExcelFieldDraft} from "./EventCompetitionExcelFieldDraft";
 
 @Entity({ name: 'events' })
 export class Event extends BaseEntity {
@@ -91,5 +92,13 @@ export class Event extends BaseEntity {
     @ManyToMany(() => Sponsor, (sponsor) => sponsor.events)
     @JoinTable()
     sponsors: Sponsor[]
+
+    /**
+     *  List of all assigned event competition excel field draft
+     * @returns {EventCompetitionExcelFieldDraft[]} pets
+     */
+    @OneToMany(() => EventCompetitionExcelFieldDraft, (eventCompetitionExcelFieldDraft) => eventCompetitionExcelFieldDraft.event, { onDelete: 'CASCADE' })
+    @JoinTable()
+    eventCompetitionExcelFieldDrafts: EventCompetitionExcelFieldDraft[]
 
 }

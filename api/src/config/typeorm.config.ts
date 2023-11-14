@@ -15,6 +15,7 @@ import {Sponsor} from "../typeorm/entities/Sponsor";
 import {Group} from "../typeorm/entities/Group";
 import {UserEventCompetition} from "../typeorm/entities/UserEventCompetition";
 import {CompetitionExcelField} from "../typeorm/entities/CompetitionExcelField";
+import {EventCompetitionExcelFieldDraft} from "../typeorm/entities/EventCompetitionExcelFieldDraft";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -29,7 +30,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
-      entities: [Event, Competition, File, User, UserPet, UserProfile, EventCompetition, Sponsor, Group, UserEventCompetition, CompetitionExcelField],
+      entities: [Event, Competition, File, User, UserPet, UserProfile, EventCompetition, Sponsor, Group, UserEventCompetition, CompetitionExcelField, EventCompetitionExcelFieldDraft],
       synchronize: configService.get('APP_MODE') === AppMode.DEVELOPMENT,
     };
   },

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type {Ref} from 'vue'
-import {requiredValidator} from '@validators'
-import type {Competition, CompetitionExcelField, Group} from '@/globals/types/types'
+import type { Ref } from 'vue'
+import { requiredValidator } from '@validators'
+import type { Competition, CompetitionExcelField, Group, UserPet } from '@/globals/types/types'
 import axiosIns from '@axios'
 
-import {useToastStore} from '@/store/toast'
-import {defaultCompetition} from '@/globals/defaults'
-import {EXCEL_FIELD_TYPE} from '@/globals/enums/enums'
+import { useToastStore } from '@/store/toast'
+import { defaultCompetition } from '@/globals/defaults'
+import { EXCEL_FIELD_TYPE } from '@/globals/enums/enums'
 
 interface Props {
   defaultCompetition?: Competition
@@ -22,6 +22,8 @@ const { showMessage } = useToastStore()
 const competition: Ref<Competition> = ref({ ...defaultCompetition })
 const loading: Ref<boolean> = ref(false)
 
+const competitionExcelFieldsPetsPreview: Ref<UserPet[]> = ref([])
+
 const competitionExcelFields: Ref<CompetitionExcelField[]> = ref([
   {
     id: 0,
@@ -34,6 +36,18 @@ const competitionExcelFields: Ref<CompetitionExcelField[]> = ref([
     type: EXCEL_FIELD_TYPE.VALUE,
   },
 ])
+
+const saveCompetitionExcelFields = async (fields: Array<any>, competitionId: number | string) => {
+  try {
+    const payload = fields.filter(field => field?.id !== 0).map(field => ({ ...field, competition: competitionId }))
+    const resp = await axiosIns.put('settings/competition-excel-fields', payload)
+
+    return [resp, null]
+  }
+  catch (err) {
+    return [null, err]
+  }
+}
 
 const onSubmit = async () => {
   loading.value = true
@@ -52,6 +66,15 @@ const onSubmit = async () => {
         resp = await axiosIns.post('settings/competitions', item)
 
       const [updatedItem] = resp?.data?.items
+
+      console.log(updatedItem)
+
+      const [_, err] = await saveCompetitionExcelFields(competitionExcelFields.value, updatedItem.id)
+      if (err) {
+        showMessage('error', 'snackbar.AnErrorOccurredWhileUpdatingPet', 'snackbar.ProblemEncountered')
+
+        return false
+      }
 
       showMessage('success', 'snackbar.PetChangesSaved', 'snackbar.ChangesSaved')
 
@@ -74,7 +97,13 @@ const loadCompetitionEventFields = async () => {
       },
     })
 
-    const excelFields = resp?.data?.items
+    const excelFields = (resp?.data?.items || []).sort((a, b) => a.id - b.id)
+
+    competitionExcelFields.value.push(...excelFields.map(e => {
+      const { id, name, type } = e
+
+      return { id, name, type }
+    }))
   }
   catch (err) {
     showMessage('error', 'snackbar.AnErrorOccurredWhileUpdatingPet', 'snackbar.ProblemEncountered')
@@ -88,10 +117,61 @@ const getExcelFieldTypeIcon = (type: EXCEL_FIELD_TYPE) => {
     return 'mdi-equal'
   if (type === EXCEL_FIELD_TYPE.GREATER)
     return 'mdi-greater-than'
-  if (type === EXCEL_FIELD_TYPE.LOWER)
+  if (type === EXCEL_FIELD_TYPE.LESS)
     return 'mdi-less-than'
 
   return 'mdi-chevron-bottom'
+}
+
+const getExcelSamplePreviousValueFields = (result: any, type: EXCEL_FIELD_TYPE) => {
+  return Object.values(result).reduce((total, field, currentIndex) => {
+    if (currentIndex <= 1)
+      return total
+
+    if (type === EXCEL_FIELD_TYPE.SUM)
+      return total + field.value
+    else if (type === EXCEL_FIELD_TYPE.GREATER && field.value > total)
+      return field.value
+    else if (type === EXCEL_FIELD_TYPE.LESS && field.value < total || total === 0)
+      return field.value
+
+    return total
+  }, 0)
+}
+
+const getExcelSample = async () => {
+  try {
+    const resp = await axiosIns.get('/user/pets', { params: { limit: 5, page: 1 } })
+
+    competitionExcelFieldsPetsPreview.value = (resp.data?.items || [])
+      .map((userPet: UserPet) => {
+        const { user, ...pet } = userPet
+        const { primaryProfile } = user
+
+        return competitionExcelFields.value.reduce((result, item, currentIndex) => {
+          const toReturn: { name: string; value: any } = {
+            name: item.name,
+            value: '',
+          }
+
+          if (currentIndex === 0) { toReturn.value = primaryProfile.name }
+          else if (currentIndex === 1) { toReturn.value = pet.name }
+          else {
+            if (item.type === EXCEL_FIELD_TYPE.VALUE)
+              toReturn.value = Math.round(Math.random() * 2000)
+            else
+              toReturn.value = getExcelSamplePreviousValueFields(result, item.type)
+          }
+
+          result[`_${currentIndex}`] = toReturn
+
+          return result
+        }, {})
+      })
+  }
+  catch (err) {
+    showMessage('error', 'snackbar.SomethingWentWrong', 'snackbar.ProblemEncountered')
+  }
 }
 
 onMounted(() => {
@@ -141,7 +221,7 @@ onMounted(() => {
         <!-- Data -->
         <VCol
           sm="12"
-          md="5"
+          md="4"
         >
           <VCardTitle class="text-primary my-2 mb-3">
             {{ $t('BasicData') }}
@@ -185,7 +265,7 @@ onMounted(() => {
 
         <!-- Images -->
         <VCol
-          md="7"
+          md="8"
           sm="12"
         >
           <VCardTitle class="text-primary my-2 mb-3">
@@ -226,13 +306,55 @@ onMounted(() => {
               </VMenu>
             </VTextField>
 
-            <VBtn @click="competitionExcelFields.push({
-              name: 'Field',
-              type: EXCEL_FIELD_TYPE.VALUE,
-            })">
+            <VBtn
+              @click="competitionExcelFields.push({
+                name: 'Field',
+                type: EXCEL_FIELD_TYPE.VALUE,
+              })"
+            >
               <VIcon icon="mdi-plus" />
             </VBtn>
           </div>
+
+          <VCardTitle class="text-primary my-2 mb-3">
+            {{ $t('ExcelPreview') }}
+            <VBtn
+              size="small"
+              @click="getExcelSample"
+            >
+              <VIcon icon="mdi-download" />
+            </VBtn>
+          </VCardTitle>
+
+          <VTable v-if="competitionExcelFieldsPetsPreview.length">
+            <thead>
+              <tr>
+                <th
+                  v-for="(key, excelSampleFieldIndex) in Object.values(competitionExcelFieldsPetsPreview[0]).map(e => e.name)"
+                  :key="`excel_sample_head_field_${excelSampleFieldIndex}`"
+                  class="text-left"
+                >
+                  {{ key }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(excelSampleField, excelSampleFieldIndex) in competitionExcelFieldsPetsPreview"
+                :key="`excel_sample_tr_field_${excelSampleFieldIndex}`"
+              >
+                <td
+                  v-for="(excelSampleValueField, excelSampleValueFieldIndex) in Object.values(excelSampleField)"
+                  :key="`excel_sample_tr_field_${excelSampleFieldIndex}_td_${excelSampleValueFieldIndex}`"
+                >
+                  <VTextField
+                    v-model="excelSampleValueField.value"
+                    density="compact"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </VTable>
         </VCol>
       </VRow>
     </VForm>

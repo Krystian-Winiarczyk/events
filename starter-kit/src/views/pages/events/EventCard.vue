@@ -65,7 +65,7 @@ const redirectToPage = page => {
                     Users
                   </VTooltip>
                 </VBtn>
-                <VBtn icon>
+                <VBtn icon @click="redirectToPage({ name: 'events-excel-id', params: { id: event.id } })">
                   <VIcon icon="mdi-file-excel" />
                   <VTooltip
                     activator="parent"
