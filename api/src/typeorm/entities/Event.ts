@@ -62,6 +62,9 @@ export class Event extends BaseEntity {
     @OneToMany(() => EventCompetition, eventCompetition =>  eventCompetition.event, { cascade: true })
     eventCompetitions: EventCompetition[]
 
+    @Column({ nullable: true, default: false })
+    draftGenerated: boolean
+
     /**
      *  User event competitions
      * @returns {UserEventCompetition[]} profiles

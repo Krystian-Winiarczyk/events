@@ -68,6 +68,10 @@ const loadEventCompetitionUsers = async (competitionId: string | number = 0) => 
 const reloadData = async () => {
   loading.value = true
 
+  const draftParams = {
+
+  }
+
   const [eventResponse] = await Promise.all([
     axiosIns.get(`/events/${route.params.id}`),
   ])
