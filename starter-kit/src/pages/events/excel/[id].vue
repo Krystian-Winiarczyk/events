@@ -49,16 +49,16 @@ const groupedUserEventCompetitionByUserProfiles = (users: Array<any>) => {
   return Object.values(res)
 }
 
-const loadEventCompetitionUsers = async (competitionId: string | number = 0) => {
+const loadEventCompetitionDraftFields = async (competitionId: string | number = 0) => {
   if (!competitionId)
     return [null, 'NoCompetitions']
 
   const params = {
     'q[event][id][eq]': route.params.id,
-    'q[eventCompetition][id][eq]': competitionId,
+    'q[userEventCompetition][eventCompetition][id][eq]': competitionId,
   }
 
-  const { data } = await axiosIns.get('/user/event/competitions', { params })
+  const { data } = await axiosIns.get('/event-competition-excel-field-draft', { params })
 
   const competitionIndex = competitions.value.findIndex(competition => competition.id === competitionId)
   if (competitionIndex > -1)
@@ -68,12 +68,9 @@ const loadEventCompetitionUsers = async (competitionId: string | number = 0) => 
 const reloadData = async () => {
   loading.value = true
 
-  const draftParams = {
-
-  }
-
   const [eventResponse] = await Promise.all([
     axiosIns.get(`/events/${route.params.id}`),
+    axiosIns.post(`/events/${route.params.id}/init-excel-draft`),
   ])
 
   if (eventResponse?.data.items?.length) {
@@ -85,7 +82,7 @@ const reloadData = async () => {
 
     selectedCompetition.value = Number(id)
 
-    await loadEventCompetitionUsers(id)
+    await loadEventCompetitionDraftFields(id)
   }
   else { router.push({ name: 'events' }) }
 
@@ -127,7 +124,7 @@ onMounted(() => {
                 v-model="selectedCompetition"
                 direction="vertical"
                 class="v-tabs-pill"
-                @update:model-value="loadEventCompetitionUsers($event)"
+                @update:model-value="loadEventCompetitionDraftFields($event)"
               >
                 <VTab
                   v-for="(competition, competitionIndex) in groupedCompetitions[competitionGroup]"
