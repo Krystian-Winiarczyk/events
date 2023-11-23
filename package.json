@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "@intlify/vite-plugin-vue-i18n": "^7.0.0"
-  }
-}

@@ -35,8 +35,9 @@ export class EventsController extends BaseController<Event> {
             );
 
             const toReturnObject = await this.eventsService.findOneById(id, {})
+            await this.eventCompetitionExcelFieldDraftService.initEventDraftFields(id)
 
-            this.apiSuccessResponse({ res, req, data: await this.eventCompetitionExcelFieldDraftService.initEventDraftFields(id) });
+            this.apiSuccessResponse({ res, req, data: toReturnObject });
         } catch (error) {
             this.apiErrorResponse(res, req, error);
         }

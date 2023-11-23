@@ -16,6 +16,7 @@ import {File} from "./File";
 import {Gender} from "../../constants/Gender";
 import {IsOptional} from "class-validator";
 import {UserEventCompetition} from "./UserEventCompetition";
+import {EventCompetitionExcelFieldDraft} from "./EventCompetitionExcelFieldDraft";
 
 @Entity({ name: 'user_profiles' })
 export class UserProfile extends BaseEntity {
@@ -133,6 +134,14 @@ export class UserProfile extends BaseEntity {
     @OneToMany(() => UserEventCompetition, (userEventCompetition) => userEventCompetition.userProfile, { onDelete: 'CASCADE' })
     @JoinTable()
     userEventCompetitions: UserEventCompetition[]
+
+    /**
+     *  List of all assigned event competition excel field draft
+     * @returns {EventCompetitionExcelFieldDraft[]} pets
+     */
+    @OneToMany(() => EventCompetitionExcelFieldDraft, (eventCompetitionExcelFieldDraft) => eventCompetitionExcelFieldDraft.userProfile, { onDelete: 'CASCADE' })
+    @JoinTable()
+    eventCompetitionExcelFieldDrafts: EventCompetitionExcelFieldDraft[]
 
     /**
      *  User profile full name

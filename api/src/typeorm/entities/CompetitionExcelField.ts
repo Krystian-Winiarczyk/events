@@ -4,7 +4,6 @@ import {Group} from "./Group";
 import {ExcelFieldType} from "../../constants/ExcelFieldType";
 import {Competition} from "./Competition";
 import {EventCompetitionExcelFieldDraft} from "./EventCompetitionExcelFieldDraft";
-import {UserPet} from "./UserPet";
 
 @Entity({ name: 'competition_excel_fields' })
 export class CompetitionExcelField extends BaseEntity {

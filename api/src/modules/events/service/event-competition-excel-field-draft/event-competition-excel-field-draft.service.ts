@@ -20,9 +20,9 @@ export class EventCompetitionExcelFieldDraftService extends BaseService<EventCom
         super(eventCompetitionExcelFieldDraft, {
             userEventCompetition: {
                 eventCompetition: true,
-                userPet: true,
-                userProfile: true,
             },
+            userPet: true,
+            userProfile: true,
             competitionExcelField: true
         });
     }
@@ -57,18 +57,17 @@ export class EventCompetitionExcelFieldDraftService extends BaseService<EventCom
                     },
                 })
 
-                console.log(competitionExcelFields)
-
                 const payload = competitionExcelFields.map(competitionExcelField => {
                     return {
                         value: '',
                         event: eventId,
+                        userProfile: userEventCompetition.userProfile,
+                        userPet: userEventCompetition.userPet,
                         userEventCompetition: userEventCompetition.id,
                         competitionExcelField: competitionExcelField.id,
                     }
                 })
 
-                console.log(payload)
                 await this.create(payload)
             }
             return 'OK'

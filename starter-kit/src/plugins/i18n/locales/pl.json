@@ -1,5 +1,7 @@
 {
   "PricePerStart": "Kwota za start",
+  "GenerateExcelDraft": "Wygeneruj draft Excel",
+  "GenerateExcelDraftDescription": "Draft excela jest generowany w celu umożliwienia użytkownikom wprowadzania zmian i edycji danych. Dzięki temu narzędziu użytkownicy mogą łatwo edytować punkty konkurencji związanych z wydarzeniem.",
   "SignIntoEvent": "Zapisz się na wydarzenie",
   "SelectCompetitions": "Wybierz konkurencje",
   "NoTeamsSelected": "Brak dodanych zespołów",
@@ -156,6 +158,7 @@
   },
 
   "snackbar": {
+    "ExcelDraftCreate": "Pomyślnie utworzono draft pliku excel",
     "AnErrorOccurredWhileUpdatingGroup": "",
 
     "PetChangesSaved": "Pomyślnie zapisano zmiany dotyczące pupila",

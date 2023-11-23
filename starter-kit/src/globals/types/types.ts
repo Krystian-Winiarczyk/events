@@ -87,6 +87,7 @@ export interface Event {
   eventDaysCount: number
   freeEntrance: boolean
   active: boolean
+  draftGenerated?: boolean
   mediaUrl: string
   regulation: string
   regulationUrl: string
@@ -134,4 +135,14 @@ export interface CompetitionExcelField {
   type: EXCEL_FIELD_TYPE
 
   competition: Competition | string | any
+}
+
+
+export interface EventCompetitionExcelFieldDraft {
+  value: string
+  event: Event
+  userEventCompetition: UserEventCompetition
+  competitionExcelField: CompetitionExcelField
+  userProfile: UserProfile
+  userPet: UserPet
 }
