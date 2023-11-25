@@ -24,22 +24,19 @@ export abstract class BaseControllerUtils {
         };
     }
     protected resolveFilterType(type = 'eq', value) {
-        const types = {
-            ['eq' || 'neq']: Equal(value),
-            ['like' || 'nlike']: Like(value.replaceAll(':', '%')),
-            ['between' || 'nbetween']: Between(
-                value.split('_')[0],
-                value.split('_')[1],
-            ),
-            ['gt' || 'ngt']: MoreThan(value),
-            ['gte' || 'ngte']: MoreThanOrEqual(value),
-            ['lt' || 'nlt']: LessThan(value),
-            ['lte' || 'nlte']: LessThanOrEqual(value),
-            ['isNull' || 'nisNull']: IsNull(),
-            ['in' || 'nin']: In(value),
-        };
+        let resultType = null
 
-        return type.startsWith('n') ? Not(types[type]) : types[type];
+        if (['eq', 'neq'].includes(type)) resultType = Equal(value)
+        else if (['like', 'nlike'].includes(type)) resultType = Like(value.replaceAll(':', '%'))
+        else if (['between', 'nbetween'].includes(type)) resultType = Between(value.split('_')[0], value.split('_')[1])
+        else if (['gt', 'ngt'].includes(type)) resultType = MoreThan(value)
+        else if (['gte', 'ngte'].includes(type)) resultType = MoreThanOrEqual(value)
+        else if (['lt', 'nlt'].includes(type)) resultType = LessThan(value)
+        else if (['lte', 'nlte'].includes(type)) resultType = LessThanOrEqual(value)
+        else if (['isNull', 'nisNull'].includes(type)) resultType = IsNull()
+        else if (['in', 'nin'].includes(type)) resultType = In(value)
+
+        return type.startsWith('n') ? Not(resultType) : resultType;
     }
 
     resolveFilters(filters: { [key: string]: any }) {
