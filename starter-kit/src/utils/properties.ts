@@ -48,10 +48,11 @@ export default {
     app.config.globalProperties.$scroll = {
       binary: (reverse = true): number => {
         const SCROLL = Math.max(window.scrollY, 0)
-
+        
         const LEVEL = !reverse ? scroll : 1 - SCROLL
 
         return LEVEL.range(0, 1)
+        
       },
 
       breakPoint: (point: number, reverse = true): number => {

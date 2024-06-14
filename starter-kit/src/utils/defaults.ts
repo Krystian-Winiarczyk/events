@@ -1,6 +1,6 @@
-import type { App } from 'vue/dist/vue'
 import flatpickr from 'flatpickr'
 import { Polish } from "flatpickr/dist/l10n/pl"
+import type { App } from 'vue/dist/vue'
 
 export default {
   install(app: App<Element>): void {

@@ -1,4 +1,4 @@
-import {Body, Controller, Param, ParseIntPipe, Patch, Post, Req, Res} from '@nestjs/common';
+import {Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req, Res} from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators';
 import { BaseController } from 'src/base/BaseController';
 import { JwtAuthGuard } from 'src/guard/jwt-auth/jwt-auth.guard';
@@ -21,9 +21,27 @@ export class EventsController extends BaseController<Event> {
         super(eventsService)
     }
 
+    @Get('open-event')
+    // @Roles(Role.ADMIN)
+    async getOpenEvent(
+        @Req() req: Request,
+        @Res() res: Response,
+    ) {
+        try {
+            const item: Event = await this.eventsService.findOneById(1, {});
+
+            // const toReturnObject = await this.eventsService.findOneById(id, {})
+            // await this.eventCompetitionExcelFieldDraftService.initEventDraftFields(id)
+
+            this.apiSuccessResponse({ res, req, data: item });
+        } catch (error) {
+            this.apiErrorResponse(res, req, error);
+        }
+    }
+
     @Post(':id/init-excel-draft')
     // @Roles(Role.ADMIN)
-    async updateOneById(
+    async initExcelFile(
         @Req() req: Request,
         @Res() res: Response,
         @Param('id', ParseIntPipe) id: number,

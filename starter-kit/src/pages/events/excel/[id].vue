@@ -100,7 +100,6 @@ const updateExcelField = async (value: any, excelField: any, _restFields: Array<
   const {competitionExcelField, index} = excelField
 
   const competitionIndex = competitions.value.findIndex(competition => Number(competition.id) === Number(selectedCompetition.value))
-  console.log(value.target.value)
 
   if (competitionIndex > -1) {
     competitions.value[competitionIndex].excelDraftFields[index].value = value.target.value
@@ -108,7 +107,8 @@ const updateExcelField = async (value: any, excelField: any, _restFields: Array<
     const lastField = restFields.at(-1)
     const lastFieldType = lastField.competitionExcelField.type
 
-    restFields.splice(index, 1)
+    const removeIndex = restFields.findIndex(i => i.index === index && i.value == value.target.value)
+    restFields.splice(removeIndex, 1)
     restFields.pop()
 
     let resultValue = null
@@ -165,25 +165,41 @@ const groupedEventCompetitionExcelFieldsByUser = (excelDraftFields: Array<any>):
 
     return result
   }, {})
+  console.log('======================================')
 
-    // .sort((a: any, b: any) => {
-    //   if (!a.excelFields?.length || !b.excelFields?.length) return -1
-    //
-    //   const { competitionExcelField: prevExcelField, value: prevValue } = a.excelFields.at(-1)
-    //   const { competitionExcelField: nextExcelField, value: nextValue } = b.excelFields.at(-1)
-    //
-    //   const byType: EXCEL_FIELD_TYPE = prevExcelField.type
-    //
-    //   if (byType === EXCEL_FIELD_TYPE.LESS) {
-    //     if (prevValue > nextValue) return 1
-    //     else return -1
-    //   } else {
-    //     if (prevValue > nextValue) return 1
-    //     else return -1
-    //   }
-    // })
+  const items = Object.values(res)
+  // return items
+  return JSON.parse(JSON.stringify(items)).sort((a: any, b: any) => {
+    if (!a.excelFields?.length || !b.excelFields?.length) return -1
 
-  return Object.values(res) || []
+    let { competitionExcelField: prevExcelField, value: prevValue } = a.excelFields.at(-1)
+    let { competitionExcelField: nextExcelField, value: nextValue } = b.excelFields.at(-1)
+
+    const byType: EXCEL_FIELD_TYPE = prevExcelField.type
+
+    if (!prevValue) {
+      prevValue = byType === EXCEL_FIELD_TYPE.LESS ? 99999999999 : 0
+    }
+
+    if (!nextValue) {
+      nextValue = byType === EXCEL_FIELD_TYPE.LESS ? 99999999999 : 0
+    }
+
+    console.log('byType', byType)
+    console.log('prev', prevValue)
+    console.log('next', nextValue)
+    console.log('compare', nextValue)
+
+    if (byType === EXCEL_FIELD_TYPE.LESS) {
+      if (prevValue > nextValue) return 1
+      else return -1
+    } else {
+      if (prevValue > nextValue) return 1
+      else return -1
+    }
+  })
+
+  // return items || []
 }
 
 const loadEventCompetitionDraftFields = async (competitionId: string | number = 0) => {
@@ -358,6 +374,11 @@ onMounted(() => {
                       <VTextField
                         density="compact"
                         :model-value="excelFieldValue.value"
+                        :disabled="[
+                          EXCEL_FIELD_TYPE.SUM,
+                          EXCEL_FIELD_TYPE.LESS,
+                          EXCEL_FIELD_TYPE.GREATER,
+                        ].includes(excelFieldValue.competitionExcelField.type)"
                         @blur="updateExcelField($event, excelFieldValue, excelFieldRow.excelFields)"
                       />
                     </td>

@@ -1,6 +1,7 @@
 /* eslint-disable import/order */
 import '@/@iconify/icons-bundle'
 import App from '@/App.vue'
+import i18n from '@/plugins/i18n'
 import layoutsPlugin from '@/plugins/layouts'
 import vuetify from '@/plugins/vuetify'
 import { loadFonts } from '@/plugins/webfontloader'
@@ -9,18 +10,17 @@ import '@core/scss/template/index.scss'
 import '@styles/styles.scss'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import i18n from '@/plugins/i18n'
 
 /*    START::Utils    */
-import prototypes from './utils/prototypes'
-import properties from './utils/properties'
 import defaults from './utils/defaults'
+import properties from './utils/properties'
+import prototypes from './utils/prototypes'
 
 /*    END::Utils    */
 
 /*    START::Mixins    */
 import breakpointsMixin from '@/mixins/breakpoints'
-import './prototypes.js'
+import './prototypes'
 
 /*    END::Mixins    */
 
