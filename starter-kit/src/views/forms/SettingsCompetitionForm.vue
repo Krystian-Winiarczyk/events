@@ -1,217 +1,314 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { requiredValidator } from '@validators'
-import type { Competition, CompetitionExcelField, Group, UserPet } from '@/globals/types/types'
-import axiosIns from '@axios'
+import type { Ref } from "vue";
+import { requiredValidator } from "@validators";
+import type {
+  Competition,
+  CompetitionExcelField,
+  Group,
+  UserPet,
+} from "@/globals/types/types";
+import axiosIns from "@axios";
 
-import { useToastStore } from '@/store/toast'
-import { defaultCompetition } from '@/globals/defaults'
-import { EXCEL_FIELD_TYPE } from '@/globals/enums/enums'
+import { useToastStore } from "@/store/toast";
+import { defaultCompetition } from "@/globals/defaults";
+import { EXCEL_FIELD_TYPE } from "@/globals/enums/enums";
+import { imagePath } from "@core/utils/formatters";
 
 interface Props {
-  defaultCompetition?: Competition
-  groups?: Array<Group>
+  defaultCompetition?: Competition;
+  groups?: Array<Group>;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const emits = defineEmits(['close'])
+const emits = defineEmits(["close"]);
 
-const { showMessage } = useToastStore()
+const { showMessage } = useToastStore();
 
-const competition: Ref<Competition> = ref({ ...defaultCompetition })
-const loading: Ref<boolean> = ref(false)
+const competition: Ref<Competition> = ref({ ...defaultCompetition });
+const loading: Ref<boolean> = ref(false);
+const competitionGradeCardUploadRef: Ref<any> = ref(null);
 
-const competitionExcelFieldsPetsPreview: Ref<UserPet[]> = ref([])
+const competitionExcelFieldsPetsPreview: Ref<UserPet[]> = ref([]);
 
 const competitionExcelFields: Ref<CompetitionExcelField[]> = ref([
   {
     id: 0,
-    name: 'Zawodnik',
+    name: "Zawodnik",
     type: EXCEL_FIELD_TYPE.VALUE,
   },
   {
     id: 0,
-    name: 'Pupil',
+    name: "Pupil",
     type: EXCEL_FIELD_TYPE.VALUE,
   },
-])
+]);
 
-const saveCompetitionExcelFields = async (fields: Array<any>, competitionId: number | string) => {
+const saveCompetitionExcelFields = async (
+  fields: Array<any>,
+  competitionId: number | string
+) => {
   try {
-    const payload = fields.filter(field => field?.id !== 0).map(field => ({ ...field, competition: competitionId }))
-    const resp = await axiosIns.put('settings/competition-excel-fields', payload)
+    const payload = fields
+      .filter((field) => field?.id !== 0)
+      .map((field) => ({ ...field, competition: competitionId }));
 
-    return [resp, null]
+    const resp = await axiosIns.put(
+      "settings/competition-excel-fields",
+      payload
+    );
+
+    return [resp, null];
+  } catch (err) {
+    return [null, err];
   }
-  catch (err) {
-    return [null, err]
-  }
-}
+};
+
+const toBase64 = (file, maxSize = 150 * 1024) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const img = new Image();
+      img.src = reader.result;
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Calculate the scaling factor to reduce the image size
+        const scaleFactor = Math.sqrt(maxSize / file.size);
+        canvas.width = img.width * scaleFactor;
+        canvas.height = img.height * scaleFactor;
+
+        // Draw the resized image onto the canvas
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Convert the canvas to a Blob with compression
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const blobReader = new FileReader();
+              blobReader.onload = () => resolve(blobReader.result);
+              blobReader.onerror = reject;
+              blobReader.readAsDataURL(blob); // Convert the Blob to a base64 string
+            } else {
+              reject(new Error("Canvas toBlob conversion failed."));
+            }
+          },
+          file.type || 'image/jpeg', // Fallback to 'image/jpeg' if file.type is undefined
+          0.7 // Compression quality
+        );
+      };
+
+      img.onerror = () => reject(new Error("Image loading failed."));
+    };
+
+    reader.onerror = () => reject(new Error("File reading failed."));
+    reader.readAsDataURL(file); // Initial read of the file to get the Data URL
+  });
 
 const onSubmit = async () => {
-  loading.value = true
+  loading.value = true;
 
-  const item = { ...competition.value }
+  const item = { ...competition.value };
 
-  if (item.group)
-    item.group = item.group?.id || item.group
+  if (item.group) item.group = item.group?.id || item.group;
 
   setTimeout(async () => {
     try {
-      let resp = null
-      if (item?.id)
-        resp = await axiosIns.patch(`settings/competitions/${item.id}`, item)
-      else
-        resp = await axiosIns.post('settings/competitions', item)
+      let resp = null;
 
-      const [updatedItem] = resp?.data?.items
-
-      console.log(updatedItem)
-
-      const [_, err] = await saveCompetitionExcelFields(competitionExcelFields.value, updatedItem.id)
-      if (err) {
-        showMessage('error', 'snackbar.AnErrorOccurredWhileUpdatingPet', 'snackbar.ProblemEncountered')
-
-        return false
+      if (typeof item.gradeCard !== "string" && item.gradeCard) {
+        item.gradeCard = await toBase64(item.gradeCard);
       }
 
-      showMessage('success', 'snackbar.PetChangesSaved', 'snackbar.ChangesSaved')
+      if (item?.id)
+        resp = await axiosIns.patch(`settings/competitions/${item.id}`, item);
+      else resp = await axiosIns.post("settings/competitions", item);
 
-      emits('close', updatedItem)
+      const [updatedItem] = resp?.data?.items;
+
+      const [_, err] = await saveCompetitionExcelFields(
+        competitionExcelFields.value,
+        updatedItem.id
+      );
+
+      if (err) {
+        showMessage(
+          "error",
+          "snackbar.AnErrorOccurredWhileUpdatingPet",
+          "snackbar.ProblemEncountered"
+        );
+
+        return false;
+      }
+
+      showMessage(
+        "success",
+        "snackbar.PetChangesSaved",
+        "snackbar.ChangesSaved"
+      );
+
+      emits("close", updatedItem);
+    } catch (err) {
+      showMessage(
+        "error",
+        "snackbar.AnErrorOccurredWhileUpdatingPet",
+        "snackbar.ProblemEncountered"
+      );
+    } finally {
+      loading.value = false;
     }
-    catch (err) {
-      showMessage('error', 'snackbar.AnErrorOccurredWhileUpdatingPet', 'snackbar.ProblemEncountered')
-    }
-    finally {
-      loading.value = false
-    }
-  }, 1000)
-}
+  }, 1000);
+};
 
 const loadCompetitionEventFields = async () => {
   try {
-    const resp = await axiosIns.get('settings/competition-excel-fields', {
+    const resp = await axiosIns.get("settings/competition-excel-fields", {
       params: {
-        'q[competition][id][eq]': String(props.defaultCompetition?.id || 0),
+        "q[competition][id][eq]": String(props.defaultCompetition?.id || 0),
       },
-    })
+    });
 
-    const excelFields = (resp?.data?.items || []).sort((a, b) => a.id - b.id)
+    const excelFields = (resp?.data?.items || []).sort((a, b) => a.id - b.id);
 
-    competitionExcelFields.value.push(...excelFields.map(e => {
-      const { id, name, type } = e
+    competitionExcelFields.value.push(
+      ...excelFields.map((e) => {
+        const { id, name, type } = e;
 
-      return { id, name, type }
-    }))
+        return { id, name, type };
+      })
+    );
+  } catch (err) {
+    showMessage(
+      "error",
+      "snackbar.AnErrorOccurredWhileUpdatingPet",
+      "snackbar.ProblemEncountered"
+    );
   }
-  catch (err) {
-    showMessage('error', 'snackbar.AnErrorOccurredWhileUpdatingPet', 'snackbar.ProblemEncountered')
-  }
-}
+};
 
 const getExcelFieldTypeIcon = (type: EXCEL_FIELD_TYPE) => {
-  if (type === EXCEL_FIELD_TYPE.VALUE)
-    return 'mdi-circle-edit-outline'
-  if (type === EXCEL_FIELD_TYPE.SUM)
-    return 'mdi-equal'
-  if (type === EXCEL_FIELD_TYPE.GREATER)
-    return 'mdi-greater-than'
-  if (type === EXCEL_FIELD_TYPE.LESS)
-    return 'mdi-less-than'
+  if (type === EXCEL_FIELD_TYPE.GRADE_CARD) return "mdi-file";
+  if (type === EXCEL_FIELD_TYPE.VALUE) return "mdi-circle-edit-outline";
+  if (type === EXCEL_FIELD_TYPE.SUM) return "mdi-equal";
+  if (type === EXCEL_FIELD_TYPE.GREATER) return "mdi-greater-than";
+  if (type === EXCEL_FIELD_TYPE.LESS) return "mdi-less-than";
 
-  return 'mdi-chevron-bottom'
-}
+  return "mdi-chevron-bottom";
+};
 
-const getExcelSamplePreviousValueFields = (result: any, type: EXCEL_FIELD_TYPE) => {
+const getExcelSamplePreviousValueFields = (
+  result: any,
+  type: EXCEL_FIELD_TYPE
+) => {
   return Object.values(result).reduce((total, field, currentIndex) => {
-    if (currentIndex <= 1)
-      return total
+    if (currentIndex <= 1) return total;
 
-    if (type === EXCEL_FIELD_TYPE.SUM)
-      return total + field.value
+    if (type === EXCEL_FIELD_TYPE.SUM) return total + field.value;
     else if (type === EXCEL_FIELD_TYPE.GREATER && field.value > total)
-      return field.value
-    else if (type === EXCEL_FIELD_TYPE.LESS && field.value < total || total === 0)
-      return field.value
+      return field.value;
+    else if (
+      (type === EXCEL_FIELD_TYPE.LESS && field.value < total) ||
+      total === 0
+    )
+      return field.value;
 
-    return total
-  }, 0)
-}
+    return total;
+  }, 0);
+};
+
+const imagePreviewSrc = (img: any) => {
+  const image = img;
+
+  if (!image) return null;
+
+  if (image?.filename) return imagePath(image);
+  if (typeof image === "string" && image.includes("base64")) return image;
+
+  return URL.createObjectURL(image);
+};
 
 const getExcelSample = async () => {
   try {
-    const resp = await axiosIns.get('/user/pets', { params: { limit: 5, page: 1 } })
+    const resp = await axiosIns.get("/user/pets", {
+      params: { limit: 5, page: 1 },
+    });
 
-    competitionExcelFieldsPetsPreview.value = (resp.data?.items || [])
-      .map((userPet: UserPet) => {
-        const { user, ...pet } = userPet
-        const { primaryProfile } = user
+    competitionExcelFieldsPetsPreview.value = (resp.data?.items || []).map(
+      (userPet: UserPet) => {
+        const { user, ...pet } = userPet;
+        const { primaryProfile } = user;
 
-        return competitionExcelFields.value.reduce((result, item, currentIndex) => {
-          const toReturn: { name: string; value: any } = {
-            name: item.name,
-            value: '',
-          }
+        return competitionExcelFields.value.reduce(
+          (result, item, currentIndex) => {
+            const toReturn: { name: string; value: any } = {
+              name: item.name,
+              value: "",
+            };
 
-          if (currentIndex === 0) { toReturn.value = primaryProfile.name }
-          else if (currentIndex === 1) { toReturn.value = pet.name }
-          else {
-            if (item.type === EXCEL_FIELD_TYPE.VALUE)
-              toReturn.value = Math.round(Math.random() * 2000)
-            else
-              toReturn.value = getExcelSamplePreviousValueFields(result, item.type)
-          }
+            if (currentIndex === 0) {
+              toReturn.value = primaryProfile.name;
+            } else if (currentIndex === 1) {
+              toReturn.value = pet.name;
+            } else {
+              if (item.type === EXCEL_FIELD_TYPE.VALUE) {
+                toReturn.value = Math.round(Math.random() * 2000);
+              } else {
+                toReturn.value = getExcelSamplePreviousValueFields(
+                  result,
+                  item.type
+                );
+              }
+            }
 
-          result[`_${currentIndex}`] = toReturn
+            result[`_${currentIndex}`] = toReturn;
 
-          return result
-        }, {})
-      })
+            return result;
+          },
+          {}
+        );
+      }
+    );
+  } catch (err) {
+    showMessage(
+      "error",
+      "snackbar.SomethingWentWrong",
+      "snackbar.ProblemEncountered"
+    );
   }
-  catch (err) {
-    showMessage('error', 'snackbar.SomethingWentWrong', 'snackbar.ProblemEncountered')
-  }
-}
+};
 
 onMounted(() => {
   if (props.defaultCompetition) {
-    Object.assign(competition.value, JSON.parse(JSON.stringify(props.defaultCompetition)))
+    Object.assign(
+      competition.value,
+      JSON.parse(JSON.stringify(props.defaultCompetition))
+    );
 
-    if (props.defaultCompetition?.id)
-      loadCompetitionEventFields()
+    if (props.defaultCompetition?.id) loadCompetitionEventFields();
   }
-})
+});
 </script>
 
 <template>
   <div>
     <div>
       <VToolbar color="primary">
-        <VBtn
-          icon
-          variant="plain"
-          @click="$emit('close')"
-        >
-          <VIcon
-            color="white"
-            icon="mdi-close"
-          />
+        <VBtn icon variant="plain" @click="$emit('close')">
+          <VIcon color="white" icon="mdi-close" />
         </VBtn>
 
         <VToolbarTitle>
-          {{ $t(competition.id ? 'EditCompetition' : 'CreateNewCompetition') }}
+          {{ $t(competition.id ? "EditCompetition" : "CreateNewCompetition") }}
         </VToolbarTitle>
 
         <VSpacer />
 
         <VToolbarItems>
-          <VBtn
-            variant="text"
-            :loading="loading"
-            @click="onSubmit"
-          >
-            {{ $t('Save') }}
+          <VBtn variant="text" :loading="loading" @click="onSubmit">
+            {{ $t("Save") }}
           </VBtn>
         </VToolbarItems>
       </VToolbar>
@@ -219,12 +316,9 @@ onMounted(() => {
     <VForm class="pet-form d-flex justify-center mx-10">
       <VRow>
         <!-- Data -->
-        <VCol
-          sm="12"
-          md="4"
-        >
+        <VCol sm="12" md="4">
           <VCardTitle class="text-primary my-2 mb-3">
-            {{ $t('BasicData') }}
+            {{ $t("BasicData") }}
           </VCardTitle>
 
           <VRow>
@@ -264,64 +358,98 @@ onMounted(() => {
         </VCol>
 
         <!-- Images -->
-        <VCol
-          md="8"
-          sm="12"
-        >
+        <VCol md="8" sm="12">
           <VCardTitle class="text-primary my-2 mb-3">
-            {{ $t('Excel') }}
+            {{ $t("Excel") }}
           </VCardTitle>
 
           <div class="d-flex justify-start justify-content-start flex-wrap">
-            <VTextField
+            <div
               v-for="(excelField, excelFieldIndex) in competitionExcelFields"
               :key="`excel_field_${excelFieldIndex}`"
-              v-model="excelField.name"
-              class="mr-3 mb-3"
-              density="compact"
-              :disabled="excelField.id === 0"
-              style="min-width: 150px; max-width: 250px"
+              class="d-flex"
             >
-              <template #append-inner>
-                <VIcon :icon="getExcelFieldTypeIcon(excelField.type)" />
-              </template>
+              <VTextField
+                v-model="excelField.name"
+                class="mr-3 mb-3"
+                density="compact"
+                :disabled="excelField.id === 0"
+                style="min-width: 150px; max-width: 250px"
+              >
+                <template #append-inner>
+                  <VIcon :icon="getExcelFieldTypeIcon(excelField.type)" />
+                </template>
 
-              <VMenu activator="parent">
-                <VList select-strategy="classic">
-                  <VListItem
-                    v-for="(item, index) in Object.keys(EXCEL_FIELD_TYPE)"
-                    :key="`excel_field_${excelFieldIndex}_${index}`"
-                    :value="item"
-                    :active="excelField.type === item"
-                    @click="excelField.type = item"
-                  >
-                    <template #prepend="{ isActive }">
-                      <VListItemAction start>
-                        <VCheckboxBtn :model-value="isActive" />
-                      </VListItemAction>
-                    </template>
-                    <VListItemTitle>{{ $t(item.firstToUpper()) }}</VListItemTitle>
-                  </VListItem>
-                </VList>
-              </VMenu>
-            </VTextField>
+                <VMenu activator="parent">
+                  <VList select-strategy="classic">
+                    <VListItem
+                      v-for="(item, index) in Object.keys(EXCEL_FIELD_TYPE)"
+                      :key="`excel_field_${excelFieldIndex}_${index}`"
+                      :value="item"
+                      :active="excelField.type === item"
+                      @click="excelField.type = item"
+                    >
+                      <template #prepend="{ isActive }">
+                        <VListItemAction start>
+                          <VCheckboxBtn :model-value="isActive" />
+                        </VListItemAction>
+                      </template>
+                      <VListItemTitle>
+                        {{ $t(item.firstToUpper()) }}
+                      </VListItemTitle>
+                    </VListItem>
+                  </VList>
+                </VMenu>
+              </VTextField>
+            </div>
 
             <VBtn
-              @click="competitionExcelFields.push({
-                name: 'Field',
-                type: EXCEL_FIELD_TYPE.VALUE,
-              })"
+              @click="
+                competitionExcelFields.push({
+                  name: 'Field',
+                  type: EXCEL_FIELD_TYPE.VALUE,
+                })
+              "
             >
               <VIcon icon="mdi-plus" />
             </VBtn>
           </div>
 
-          <VCardTitle class="text-primary my-2 mb-3">
-            {{ $t('ExcelPreview') }}
-            <VBtn
-              size="small"
-              @click="getExcelSample"
-            >
+          <VCardTitle
+            v-if="
+              competitionExcelFields.find(
+                (e) => e.type === EXCEL_FIELD_TYPE.GRADE_CARD
+              )
+            "
+            class="text-primary my-2 mb-3"
+          >
+            {{ $t("GradeCardFile") }}
+
+            <div>
+              <VFileInput
+                ref="competitionGradeCardUploadRef"
+                class="d-none"
+                show-size
+                accept="image/png, image/jpeg, image/bmp, image/jpg, image/webp"
+                @update:model-value="[competition.gradeCard] = $event"
+              />
+              <VAvatar
+                :image="imagePreviewSrc(competition.gradeCard)"
+                variant="tonal"
+                class="cursor-pointer"
+                color="primary"
+                rounded
+                size="260"
+                @click="competitionGradeCardUploadRef.click()"
+              >
+                <VIcon icon="mdi-cloud-upload" size="40" />
+              </VAvatar>
+            </div>
+          </VCardTitle>
+
+          <VCardTitle v-else class="text-primary my-2 mb-3">
+            {{ $t("ExcelPreview") }}
+            <VBtn size="small" @click="getExcelSample">
               <VIcon icon="mdi-download" />
             </VBtn>
           </VCardTitle>
@@ -330,7 +458,9 @@ onMounted(() => {
             <thead>
               <tr>
                 <th
-                  v-for="(key, excelSampleFieldIndex) in Object.values(competitionExcelFieldsPetsPreview[0]).map(e => e.name)"
+                  v-for="(key, excelSampleFieldIndex) in Object.values(
+                    competitionExcelFieldsPetsPreview[0]
+                  ).map((e) => e.name)"
                   :key="`excel_sample_head_field_${excelSampleFieldIndex}`"
                   class="text-left"
                 >
@@ -340,11 +470,15 @@ onMounted(() => {
             </thead>
             <tbody>
               <tr
-                v-for="(excelSampleField, excelSampleFieldIndex) in competitionExcelFieldsPetsPreview"
+                v-for="(
+                  excelSampleField, excelSampleFieldIndex
+                ) in competitionExcelFieldsPetsPreview"
                 :key="`excel_sample_tr_field_${excelSampleFieldIndex}`"
               >
                 <td
-                  v-for="(excelSampleValueField, excelSampleValueFieldIndex) in Object.values(excelSampleField)"
+                  v-for="(
+                    excelSampleValueField, excelSampleValueFieldIndex
+                  ) in Object.values(excelSampleField)"
                   :key="`excel_sample_tr_field_${excelSampleFieldIndex}_td_${excelSampleValueFieldIndex}`"
                 >
                   <VTextField
@@ -381,7 +515,7 @@ onMounted(() => {
 
   .hover-next {
     .display-image {
-      transition: all .25s;
+      transition: all 0.25s;
     }
 
     &:hover .display-image {

@@ -63,6 +63,7 @@ export interface Competition {
   name: string
   description: string
   regulationUrl: string
+  gradeCard?: string
   group?: Group | string | any
 }
 

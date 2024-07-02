@@ -99,9 +99,9 @@ onMounted(() => {
 
 <template>
   <div v-if="event">
-    <h3>
-      {{ $t('SignIntoEvent') }}
-    </h3>
+    <h2 class="text-primary mb-5">
+      {{ $t('Players') }}
+    </h2>
 
     <VRow>
       <VCol

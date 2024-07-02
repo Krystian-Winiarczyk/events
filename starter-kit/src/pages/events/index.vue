@@ -47,15 +47,16 @@ onMounted(() => {
 
 <template>
   <div>
-    <h4>
+    <h2 class="text-primary mb-5">
       {{ $t('Events') }}
-    </h4>
+    </h2>
 
     <VRow>
       <EventCard
         v-for="event in events"
         :key="`event_${event.id}`"
         :event="event"
+        :size="12"
         @open-edit-modal="openEditEvent(event)"
       />
     </VRow>

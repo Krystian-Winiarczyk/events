@@ -78,10 +78,7 @@ onMounted(async () => {
       <OpenEventNavbar />
     </VContainer>
 
-    <div
-      v-if="openEvent"
-      class="mt-3"
-    >
+    <div v-if="openEvent">
       <VRow style="background-color: rgba(var(--v-theme-surface), .5); min-height: 70vh">
         <VCol
           cols="12"
@@ -165,7 +162,7 @@ onMounted(async () => {
           order-sm="1"
         >
           <VImg
-            class="elevation-6 rounded-circle mx-2"
+            class="elevation-6 mx-2"
             :src="imagePath(openEvent.banner)"
           />
         </VCol>

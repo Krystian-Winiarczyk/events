@@ -44,7 +44,9 @@ const reloadData = async () => {
 
 <template>
   <div>
-    <h4>Users</h4>
+    <h2 class="text-primary mb-5">
+      {{ $t('Users') }}
+    </h2>
     <VDataTableServer
       v-model:items-per-page.async="perPage"
       v-model:page.async="page"

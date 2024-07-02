@@ -169,13 +169,13 @@ onMounted(() => {
 
 <template>
   <div v-if="event">
-    <h3>
+    <h2 class="text-primary mb-5">
       {{ $t('SignIntoEvent') }}
-    </h3>
+    </h2>
     <EventCard :event="event" />
-    <h3>
+    <h2 class="text-primary mb-5">
       {{ $t('SelectCompetitions') }}
-    </h3>
+    </h2>
 
     <div
       v-for="competitionGroup in Object.keys(groupedCompetitions).reverse()"

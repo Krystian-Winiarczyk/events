@@ -47,6 +47,7 @@ export const defaultCompetition: Competition = {
   regulationUrl: '',
   description: '',
   group: null,
+  gradeCard: '',
 }
 export const defaultGroup: Group = {
   name: '',

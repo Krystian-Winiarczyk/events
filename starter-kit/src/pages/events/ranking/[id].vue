@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 
+import { useTheme } from 'vuetify'
 import type {
   CompetitionExcelField,
   Event,
@@ -15,7 +16,8 @@ import { useAuthStore } from '@/store/auth'
 import { EXCEL_FIELD_TYPE, VIEW_DENSITY } from '@/globals/enums/enums'
 import { useToastStore } from '@/store/toast'
 import PlayerRow from '@/views/pages/events/excel/PlayerRow.vue'
-import InitExcel from '@/views/pages/events/excel/InitExcel.vue'
+import InitExcel from '@/views/pages/events/ranking/InitExcel.vue'
+import * as illustrations from '@core/utils/illustrations'
 
 const event: Ref<Event | null> = ref(null)
 const competitions: Ref<Array<any>> = ref([])
@@ -30,175 +32,19 @@ const router = useRouter()
 const authStore = useAuthStore()
 const { showMessage } = useToastStore()
 
-const initExcelDraft = async () => {
-  event.value.draftGenerated = true
+const vuetifyTheme = useTheme()
 
-  const id = (competitions.value.length ? groupedCompetitions.value[Object.keys(groupedCompetitions.value).reverse()[0]][0].id : null)
+const formatMilliseconds = ms => {
+  const minutes = Math.floor(ms / 60000).toString().padStart(2, '0')
+  const seconds = Math.floor((ms % 60000) / 1000).toString().padStart(2, '0')
+  const milliseconds = (ms % 1000).toString().padStart(3, '0')
 
-  await loadEventCompetitionDraftFields(id)
+  return `${minutes}:${seconds}.${milliseconds}`
 }
-
-const updateExcelDraftFieldValue = async (item, excelDraftFieldsByUserIndex = Number, competition): Promise<any> => {
-  // competitions.value[competitionIndex].excelDraftFieldsByUser[excelDraftFieldsByUserIndex].value = item.event.target.value
-  console.log()
-
-  const competitionIndex = competitions.value.findIndex(competitionItem => competitionItem.id === competition.id)
-  if (competitionIndex > -1) {
-    const value = item.event.target.value
-    const competitionRow = competitions.value[competitionIndex].excelDraftFieldsByUser[excelDraftFieldsByUserIndex]
-    const allExcelFields = JSON.parse(JSON.stringify(competitionRow.excelFields)) || []
-
-    const { competitionExcelField } = allExcelFields.pop()
-    const { id, type } = competitionExcelField
-
-    allExcelFields[item.excelFieldValueIndex].value = value
-    competitions.value[competitionIndex].excelDraftFieldsByUser[excelDraftFieldsByUserIndex].excelFields[item.excelFieldValueIndex].value = value
-
-    let currentValueType: string = ''
-    if (allExcelFields[0].value.includes('.') && allExcelFields[0].value.includes(':'))
-      currentValueType = 'TIME_LONG'
-    else if (allExcelFields[0].value.includes('.'))
-      currentValueType = 'TIME'
-    else currentValueType = 'NUMBER'
-
-    console.log('=====')
-    const lastValue = allExcelFields.filter(e => e.value).reduce((max, { value }) => {
-      if (value === 'x') return max
-      let total = getTotalValue(<string> value, currentValueType)
-
-      console.log(total, value)
-      if ((total === null || total === '') && type !== EXCEL_FIELD_TYPE.SUM) {
-        total = type === EXCEL_FIELD_TYPE.GREATER ? 0 : 99999999
-      }
-
-
-      if (type === EXCEL_FIELD_TYPE.GREATER) {
-        return total > max ? total : max
-      } else if (type === EXCEL_FIELD_TYPE.LESS) {
-        return total < max ? total : max
-      } else if (type === EXCEL_FIELD_TYPE.SUM) {
-        return total + max
-      } else {
-        return max // In case none of the conditions are met
-      }
-    }, [EXCEL_FIELD_TYPE.GREATER, EXCEL_FIELD_TYPE.SUM].includes(type) ? 0 : 99999999)
-
-    competitions.value[competitionIndex].excelDraftFieldsByUser[excelDraftFieldsByUserIndex].excelFields.at(-1).value = currentValueType !== 'NUMBER' ? formatMilliseconds(lastValue) : lastValue
-    await axiosIns.put(`/event-competition-excel-field-draft`, [
-      ...competitions.value[competitionIndex].excelDraftFieldsByUser[excelDraftFieldsByUserIndex].excelFields.map((item: EventCompetitionExcelFieldDraft) => ({ id: item?.id, value: item.value })),
-    ])
-  }
-
-  // console.log(competitions.value[competitionIndex].excelDraftFieldsByUser[excelDraftFieldsByUserIndex])
-  // console.log(item)
-}
-
-const formatMilliseconds = (ms) => {
-  const minutes = Math.floor(ms / 60000).toString().padStart(2, '0');
-  const seconds = Math.floor((ms % 60000) / 1000).toString().padStart(2, '0');
-  const milliseconds = (ms % 1000).toString().padStart(3, '0');
-  return `${minutes}:${seconds}.${milliseconds}`;
-}
-
-// const updateExcelDraftFieldValue = async (payload: Array<{ id: string | number, value: string }>): Promise<any> => {
-//   try {
-//     const { data } = await axiosIns.put(`/event-competition-excel-field-draft`, payload)
-//
-//     console.log(data)
-//     showMessage('success', 'snackbar.ExcelDraftCreate', 'snackbar.ChangesSaved')
-//   } catch (err) {
-//     showMessage('error', 'snackbar.AnErrorOccurredWhileUpdatingSponsor', 'snackbar.ProblemEncountered')
-//   } finally {
-//
-//   }
-// }
 
 const generateUniqueId = (eventCompetitionExcelFieldDraft: EventCompetitionExcelFieldDraft): string => {
   return `${eventCompetitionExcelFieldDraft.userEventCompetition?.id}_${eventCompetitionExcelFieldDraft.userPet?.id}_${eventCompetitionExcelFieldDraft.userProfile?.id}`
 }
-
-const getTotalValue = (value: string, type: string): number | null => {
-  if (!value) return 0
-
-
-  console.log('VALUE', type, value)
-  if (type === 'TIME_LONG') {
-    const [minutes = '0', seconds = '0', milliseconds = '0'] = value.split(/:|\./)
-
-    return parseInt(minutes) * 60000 + parseInt(seconds) * 1000 + parseInt(milliseconds) || 0
-  }
-
-  else if (type === 'TIME') {
-    const [seconds, milliseconds] = value.split('.')
-
-    return parseInt(seconds) * 1000 + parseInt(milliseconds) || 0
-  }
-  else {
-    return Number(value)
-  }
-}
-
-// const getCompareValue = (items: Array<any>, currentValue: string, rootType = EXCEL_FIELD_TYPE.GREATER) => {
-//   let type = ''
-//   let valueIndex = -1
-//
-//   if (currentValue.includes('.') && currentValue.includes(':'))
-//     type = 'TIME_LONG'
-//   else if (currentValue.includes('.') && currentValue.length === 6)
-//     type = 'TIME'
-//   else type = 'NUMBER'
-//
-//   const result = items.reduce((max, { value }, currentIndex) => {
-//     let total = getTotalValue(<string> value, type)
-//
-//     if (total === null) total = rootType === EXCEL_FIELD_TYPE.GREATER ? 0 : 99999999
-//
-//     if (rootType === EXCEL_FIELD_TYPE.GREATER) {
-//       valueIndex = total > max ? currentIndex : valueIndex
-//       return total > max ? total : max
-//     }
-//     else if (rootType === EXCEL_FIELD_TYPE.LESS) {
-//       valueIndex = total < max ? currentIndex : valueIndex
-//       return total < max ? total : max
-//     }
-//   }, getTotalValue(<string> currentValue, type))
-//
-//   return valueIndex === -1 ? currentValue : items[valueIndex].value
-// }
-
-// const updateExcelField = async (value: any, excelField: any, _restFields: Array<any>) => {
-//   const restFields = JSON.parse(JSON.stringify(_restFields))
-//   const {competitionExcelField, index} = excelField
-//
-//   const competitionIndex = competitions.value.findIndex(competition => Number(competition.id) === Number(selectedCompetition.value))
-//
-//   if (competitionIndex > -1) {
-//     competitions.value[competitionIndex].excelDraftFields[index].value = value.target.value
-//
-//     const lastField = restFields.at(-1)
-//     const lastFieldType = lastField.competitionExcelField.type
-//
-//     const removeIndex = restFields.findIndex(i => i.index === index && i.value == value.target.value)
-//     restFields.splice(removeIndex, 1)
-//     restFields.pop()
-//
-//     let resultValue = null
-//
-//     if (lastFieldType === EXCEL_FIELD_TYPE.SUM)
-//       resultValue = restFields.reduce((a, b) => +a + +(b.value || 0), Number(value.target.value || 0))
-//     else if (lastFieldType === EXCEL_FIELD_TYPE.GREATER)
-//       resultValue = getCompareValue(restFields, value.target.value, lastFieldType)
-//     else if (lastFieldType === EXCEL_FIELD_TYPE.LESS)
-//       resultValue = getCompareValue(restFields, value.target.value, lastFieldType)
-//
-//     competitions.value[competitionIndex].excelDraftFields[lastField.index].value = resultValue
-//
-//     await updateExcelDraftFieldValue([
-//       {id: competitions.value[competitionIndex].excelDraftFields[lastField.index].id, value: resultValue},
-//       {id: competitions.value[competitionIndex].excelDraftFields[index].id, value: value.target.value},
-//     ])
-//   }
-// }
 
 const groupedCompetitions = computed(() => {
   return Object.values(competitions.value).reduce((result: { [key: string]: Array<EventCompetition> }, item: EventCompetition) => {
@@ -238,8 +84,6 @@ const groupedEventCompetitionExcelFieldsByUser = (excelDraftFields: Array<any>):
     return result
   }, {})
 
-  console.log('======================================')
-
   const items = Object.values(res)
 
   // return items
@@ -258,10 +102,7 @@ const groupedEventCompetitionExcelFieldsByUser = (excelDraftFields: Array<any>):
     if (!nextValue)
       nextValue = byType === EXCEL_FIELD_TYPE.LESS ? 99999999999 : 0
 
-    console.log('byType', byType)
-    console.log('prev', prevValue)
-    console.log('next', nextValue)
-    console.log('compare', nextValue)
+    console.log(byType, nextValue, prevValue)
 
     if (byType === EXCEL_FIELD_TYPE.LESS) {
       if (prevValue > nextValue)
@@ -269,9 +110,12 @@ const groupedEventCompetitionExcelFieldsByUser = (excelDraftFields: Array<any>):
       else return -1
     }
     else {
+      console.log(123)
+      prevValue = prevValue > 9999 ? 0 : prevValue
+      nextValue = nextValue > 9999 ? 0 : nextValue
       if (prevValue > nextValue)
-        return 1
-      else return -1
+        return -1
+      else return 1
     }
   })
 
@@ -330,10 +174,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="event">
-    <h2 class="text-primary mb-5">
-      {{ $t('Punctation') }}
-    </h2>
+  <div
+    v-if="event"
+    class="pa-4"
+  >
+    <h3>
+      {{ $t('Ranking') }}
+    </h3>
 
     <VRow v-if="event.draftGenerated">
       <VCol
@@ -390,9 +237,13 @@ onMounted(() => {
               :key="`event_competition_group_${competitionGroup}_window_${competitionIndex}`"
               :value="competition.id"
             >
-              <VTable v-if="competition?.excelDraftFieldsByUser?.length">
+              <VTable
+                v-if="competition?.excelDraftFieldsByUser?.length"
+                class="shadow-lg"
+              >
                 <thead>
                   <tr>
+                    <th>{{ $t('Place') }}</th>
                     <th>{{ $t('Profile') }}</th>
                     <th>{{ $t('Pet') }}</th>
                     <th
@@ -410,23 +261,39 @@ onMounted(() => {
                     :key="`excel_field_row_${excelFieldUserRowIndex}`"
                     :excel-field-row="excelFieldRow"
                     :index="excelFieldUserRowIndex"
+                    is-view
                     @update-excel-field-value="updateExcelDraftFieldValue($event, excelFieldUserRowIndex, competition)"
                   />
                 </tbody>
               </VTable>
+              <VCard
+                v-else
+                :key="`no_card_${competitionIndex}`"
+                class="d-flex flex-column justify-center align-center mx-auto"
+              >
+                <div class="d-lg-flex px-10 pt-5 pb-0 justify-center align-center flex-column">
+                  <h2 class="pr-5 text-primary">
+                    {{ $t('NoPlayers') }}
+                  </h2>
+                  <div v-html="illustrations.excelDraft(vuetifyTheme.current.value.colors.primary, '300px')" />
+                </div>
+              </VCard>
             </VWindowItem>
           </div>
         </VWindow>
       </VCol>
     </VRow>
 
-    <InitExcel
-      v-else
-      @end="initExcelDraft"
-    />
+    <InitExcel v-else />
   </div>
 </template>
 
 <style scoped>
 
 </style>
+
+<route lang="yaml">
+meta:
+  layout: blank
+  authRequired: false
+</route>

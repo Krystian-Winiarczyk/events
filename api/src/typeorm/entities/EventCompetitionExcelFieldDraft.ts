@@ -16,6 +16,13 @@ export class EventCompetitionExcelFieldDraft extends BaseEntity {
     value: string
 
     /**
+     *  Competition excel grade card image as Base64
+     * @returns {string} grade card
+     */
+    @Column({ type: 'longtext', nullable: false })
+    gradeCard: string
+
+    /**
      * userEventCompetition
      * @returns {UserEventCompetition} userEventCompetition
      */

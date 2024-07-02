@@ -1,32 +1,69 @@
-import {Body, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, Req, Res} from '@nestjs/common';
+import {
+  Body,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Put,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
-import {FindOptionsUtils, In, UpdateResult,} from 'typeorm';
-import { BaseService } from "./BaseService";
-import { BaseEntity } from "./BaseEntity";
-import { BaseControllerUtils } from "./BaseControllerUtils";
+import { FindOptionsUtils, In, UpdateResult } from 'typeorm';
+import { BaseService } from './BaseService';
+import { BaseEntity } from './BaseEntity';
+import { BaseControllerUtils } from './BaseControllerUtils';
+import { Role } from '../constants/Role';
 
-export abstract class BaseController<T extends BaseEntity> extends BaseControllerUtils{
-  constructor(private service?: BaseService<T>) {
-    super()
+export abstract class BaseController<
+    T extends BaseEntity,
+> extends BaseControllerUtils {
+  constructor(
+      private service?: BaseService<T>,
+      private activeUserFilter: boolean = false,
+  ) {
+    super();
   }
 
   @Get()
   async getAll(
       @Req() req: Request,
       @Res() res: Response,
-      @Query('limit') limit = 25,
+      @Query('limit') limit = 50,
       @Query('page') page = 1,
       @Query('q') q,
+      skipResponse: boolean = false,
   ) {
     try {
-      const [items, total]: [ T[], number ] = await this.service.findAll({
+      let whereParams = {};
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (this.activeUserFilter && req?.user && req?.user.role !== Role.ADMIN) {
+        whereParams = {
+          ...this.resolveFilters(q),
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          ...this.resolveFilters({ createdBy: { eq: req?.user?.id } }),
+        };
+      } else {
+        whereParams = { ...this.resolveFilters(q) };
+      }
+      const [items, total]: [T[], number] = await this.service.findAll({
         pagination: this.paginationFragment(limit, page),
-        where: this.resolveFilters(q),
+        where: whereParams,
       });
 
-      this.apiSuccessResponse({ res, req, data: items, total });
+      if (!skipResponse) {
+        this.apiSuccessResponse({ res, req, data: items, total });
+      }
+      return [{ res, req, data: items, total }, null];
     } catch (error) {
       this.apiErrorResponse(res, req, error);
+      return [null, error];
     }
   }
   //
@@ -47,19 +84,17 @@ export abstract class BaseController<T extends BaseEntity> extends BaseControlle
 
   @Post()
   // @Roles(Role.WORKER, Role.ADMIN, Role.SUPER_ADMIN, Role.USER)
-  async create(
-      @Req() req: Request,
-      @Res() res: Response,
-      @Body() createDto,
-  ) {
+  async create(@Req() req: Request, @Res() res: Response, @Body() createDto) {
     try {
-      const item: T | T[] = await this.service.create(createDto);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const item: T | T[] = await this.service.create(createDto, req?.user?.id);
 
-      const toReturnObject = Array.isArray(item) ?
-          await this.service.findAll({
-            where: this.resolveFilters({ id: { in: item.map(i => i.id) } })
+      const toReturnObject = Array.isArray(item)
+          ? await this.service.findAll({
+            where: this.resolveFilters({ id: { in: item.map((i) => i.id) } }),
           })
-          : await this.service.findOneById(item.id, {})
+          : await this.service.findOneById(item.id, {});
 
       this.apiSuccessResponse({ res, req, data: toReturnObject });
     } catch (error) {
@@ -76,12 +111,14 @@ export abstract class BaseController<T extends BaseEntity> extends BaseControlle
       @Body() updateDto,
   ) {
     try {
-      await this.service.updateOneById(
-          id,
-          updateDto,
-      );
+      await this.service.updateOneById(id, {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        updatedBy: req?.user?.id || null,
+        ...updateDto,
+      });
 
-      const toReturnObject = await this.service.findOneById(id, {})
+      const toReturnObject = await this.service.findOneById(id, {});
 
       this.apiSuccessResponse({ res, req, data: toReturnObject });
     } catch (error) {
@@ -97,11 +134,16 @@ export abstract class BaseController<T extends BaseEntity> extends BaseControlle
       @Body() updateDto,
   ) {
     try {
-      await this.service.updateOrCreate(updateDto);
+      const response = await this.service.updateOrCreate(
+          updateDto,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          req?.user?.id || null,
+      );
 
       // const toReturnObject = await this.service.findOneById(id, {})
 
-      this.apiSuccessResponse({ res, req, data: [] });
+      this.apiSuccessResponse({ res, req, data: response, putResponse: true });
     } catch (error) {
       this.apiErrorResponse(res, req, error);
     }

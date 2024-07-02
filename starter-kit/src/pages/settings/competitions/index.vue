@@ -23,7 +23,14 @@ const competitionHeaders = ref([
   { title: 'ACTION', key: 'action', sortable: false },
 ])
 
+const groupHeaders = ref([
+  { title: 'ID', key: 'id', sortable: false },
+  { title: 'NAME', key: 'name', sortable: false },
+  { title: 'ACTION', key: 'action', sortable: false },
+])
+
 const loading = ref(false)
+const activeTab = ref(0)
 
 const isEditGroupDialogVisible: Ref<boolean> = ref(false)
 const isEditCompetitionDialogVisible: Ref<boolean> = ref(false)
@@ -92,128 +99,184 @@ const deleteGroup = (group: Group, index: number): void => {
 
 <template>
   <div>
-    <div class="mb-6">
-      <h4>
+    <VTabs v-model="activeTab">
+      <VTab>
+        {{ $t('Competitions') }}
+      </VTab>
+      <VTab>
         {{ $t('Groups') }}
+      </VTab>
+    </VTabs>
+
+    <VWindow v-model="activeTab">
+      <VWindowItem>
         <VBtn
           color="primary"
           size="small"
-          class="me-1"
-          @click="openEditGroup(null)"
+          class="me-1 mt-2"
+          @click="openEditCompetition(null)"
         >
+          {{ $t('Add') }}
           <VIcon
             icon="mdi-plus"
             size="20"
           />
         </VBtn>
-      </h4>
+        <VCard>
+          <VDataTableServer
+            v-model:items-per-page.async="perPage"
+            v-model:page.async="page"
+            :must-sort="false"
+            :headers="competitionHeaders"
+            :items="competitions"
+            :items-length="totalItems"
+            :loading="loading"
+            @update:options="reloadData"
+          >
+            <template #item.description="{ item }">
+              {{ $filters.truncate(item.raw.description, 60) }}
+            </template>
 
-      <VCard class="mt-2 pa-2">
-        <VMenu
-          v-for="(group, groupIndex) in groups"
-          :key="`group_${group.id}`"
-          v-model="group.menu"
-          :close-on-content-click="false"
-          location="right center"
-          open-on-hover
-        >
-          <template #activator="{ props }">
-            <VChip
-              v-bind="props"
-              color="primary"
-              class="mr-1"
-            >
-              {{ group.name }}
-            </VChip>
-          </template>
+            <template #item.group="{ item }">
+              <VChip
+                v-if="item.raw.group"
+                color="primary"
+              >
+                {{ item.raw.group.name }}
+              </VChip>
+              <VIcon
+                v-else
+                icon="mdi-minus"
+              />
+            </template>
 
-          <VCard class="pa-2 ma-1">
-            <VBtn
-              icon
-              size="small"
-              color="secondary"
-              variant="text"
-              class="mr-2"
-              @click="deleteGroup(group, groupIndex)"
-            >
-              <VIcon icon="mdi-trash" />
-            </VBtn>
-            <VBtn
-              icon
-              size="small"
-              color="secondary"
-              variant="text"
-              @click="openEditGroup(group)"
-            >
-              <VIcon icon="mdi-edit" />
-            </VBtn>
-          </VCard>
-        </VMenu>
-      </VCard>
-    </div>
-    <h4>
-      {{ $t('Competitions') }}
-      <VBtn
-        color="primary"
-        size="small"
-        class="me-1"
-        @click="openEditCompetition(null)"
-      >
-        <VIcon
-          icon="mdi-plus"
-          size="20"
-        />
-      </VBtn>
-    </h4>
-    <VCard>
-      <VDataTableServer
-        v-model:items-per-page.async="perPage"
-        v-model:page.async="page"
-        :must-sort="false"
-        :headers="competitionHeaders"
-        :items="competitions"
-        :items-length="totalItems"
-        :loading="loading"
-        @update:options="reloadData"
-      >
-        <template #item.description="{ item }">
-          {{ $filters.truncate(item.raw.description, 60) }}
-        </template>
-
-        <template #item.group="{ item }">
-          <VChip
-            v-if="item.raw.group"
+            <template #item.action="{ item }">
+              <VBtn
+                size="sm"
+                variant="plain"
+                color="warning"
+                @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
+              >
+                <VIcon icon="mdi-edit" />
+              </VBtn>
+              <VBtn
+                size="sm"
+                class="ml-5"
+                variant="plain"
+                color="error"
+                @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
+              >
+                <VIcon icon="mdi-trash" />
+              </VBtn>
+            </template>
+          </VDataTableServer>
+        </VCard>
+      </VWindowItem>
+      <VWindowItem>
+        <div class="mb-6">
+          <VBtn
             color="primary"
+            size="small"
+            class="me-1 mt-2"
+            @click="openEditGroup(null)"
           >
-            {{ item.raw.group.name }}
-          </VChip>
-          <VIcon
-            v-else
-            icon="mdi-minus"
-          />
-        </template>
+            {{ $t('Add') }}
+            <VIcon
+              icon="mdi-plus"
+              size="20"
+            />
+          </VBtn>
+          <!--            <VMenu -->
+          <!--              v-for="(group, groupIndex) in groups" -->
+          <!--              :key="`group_${group.id}`" -->
+          <!--              v-model="group.menu" -->
+          <!--              :close-on-content-click="false" -->
+          <!--              location="right center" -->
+          <!--              open-on-hover -->
+          <!--            > -->
+          <!--              <template #activator="{ props }"> -->
+          <!--                <VChip -->
+          <!--                  v-bind="props" -->
+          <!--                  color="primary" -->
+          <!--                  class="mr-1" -->
+          <!--                > -->
+          <!--                  {{ group.name }} -->
+          <!--                </VChip> -->
+          <!--              </template> -->
 
-        <template #item.action="{ item }">
-          <VBtn
-            size="sm"
-            variant="plain"
-            color="warning"
-            @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
+          <!--              <VCard class="pa-2 ma-1"> -->
+          <!--                <VBtn -->
+          <!--                  icon -->
+          <!--                  size="small" -->
+          <!--                  color="secondary" -->
+          <!--                  variant="text" -->
+          <!--                  class="mr-2" -->
+          <!--                  @click="deleteGroup(group, groupIndex)" -->
+          <!--                > -->
+          <!--                  <VIcon icon="mdi-trash" /> -->
+          <!--                </VBtn> -->
+          <!--                <VBtn -->
+          <!--                  icon -->
+          <!--                  size="small" -->
+          <!--                  color="secondary" -->
+          <!--                  variant="text" -->
+          <!--                  @click="openEditGroup(group)" -->
+          <!--                > -->
+          <!--                  <VIcon icon="mdi-edit" /> -->
+          <!--                </VBtn> -->
+          <!--              </VCard> -->
+          <!--            </VMenu> -->
+
+          <VDataTableServer
+            v-model:items-per-page.async="perPage"
+            v-model:page.async="page"
+            :must-sort="false"
+            :headers="groupHeaders"
+            :items="groups"
+            :items-length="totalItems"
+            :loading="loading"
+            @update:options="reloadData"
           >
-            <VIcon icon="mdi-edit" />
-          </VBtn>
-          <VBtn
-            size="sm"
-            class="ml-5"
-            variant="plain"
-            color="error"
-            @click="editedCompetition = item.raw; isEditCompetitionDialogVisible = true"
-          >
-            <VIcon icon="mdi-trash" />
-          </VBtn>
-        </template>
-      </VDataTableServer>
-    </VCard>
+            <template #item.description="{ item }">
+              {{ $filters.truncate(item.raw.description, 60) }}
+            </template>
+
+            <template #item.group="{ item }">
+              <VChip
+                v-if="item.raw.group"
+                color="primary"
+              >
+                {{ item.raw.group.name }}
+              </VChip>
+              <VIcon
+                v-else
+                icon="mdi-minus"
+              />
+            </template>
+
+            <template #item.action="{ item, index }">
+              <VBtn
+                size="sm"
+                variant="plain"
+                color="warning"
+                @click="openEditGroup(item)"
+              >
+                <VIcon icon="mdi-edit" />
+              </VBtn>
+              <VBtn
+                size="sm"
+                class="ml-5"
+                variant="plain"
+                color="error"
+                @click="deleteGroup(item, index)"
+              >
+                <VIcon icon="mdi-trash" />
+              </VBtn>
+            </template>
+          </VDataTableServer>
+        </div>
+      </VWindowItem>
+    </VWindow>
 
     <VDialog
       v-model="isEditCompetitionDialogVisible"

@@ -2,20 +2,24 @@ import { HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
 import {
     Between,
-    Equal, In,
+    Equal,
+    In,
     IsNull,
     LessThan,
     LessThanOrEqual,
     Like,
     MoreThan,
     MoreThanOrEqual,
-    Not
+    Not,
 } from 'typeorm';
 import * as process from 'process';
 import { AppMode } from '../constants/AppMode';
 
 export abstract class BaseControllerUtils {
-    protected getBasicDataForResponse(req: Request, status: HttpStatus): BasicResponseInterface {
+    protected getBasicDataForResponse(
+        req: Request,
+        status: HttpStatus,
+    ): BasicResponseInterface {
         return {
             method: req.method,
             url: req.baseUrl,
@@ -24,17 +28,21 @@ export abstract class BaseControllerUtils {
         };
     }
     protected resolveFilterType(type = 'eq', value) {
-        let resultType = null
+        let resultType = null;
 
-        if (['eq', 'neq'].includes(type)) resultType = Equal(value)
-        else if (['like', 'nlike'].includes(type)) resultType = Like(value.replaceAll(':', '%'))
-        else if (['between', 'nbetween'].includes(type)) resultType = Between(value.split('_')[0], value.split('_')[1])
-        else if (['gt', 'ngt'].includes(type)) resultType = MoreThan(value)
-        else if (['gte', 'ngte'].includes(type)) resultType = MoreThanOrEqual(value)
-        else if (['lt', 'nlt'].includes(type)) resultType = LessThan(value)
-        else if (['lte', 'nlte'].includes(type)) resultType = LessThanOrEqual(value)
-        else if (['isNull', 'nisNull'].includes(type)) resultType = IsNull()
-        else if (['in', 'nin'].includes(type)) resultType = In(value)
+        if (['eq', 'neq'].includes(type)) resultType = Equal(value);
+        else if (['like', 'nlike'].includes(type))
+            resultType = Like(value.replaceAll(':', '%'));
+        else if (['between', 'nbetween'].includes(type))
+            resultType = Between(value.split('_')[0], value.split('_')[1]);
+        else if (['gt', 'ngt'].includes(type)) resultType = MoreThan(value);
+        else if (['gte', 'ngte'].includes(type))
+            resultType = MoreThanOrEqual(value);
+        else if (['lt', 'nlt'].includes(type)) resultType = LessThan(value);
+        else if (['lte', 'nlte'].includes(type))
+            resultType = LessThanOrEqual(value);
+        else if (['isNull', 'nisNull'].includes(type)) resultType = IsNull();
+        else if (['in', 'nin'].includes(type)) resultType = In(value);
 
         return type.startsWith('n') ? Not(resultType) : resultType;
     }
@@ -75,16 +83,19 @@ export abstract class BaseControllerUtils {
                            data,
                            status = HttpStatus.OK,
                            total,
+                           putResponse = false,
                        }: {
-        res: Response,
-        req: Request,
-        data: any,
-        status?: HttpStatus,
-        total?: number,
+        res: Response;
+        req: Request;
+        data: any;
+        status?: HttpStatus;
+        total?: number;
+        putResponse?: boolean;
     }) {
         const payload: any = this.getBasicDataForResponse(req, status);
 
-        if (Array.isArray(data)) payload.items = data.filter(Boolean);
+        if (putResponse) payload.items = data;
+        else if (Array.isArray(data)) payload.items = data.filter(Boolean);
         else payload.items = [data].filter(Boolean);
 
         res.status(status).json({ ...payload, totalItems: total });

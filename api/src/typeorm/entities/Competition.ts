@@ -19,6 +19,13 @@ export class Competition extends BaseEntity {
      */
     @Column({ type: 'text', nullable: true })
     description: string
+    
+    /**
+     *  Competition excel grade card image as Base64
+     * @returns {string} grade card
+     */
+    @Column({ type: 'longtext', nullable: false })
+    gradeCard: string
 
     /**
      *  Competition regulationUrl
